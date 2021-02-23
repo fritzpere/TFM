@@ -27,7 +27,7 @@ def persistency_per_band_and_state(tensor,measure,n_bands=3):
         band_tensor = np.abs(tensor[band,:,:,:])
         for i in range (3): 
             #print('nans?',np.isnan(band_tensor[i]).any())
-            if measure=='distance':
+            if measure=='intensities':
                 matrix=distance_matrix(band_tensor[i],band_tensor[i])
                
             else:
@@ -42,7 +42,7 @@ def persistency_per_band_and_state(tensor,measure,n_bands=3):
             persistence_dic[band,i]= persistence #dictionary with key=(band,state) and value=persistence
     return persistence_dic 
 
-def compute_persistence_from_EEG(data,measure='distance',subj_dir=None,space=None,save=True,):
+def compute_persistence_from_EEG(data,measure='intensities',subj_dir=None,space=None,save=True,):
     """
     Pipeline that beggins with raw_data and preprocess it
     to later compute Persistent Homology
@@ -55,9 +55,9 @@ def compute_persistence_from_EEG(data,measure='distance',subj_dir=None,space=Non
     should be saved in a txt file
     :return: dictionary with key=(band,state) and value=persistence
     """
-    if measure!='distance' and measure !='correlation':
+    if measure!='intensities' and measure !='correlation':
         print('measure paramater is incorrect')
-        measure='distance'
+        measure='intensities'
     N,T,n_trials,n_blocks=data.shape
     #n_blocks=12
     cleaned_data,N=clean(data)
@@ -73,12 +73,13 @@ def compute_persistence_from_EEG(data,measure='distance',subj_dir=None,space=Non
     #print(vect_features.shape)
     persistence_dictionary=persistency_per_band_and_state(vect_features,measure)
     if save:
-        if not os.path.exists(subj_dir+space+'/'+measure):
-            print("create directory:",subj_dir+space+'/'+measure)
-            os.makedirs(subj_dir+space+'/'+measure)
+        band_dic={0:'alpha',1:'betta',2:'gamma'}
+        if not os.path.exists(subj_dir+space+'/'+measure+'/'+'persistencies'):
+            print("create directory:",subj_dir+space+'/'+measure+'/'+'persistencies')
+            os.makedirs(subj_dir+space+'/'+measure+'/'+'persistencies')
         for i in range(3):
             for j in range(3):
-                f = open(subj_dir+'/'+space+'/'+measure+'/'+str(i)+str(j)+'persistence.txt', "w")
+                f = open(subj_dir+'/'+space+'/'+measure+'/'+'persistencies'+'/'+str(j)+band_dic[i]+'persistence.txt', "w")
                 for persistence in persistence_dictionary[(i,j)] :
                     f.write(''.join(map(str,persistence))+'\n')
                 f.close()
@@ -100,15 +101,20 @@ def plot_persistence(persistence_dic,subj_dir,intervals=1000,repre='diagrams',sp
         repre='diagrams'
         print('Representation parameter incorrect')
     if repre=='diagrams':
-        plot_func=lambda x,axes: gd.plot_persistence_diagram(x,legend=True,max_intervals=intervals,axes=axes)
+        plot_func=lambda x,axes: gd.plot_persistence_diagram(x,legend=True,max_intervals=intervals,axes=axes)#,inf_delta=0.5)
     else:
         plot_func=lambda x,axes: gd.plot_persistence_barcode(x,legend=True,max_intervals=intervals,axes=axes)
     band_dic={0:'alpha',1:'betta',2:'gamma'}
     fig, axes = plt.subplots(nrows=3, ncols=3, figsize=(14, 9))
     for i in range(3):
+        aux_lis=np.array([persistence_dic[(i,0)],persistence_dic[(i,1)],persistence_dic[(i,2)]], dtype=object)
+        x_max=np.amax(list(map(lambda y: np.amax(list(map(lambda x: x[1][0],y))),aux_lis)))+0.05
+        y_max=np.amax(list(map(lambda y: np.amax(list(map(lambda x: x[1][1] if x[1][1]!=np.inf  else 0 ,y))),aux_lis)))*1.2
         for j in range(3):
             a=plot_func(persistence_dic[(i,j)],axes=axes[i][j])
             a.set_title('{0} persistence {1} of \n motivational state {2} and band {3}'.format(space,repre,j,band_dic[i]))
+            a.set_xlim(-0.05,x_max)
+            a.set_ylim(0,y_max)
     fig.suptitle('Persistence {0} of the {1} for\n different frequency bands and motivational space'.format(repre,space),fontsize=24)
     fig.tight_layout()
     fig.subplots_adjust(top=0.85)

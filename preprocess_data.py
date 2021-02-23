@@ -8,7 +8,7 @@ Created on Wed Feb 10 11:03:43 2021
 
 import numpy as np
 import scipy.signal as spsg
-from scipy.spatial import distance_matrix #manera més óptima
+#from scipy.spatial import distance_matrix #manera més óptima
 
 def clean(data):
     """
