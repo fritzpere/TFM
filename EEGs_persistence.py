@@ -105,7 +105,7 @@ def plot_persistence(persistence_dic,subj_dir,intervals=1000,repre='diagrams',sp
     else:
         plot_func=lambda x,axes: gd.plot_persistence_barcode(x,legend=True,max_intervals=intervals,axes=axes)
     band_dic={0:'alpha',1:'betta',2:'gamma'}
-    fig, axes = plt.subplots(nrows=3, ncols=3, figsize=(14, 9))
+    fig, axes = plt.subplots(nrows=3, ncols=3, figsize=(14, 12))
     for i in range(3):
         aux_lis=np.array([persistence_dic[(i,0)],persistence_dic[(i,1)],persistence_dic[(i,2)]], dtype=object)
         x_max=np.amax(list(map(lambda y: np.amax(list(map(lambda x: x[1][0],y))),aux_lis)))+0.05
@@ -116,8 +116,8 @@ def plot_persistence(persistence_dic,subj_dir,intervals=1000,repre='diagrams',sp
             a.set_xlim(-0.05,x_max)
             a.set_ylim(0,y_max)
     fig.suptitle('Persistence {0} of the {1} for\n different frequency bands and motivational space'.format(repre,space),fontsize=24)
-    fig.tight_layout()
-    fig.subplots_adjust(top=0.85)
+    fig.tight_layout(pad=1.00)
+    fig.subplots_adjust(top=0.8)
     if save:
         if not os.path.exists(subj_dir+space+'/'+measure):
             print("create directory(plot):",subj_dir+space+'/'+measure)
