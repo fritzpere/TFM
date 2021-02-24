@@ -24,14 +24,15 @@ def persistency_per_band_and_state(tensor,measure,n_bands=3):
     """
     persistence_dic={}
     for band in range(n_bands):
-        band_tensor = np.abs(tensor[band,:,:,:])
-        for i in range (3): 
+        
+        for i in range (3):#motivational
+            band_tensor = np.abs(tensor[band,i][:,:])
             #print('nans?',np.isnan(band_tensor[i]).any())
             if measure=='intensities':
-                matrix=distance_matrix(band_tensor[i],band_tensor[i])
+                matrix=distance_matrix(band_tensor,band_tensor)
                
             else:
-                points=band_tensor[i].copy()
+                points=band_tensor.copy()
                 normalized_p=normalize(points-np.mean(points,axis=0),axis=1)
                 matrix= normalized_p @ normalized_p.T
                 matrix=1-matrix
@@ -62,16 +63,18 @@ def compute_persistence_from_EEG(data,measure='intensities',subj_dir=None,space=
     #n_blocks=12
     cleaned_data,N=clean(data)
     n_motiv=3
-    ts=get_ts(cleaned_data,n_blocks,n_trials,T,N)
-    n_trials=n_trials*4
+    ts_dic=get_ts(cleaned_data,n_blocks,n_trials,T,N)
+    #n_trials=n_trials*4
     #ts.shape=  (3, 432, 1200, 48) motivational state, trial, time, channel
-    filtered_ts=freq_filter(ts,n_motiv,n_trials,T,N)
-    vect_features=np.zeros([3,n_motiv,n_trials,N])
+    filtered_ts_dic=freq_filter(ts_dic,n_motiv,n_trials,T,N)
+    vect_features_dic={}
     for i_band in range(3):
-        vect_features[i_band] = np.abs(filtered_ts[:,i_band,:,:,:]).mean(axis=2) #Mean of time
+        vect_features_dic[i_band,0] = np.abs(filtered_ts_dic[0,i_band][:,:,:]).mean(axis=1) #Mean of time
+        vect_features_dic[i_band,1] = np.abs(filtered_ts_dic[1,i_band][:,:,:]).mean(axis=1) 
+        vect_features_dic[i_band,2] = np.abs(filtered_ts_dic[2,i_band][:,:,:]).mean(axis=1) 
     #filtered_ts.shape (3, 3, 432,1200 40) band,state, trial, time, channel
     #print(vect_features.shape)
-    persistence_dictionary=persistency_per_band_and_state(vect_features,measure)
+    persistence_dictionary=persistency_per_band_and_state(vect_features_dic,measure)
     if save:
         band_dic={0:'alpha',1:'betta',2:'gamma'}
         if not os.path.exists(subj_dir+space+'/'+measure+'/'+'persistencies'):
