@@ -46,7 +46,7 @@ def load_data(i_sub,space='both'):
 
 if __name__ == "__main__":    
     #subjects=[25,27]
-    subjects=[25,26,27]
+    subjects=[25,26,27,28,29]
     for subject in subjects:
         t=time.time()
         elec_space,font_space,subj_dir=load_data(subject)
