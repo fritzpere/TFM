@@ -32,10 +32,11 @@ def persistency_per_band_and_state(tensor,measure,n_bands=3):
                 matrix=distance_matrix(band_tensor,band_tensor)
                
             else:
-                points=band_tensor.copy()
+                #TODO
+                '''points=band_tensor.copy()
                 normalized_p=normalize(points-np.mean(points,axis=0),axis=1)
                 matrix= normalized_p @ normalized_p.T
-                matrix=1-matrix
+                matrix=1-matrix'''
             max_edge=np.max(matrix)
             Rips_complex_sample = gd.RipsComplex(distance_matrix=matrix,max_edge_length=max_edge)
             Rips_simplex_tree_sample = Rips_complex_sample.create_simplex_tree(max_dimension=2)
@@ -43,7 +44,7 @@ def persistency_per_band_and_state(tensor,measure,n_bands=3):
             persistence_dic[band,i]= persistence #dictionary with key=(band,state) and value=persistence
     return persistence_dic 
 
-def compute_persistence_from_EEG(data,measure='intensities',subj_dir=None,space=None,save=True,):
+def compute_persistence_from_EEG(data,measure='intensities',reduc=10,subj_dir=None,space=None,save=True,):
     """
     Pipeline that beggins with raw_data and preprocess it
     to later compute Persistent Homology
@@ -63,16 +64,24 @@ def compute_persistence_from_EEG(data,measure='intensities',subj_dir=None,space=
     #n_blocks=12
     cleaned_data,N=clean(data)
     n_motiv=3
+    n_band=3
     ts_dic=get_ts(cleaned_data,n_blocks,n_trials,T,N)
     #n_trials=n_trials*4
     #ts.shape=  (3, 432, 1200, 48) motivational state, trial, time, channel
     filtered_ts_dic=freq_filter(ts_dic,n_motiv,n_trials,T,N)
+    n_trials,T,N=filtered_ts_dic[0,0].shape
     vect_features_dic={}
-    for i_band in range(3):
-        vect_features_dic[i_band,0] = np.abs(filtered_ts_dic[0,i_band][:,:,:]).mean(axis=1) #Mean of time
-        vect_features_dic[i_band,1] = np.abs(filtered_ts_dic[1,i_band][:,:,:]).mean(axis=1) 
-        vect_features_dic[i_band,2] = np.abs(filtered_ts_dic[2,i_band][:,:,:]).mean(axis=1) 
-    #filtered_ts.shape (3, 3, 432,1200 40) band,state, trial, time, channel
+    for i_band in range(n_band):
+        for i_state in range(n_motiv):
+            temp=0
+            vect_temp=np.zeros((n_trials,T//reduc,N))
+            for i in range(T//reduc):
+                
+                vect_temp[i,:] =np.abs(filtered_ts_dic[i_state,i_band][i,temp:temp+reduc,:]).mean(axis=0)
+                temp+=reduc
+            vect_features_dic[i_band,i_state]= vect_temp.reshape((n_trials,-1))
+
+    print(vect_features_dic[0,0].shape)
     #print(vect_features.shape)
     persistence_dictionary=persistency_per_band_and_state(vect_features_dic,measure)
     if save:
