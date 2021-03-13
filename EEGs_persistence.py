@@ -28,6 +28,7 @@ def persistency_per_band_and_state(tensor,measure,n_bands=3):
         for i in range (3):#motivational
             band_tensor = np.abs(tensor[band,i][:,:])
             #print('nans?',np.isnan(band_tensor[i]).any())
+            #print('cloud shape:',band_tensor.shape)
             if measure=='intensities':
                 matrix=distance_matrix(band_tensor,band_tensor)
                
@@ -69,19 +70,18 @@ def compute_persistence_from_EEG(data,measure='intensities',reduc=100,subj_dir=N
     #n_trials=n_trials*4
     #ts.shape=  (3, 432, 1200, 48) motivational state, trial, time, channel
     filtered_ts_dic=freq_filter(ts_dic,n_motiv,n_trials,T,N)
-    n_trials,T,N=filtered_ts_dic[0,0].shape
+    
     vect_features_dic={}
     for i_band in range(n_band):
         for i_state in range(n_motiv):
+            n_trials=filtered_ts_dic[i_state,i_band].shape[0]
             temp=0
             vect_temp=np.zeros((n_trials,T//reduc,N))
             for i in range(T//reduc):
-                
-                vect_temp[i,:] =np.abs(filtered_ts_dic[i_state,i_band][i,temp:temp+reduc,:]).mean(axis=0)
+                vect_temp[:,i,:] =np.abs(filtered_ts_dic[i_state,i_band][:,temp:temp+reduc,:]).mean(axis=1)
                 temp+=reduc
             vect_features_dic[i_band,i_state]= vect_temp.reshape((n_trials,-1))
 
-    print(vect_features_dic[0,0].shape)
     #print(vect_features.shape)
     persistence_dictionary=persistency_per_band_and_state(vect_features_dic,measure)
     if save:

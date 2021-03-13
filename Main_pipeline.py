@@ -45,7 +45,7 @@ def load_data(i_sub,space='both'):
         return elec_space,font_space,subj_dir
 
 if __name__ == "__main__":    
-    #subjects=[25,27]
+    #subjects=[26]
     subjects=[25,26,27,28,29]
     for subject in subjects:
         t=time.time()
@@ -63,9 +63,10 @@ if __name__ == "__main__":
         plot_persistence(font_space_pers,subj_dir,intervals=1000,space='font_space',measure='intensities',save=True)
         #plot_persistence(elec_space_pers_corr,subj_dir,intervals=1000,space='electrode_space',measure='correlation',save=True)
         #plot_persistence(font_space_pers_corr,subj_dir,intervals=1000,space='font_space',measure='correlation',save=True)
+        
         '''
-        plot_persistence(elec_space_pers,subj_dir,intervals=1000,space='electrode_space',repre='barcodes',measure='distance',save=True)
-        plot_persistence(font_space_pers,subj_dir,intervals=1000,space='font_space',repre='barcodes',measure='distance',save=True)
-        plot_persistence(elec_space_pers_corr,subj_dir,intervals=1000,space='electrode_space',repre='barcodes',measure='correlation',save=True)
-        plot_persistence(font_space_pers_corr,subj_dir,intervals=1000,space='font_space',repre='barcodes',measure='correlation',save=True) '''       
+        plot_persistence(elec_space_pers,subj_dir,intervals=1000,space='electrode_space',repre='barcodes',measure='intensities',save=True)
+        plot_persistence(font_space_pers,subj_dir,intervals=1000,space='font_space',repre='barcodes',measure='intensities',save=True)
+        #plot_persistence(elec_space_pers_corr,subj_dir,intervals=1000,space='electrode_space',repre='barcodes',measure='correlation',save=True)
+        #plot_persistence(font_space_pers_corr,subj_dir,intervals=1000,space='font_space',repre='barcodes',measure='correlation',save=True) '''
         print((time.time()-t)/60, 'minuts')
