@@ -44,7 +44,7 @@ def persistency_per_band_and_state(tensor,measure,n_bands=3):
             persistence_dic[band,i]= persistence #dictionary with key=(band,state) and value=persistence
     return persistence_dic 
 
-def compute_persistence_from_EEG(data,measure='intensities',reduc=10,subj_dir=None,space=None,save=True,):
+def compute_persistence_from_EEG(data,measure='intensities',reduc=100,subj_dir=None,space=None,save=True,):
     """
     Pipeline that beggins with raw_data and preprocess it
     to later compute Persistent Homology
