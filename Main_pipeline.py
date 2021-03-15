@@ -49,7 +49,7 @@ if __name__ == "__main__":
     subjects=[25,26,27,28,29]
     for subject in subjects:
         t=time.time()
-        elec_space,font_space,subj_dir=load_data(subject)
+        elec_space,font_space,subj_dir=load_data(subject)#,'space=electrode_space')
         print('computing persistence of electrode space of subject',subject)
         elec_space_pers=compute_persistence_from_EEG(elec_space,measure='intensities',subj_dir=subj_dir,space='electrode_space',save=True) #pointcloud shape (432, 50)
         #print('computing persistence of electrode space (with correlations) of subject',subject)

@@ -11,6 +11,7 @@ from matplotlib import pyplot
 import gudhi as gd
 from sklearn.preprocessing import normalize
 from preprocess_data import *
+from topological_descriptors import *
 import os
 
 def persistency_per_band_and_state(tensor,measure,n_bands=3):
@@ -100,29 +101,7 @@ def compute_persistence_from_EEG(data,measure='intensities',reduc=100,subj_dir=N
                 f.close()
     return persistence_dictionary #dictionary with key=(band,state) and value=persistence
 
-import pandas as pd
-def compute_bottleneck(pers_band_dic, save=True):
 
-    zero_dim=[]
-    one_dim=[]
-    for i in range(3):
-        dim_list=list(map(lambda x: x[0], pers_band_dic[i]))
-        point_list=np.array(list(map(lambda x: x[1], pers_band_dic[i])))
-        zero_dim.append(point_list[np.array(dim_list)==0])
-        one_dim.append(point_list[np.array(dim_list)==1])
-    distances_0_dim=np.zeros((3,3))
-    distances_1_dim=np.zeros((3,3))
-    for i in range(3):
-        for j in range(3):
-            if i!=j:
-                distances_0_dim[i,j]=gd.bottleneck_distance(zero_dim[i],zero_dim[j])
-                distances_1_dim[i,j]=gd.bottleneck_distance(one_dim[i],one_dim[j])
-            else:
-                distances_0_dim[i,j]=0
-                distances_1_dim[i,j]=0
-    table=pd.DataFrame(np.concatenate((distances_0_dim,distances_1_dim),axis=1),index=['Motivational state 0','Motivational state 1','Motivational state 2'],columns=['M0 dimension 0','M1 dimension 0','M2 dimension 0','M0 dimension 1','M1 dimension 1','M1 dimension 2'])
-    print(table)
-    return table
 
 def plot_persistence(persistence_dic,subj_dir,intervals=1000,repre='diagrams',space='',measure='',save=False):
     """
@@ -143,8 +122,8 @@ def plot_persistence(persistence_dic,subj_dir,intervals=1000,repre='diagrams',sp
         plot_func=lambda x,axes: gd.plot_persistence_diagram(x,legend=True,max_intervals=intervals,axes=axes)#,inf_delta=0.5)
     else:
         plot_func=lambda x,axes: gd.plot_persistence_barcode(x,legend=True,max_intervals=intervals,axes=axes)
-    band_dic={0:'alpha',1:'betta',2:'gamma'}
     fig, axes = plt.subplots(nrows=3, ncols=3, figsize=(14, 12))
+    band_dic={0:'alpha',1:'betta',2:'gamma'}
     for i in range(3):
         aux_lis=np.array([persistence_dic[i][0],persistence_dic[i][1],persistence_dic[i][2]], dtype=object)
         x_max=np.amax(list(map(lambda y: np.amax(list(map(lambda x: x[1][0],y))),aux_lis)))+0.05
@@ -157,19 +136,38 @@ def plot_persistence(persistence_dic,subj_dir,intervals=1000,repre='diagrams',sp
     fig.suptitle('Persistence {0} of the {1} for\n different frequency bands and motivational space'.format(repre,space),fontsize=24)
     fig.tight_layout(pad=1.00)
     fig.subplots_adjust(top=0.8)
-    bottleneck_alpha=compute_bottleneck(persistence_dic[0])
-    bottleneck_betta=compute_bottleneck(persistence_dic[1])
-    bottleneck_gamma=compute_bottleneck(persistence_dic[2])
-
+    
+    descriptors={}
+    descriptors[0]=compute_topological_descriptors(persistence_dic[0])
+    descriptors[1]=compute_topological_descriptors(persistence_dic[1])
+    descriptors[2]=compute_topological_descriptors(persistence_dic[2])
+  
+    save_tables(descriptors,subj_dir,space,measure)
+    
     if save:
         if not os.path.exists(subj_dir+space+'/'+measure):
             print("create directory(plot):",subj_dir+space+'/'+measure)
             os.makedirs(subj_dir+'/'+space+'/'+measure)
         pyplot.savefig(subj_dir+space+'/'+measure+'/'+repre+'.png')
-        if not os.path.exists(subj_dir+space+'/'+measure+'/'+'bottleneck_tables'):
-            print("create directory(plot):",subj_dir+space+'/'+measure+'/'+'bottleneck_tables')
-            os.makedirs(subj_dir+'/'+space+'/'+measure+'/'+'bottleneck_tables')
-        bottleneck_alpha.to_csv(subj_dir+space+'/'+measure+'/'+'bottleneck_tables/'+band_dic[0]+'.csv')
-        bottleneck_betta.to_csv(subj_dir+space+'/'+measure+'/'+'bottleneck_tables/'+band_dic[1]+'.csv')
-        bottleneck_gamma.to_csv(subj_dir+space+'/'+measure+'/'+'bottleneck_tables/'+band_dic[2]+'.csv')
     plt.show()
+    
+    
+def save_tables(descriptors,subj_dir,space,measure):
+    band_dic={0:'alpha',1:'betta',2:'gamma'}
+    bottleneck_alpha,alpha_descriptors=descriptors[0]
+    bottleneck_betta,betta_descriptors=descriptors[0]
+    bottleneck_gamma,gamma_descriptors=descriptors[0]
+        
+    if not os.path.exists(subj_dir+space+'/'+measure+'/'+'bottleneck_tables'):
+        print("create directory(plot):",subj_dir+space+'/'+measure+'/'+'bottleneck_tables')
+        os.makedirs(subj_dir+'/'+space+'/'+measure+'/'+'bottleneck_tables')
+    bottleneck_alpha.to_csv(subj_dir+space+'/'+measure+'/'+'bottleneck_tables/'+band_dic[0]+'.csv')
+    bottleneck_betta.to_csv(subj_dir+space+'/'+measure+'/'+'bottleneck_tables/'+band_dic[1]+'.csv')
+    bottleneck_gamma.to_csv(subj_dir+space+'/'+measure+'/'+'bottleneck_tables/'+band_dic[2]+'.csv')
+    
+    if not os.path.exists(subj_dir+space+'/'+measure+'/'+'descriptor_tables'):
+        print("create directory(plot):",subj_dir+space+'/'+measure+'/'+'descriptor_tables')
+        os.makedirs(subj_dir+'/'+space+'/'+measure+'/'+'descriptor_tables')
+    alpha_descriptors.to_csv(subj_dir+space+'/'+measure+'/'+'descriptor_tables/'+band_dic[0]+'.csv')
+    betta_descriptors.to_csv(subj_dir+space+'/'+measure+'/'+'descriptor_tables/'+band_dic[1]+'.csv')
+    gamma_descriptors.to_csv(subj_dir+space+'/'+measure+'/'+'descriptor_tables/'+band_dic[2]+'.csv')
