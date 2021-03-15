@@ -24,9 +24,9 @@ def persistency_per_band_and_state(tensor,measure,n_bands=3):
     """
     persistence_dic={}
     for band in range(n_bands):
-        
+        persistence_dic[band]={}
         for i in range (3):#motivational
-            band_tensor = np.abs(tensor[band,i][:,:])
+            band_tensor = np.abs(tensor[band][i][:,:])
             #print('nans?',np.isnan(band_tensor[i]).any())
             #print('cloud shape:',band_tensor.shape)
             if measure=='intensities':
@@ -42,7 +42,7 @@ def persistency_per_band_and_state(tensor,measure,n_bands=3):
             Rips_complex_sample = gd.RipsComplex(distance_matrix=matrix,max_edge_length=max_edge)
             Rips_simplex_tree_sample = Rips_complex_sample.create_simplex_tree(max_dimension=2)
             persistence = Rips_simplex_tree_sample.persistence()
-            persistence_dic[band,i]= persistence #dictionary with key=(band,state) and value=persistence
+            persistence_dic[band][i]= persistence #dictionary with key=(band,state) and value=persistence
     return persistence_dic 
 
 def compute_persistence_from_EEG(data,measure='intensities',reduc=100,subj_dir=None,space=None,save=True,):
@@ -73,6 +73,7 @@ def compute_persistence_from_EEG(data,measure='intensities',reduc=100,subj_dir=N
     
     vect_features_dic={}
     for i_band in range(n_band):
+        vect_features_dic[i_band]={}
         for i_state in range(n_motiv):
             n_trials=filtered_ts_dic[i_state,i_band].shape[0]
             temp=0
@@ -80,22 +81,48 @@ def compute_persistence_from_EEG(data,measure='intensities',reduc=100,subj_dir=N
             for i in range(T//reduc):
                 vect_temp[:,i,:] =np.abs(filtered_ts_dic[i_state,i_band][:,temp:temp+reduc,:]).mean(axis=1)
                 temp+=reduc
-            vect_features_dic[i_band,i_state]= vect_temp.reshape((n_trials,-1))
+            vect_features_dic[i_band][i_state]= vect_temp.reshape((n_trials,-1))
 
     #print(vect_features.shape)
     persistence_dictionary=persistency_per_band_and_state(vect_features_dic,measure)
+        
     if save:
         band_dic={0:'alpha',1:'betta',2:'gamma'}
         if not os.path.exists(subj_dir+space+'/'+measure+'/'+'persistencies'):
             print("create directory:",subj_dir+space+'/'+measure+'/'+'persistencies')
             os.makedirs(subj_dir+space+'/'+measure+'/'+'persistencies')
+
         for i in range(3):
             for j in range(3):
                 f = open(subj_dir+'/'+space+'/'+measure+'/'+'persistencies'+'/'+str(j)+band_dic[i]+'persistence.txt', "w")
-                for persistence in persistence_dictionary[(i,j)] :
+                for persistence in persistence_dictionary[i][j] :
                     f.write(''.join(map(str,persistence))+'\n')
                 f.close()
     return persistence_dictionary #dictionary with key=(band,state) and value=persistence
+
+import pandas as pd
+def compute_bottleneck(pers_band_dic, save=True):
+
+    zero_dim=[]
+    one_dim=[]
+    for i in range(3):
+        dim_list=list(map(lambda x: x[0], pers_band_dic[i]))
+        point_list=np.array(list(map(lambda x: x[1], pers_band_dic[i])))
+        zero_dim.append(point_list[np.array(dim_list)==0])
+        one_dim.append(point_list[np.array(dim_list)==1])
+    distances_0_dim=np.zeros((3,3))
+    distances_1_dim=np.zeros((3,3))
+    for i in range(3):
+        for j in range(3):
+            if i!=j:
+                distances_0_dim[i,j]=gd.bottleneck_distance(zero_dim[i],zero_dim[j])
+                distances_1_dim[i,j]=gd.bottleneck_distance(one_dim[i],one_dim[j])
+            else:
+                distances_0_dim[i,j]=0
+                distances_1_dim[i,j]=0
+    table=pd.DataFrame(np.concatenate((distances_0_dim,distances_1_dim),axis=1),index=['Motivational state 0','Motivational state 1','Motivational state 2'],columns=['M0 dimension 0','M1 dimension 0','M2 dimension 0','M0 dimension 1','M1 dimension 1','M1 dimension 2'])
+    print(table)
+    return table
 
 def plot_persistence(persistence_dic,subj_dir,intervals=1000,repre='diagrams',space='',measure='',save=False):
     """
@@ -119,20 +146,30 @@ def plot_persistence(persistence_dic,subj_dir,intervals=1000,repre='diagrams',sp
     band_dic={0:'alpha',1:'betta',2:'gamma'}
     fig, axes = plt.subplots(nrows=3, ncols=3, figsize=(14, 12))
     for i in range(3):
-        aux_lis=np.array([persistence_dic[(i,0)],persistence_dic[(i,1)],persistence_dic[(i,2)]], dtype=object)
+        aux_lis=np.array([persistence_dic[i][0],persistence_dic[i][1],persistence_dic[i][2]], dtype=object)
         x_max=np.amax(list(map(lambda y: np.amax(list(map(lambda x: x[1][0],y))),aux_lis)))+0.05
         y_max=np.amax(list(map(lambda y: np.amax(list(map(lambda x: x[1][1] if x[1][1]!=np.inf  else 0 ,y))),aux_lis)))*1.2
         for j in range(3):
-            a=plot_func(persistence_dic[(i,j)],axes=axes[i][j])
+            a=plot_func(persistence_dic[i][j],axes=axes[i][j])
             a.set_title('{0} persistence {1} of \n motivational state {2} and band {3}'.format(space,repre,j,band_dic[i]))
             a.set_xlim(-0.05,x_max)
             a.set_ylim(0,y_max)
     fig.suptitle('Persistence {0} of the {1} for\n different frequency bands and motivational space'.format(repre,space),fontsize=24)
     fig.tight_layout(pad=1.00)
     fig.subplots_adjust(top=0.8)
+    bottleneck_alpha=compute_bottleneck(persistence_dic[0])
+    bottleneck_betta=compute_bottleneck(persistence_dic[1])
+    bottleneck_gamma=compute_bottleneck(persistence_dic[2])
+
     if save:
         if not os.path.exists(subj_dir+space+'/'+measure):
             print("create directory(plot):",subj_dir+space+'/'+measure)
             os.makedirs(subj_dir+'/'+space+'/'+measure)
         pyplot.savefig(subj_dir+space+'/'+measure+'/'+repre+'.png')
+        if not os.path.exists(subj_dir+space+'/'+measure+'/'+'bottleneck_tables'):
+            print("create directory(plot):",subj_dir+space+'/'+measure+'/'+'bottleneck_tables')
+            os.makedirs(subj_dir+'/'+space+'/'+measure+'/'+'bottleneck_tables')
+        bottleneck_alpha.to_csv(subj_dir+space+'/'+measure+'/'+'bottleneck_tables/'+band_dic[0]+'.csv')
+        bottleneck_betta.to_csv(subj_dir+space+'/'+measure+'/'+'bottleneck_tables/'+band_dic[1]+'.csv')
+        bottleneck_gamma.to_csv(subj_dir+space+'/'+measure+'/'+'bottleneck_tables/'+band_dic[2]+'.csv')
     plt.show()
