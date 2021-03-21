@@ -14,7 +14,7 @@ from preprocess_data import *
 from topological_descriptors import *
 import os
 
-def persistency_per_band_and_state(tensor,measure,n_bands=3):
+def persistency_per_band_and_state(subj_dir,space,tensor,measure,n_bands=3,save=True):
     """
     Computes Persistent Homology for each band of
     frequency and each motivational state
@@ -24,12 +24,20 @@ def persistency_per_band_and_state(tensor,measure,n_bands=3):
     :return: dictionary with key=(band,state) and value=persistence
     """
     persistence_dic={}
+    if save:
+        if not os.path.exists(subj_dir+space+'/'+measure):
+            print("create directory(point cloud):",subj_dir+space+'/'+measure+'/Point_Clouds')
+            os.makedirs(subj_dir+'/'+space+'/'+measure+'/Point_Clouds')
     for band in range(n_bands):
         persistence_dic[band]={}
         for i in range (3):#motivational
             band_tensor = np.abs(tensor[band][i][:,:])
             #print('nans?',np.isnan(band_tensor[i]).any())
             #print('cloud shape:',band_tensor.shape)
+            
+            if save:
+                np.savetxt(subj_dir+space+'/'+measure+'/Point_Clouds/'+'pointcloud_band'+str(band)+'_MotivationalState_'+str(i)+'.txt',band_tensor,delimiter=',',newline='\n')
+                
             if measure=='intensities':
                 matrix=distance_matrix(band_tensor,band_tensor)
                
@@ -85,7 +93,7 @@ def compute_persistence_from_EEG(data,measure='intensities',reduc=100,subj_dir=N
             vect_features_dic[i_band][i_state]= vect_temp.reshape((n_trials,-1))
 
     #print(vect_features.shape)
-    persistence_dictionary=persistency_per_band_and_state(vect_features_dic,measure)
+    persistence_dictionary=persistency_per_band_and_state(subj_dir,space,vect_features_dic,measure)
         
     if save:
         band_dic={0:'alpha',1:'betta',2:'gamma'}
@@ -150,7 +158,6 @@ def plot_persistence(persistence_dic,subj_dir,intervals=1000,repre='diagrams',sp
             os.makedirs(subj_dir+'/'+space+'/'+measure)
         pyplot.savefig(subj_dir+space+'/'+measure+'/'+repre+'.png')
     plt.show()
-    
     
 def save_tables(descriptors,subj_dir,space,measure):
     band_dic={0:'alpha',1:'betta',2:'gamma'}
