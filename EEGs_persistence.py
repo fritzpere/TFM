@@ -138,9 +138,9 @@ def plot_persistence(persistence_dic,subj_dir,intervals=1000,repre='diagrams',sp
     fig.subplots_adjust(top=0.8)
     
     descriptors={}
-    descriptors[0]=compute_topological_descriptors(persistence_dic[0])
-    descriptors[1]=compute_topological_descriptors(persistence_dic[1])
-    descriptors[2]=compute_topological_descriptors(persistence_dic[2])
+    descriptors[0]=compute_topological_descriptors(persistence_dic[0],subj_dir,space,measure)
+    descriptors[1]=compute_topological_descriptors(persistence_dic[1],subj_dir,space,measure)
+    descriptors[2]=compute_topological_descriptors(persistence_dic[2],subj_dir,space,measure)
   
     save_tables(descriptors,subj_dir,space,measure)
     
