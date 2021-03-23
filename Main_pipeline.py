@@ -45,8 +45,8 @@ def load_data(i_sub,space='both'):
         return elec_space,font_space,subj_dir
 
 if __name__ == "__main__":    
-    #subjects=[26]
-    subjects=[25,26,27,28,29]
+    subjects=[26]
+    #subjects=[25,26,27,28,29]
     for subject in subjects:
         t=time.time()
         elec_space,font_space,subj_dir=load_data(subject)#,'space=electrode_space')

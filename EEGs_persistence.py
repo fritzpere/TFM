@@ -26,7 +26,7 @@ def persistency_per_band_and_state(tensor,measure,n_bands=3):
     persistence_dic={}
     for band in range(n_bands):
         persistence_dic[band]={}
-        for i in range (3):#motivational
+        for i in range (-1,3):#motivational
             band_tensor = np.abs(tensor[band][i][:,:])
             #print('nans?',np.isnan(band_tensor[i]).any())
             #print('cloud shape:',band_tensor.shape)
@@ -83,8 +83,10 @@ def compute_persistence_from_EEG(data,measure='intensities',reduc=100,subj_dir=N
                 vect_temp[:,i,:] =np.abs(filtered_ts_dic[i_state,i_band][:,temp:temp+reduc,:]).mean(axis=1)
                 temp+=reduc
             vect_features_dic[i_band][i_state]= vect_temp.reshape((n_trials,-1))
+            vect_features_dic[i_band][-1]=np.zeros((n_trials*3,T//reduc*N))
+            vect_features_dic[i_band][-1][n_trials*i_state:n_trials*(i_state+1)]=vect_features_dic[i_band][i_state]
 
-    #print(vect_features.shape)
+    print(vect_features_dic[0][-1].shape)
     persistence_dictionary=persistency_per_band_and_state(vect_features_dic,measure)
         
     if save:
@@ -94,6 +96,10 @@ def compute_persistence_from_EEG(data,measure='intensities',reduc=100,subj_dir=N
             os.makedirs(subj_dir+space+'/'+measure+'/'+'persistencies')
 
         for i in range(3):
+            f = open(subj_dir+'/'+space+'/'+measure+'/'+'persistencies'+'/'+'all_states'+band_dic[i]+'persistence.txt', "w")
+            for persistence in persistence_dictionary[(i,-1)] :
+                f.write(''.join(map(str,persistence))+'\n')
+            f.close()
             for j in range(3):
                 f = open(subj_dir+'/'+space+'/'+measure+'/'+'persistencies'+'/'+str(j)+band_dic[i]+'persistence.txt', "w")
                 for persistence in persistence_dictionary[i][j] :
@@ -122,7 +128,7 @@ def plot_persistence(persistence_dic,subj_dir,intervals=1000,repre='diagrams',sp
         plot_func=lambda x,axes: gd.plot_persistence_diagram(x,legend=True,max_intervals=intervals,axes=axes)#,inf_delta=0.5)
     else:
         plot_func=lambda x,axes: gd.plot_persistence_barcode(x,legend=True,max_intervals=intervals,axes=axes)
-    fig, axes = plt.subplots(nrows=3, ncols=3, figsize=(14, 12))
+    fig, axes = plt.subplots(nrows=3, ncols=4, figsize=(14, 12))
     band_dic={0:'alpha',1:'betta',2:'gamma'}
     for i in range(3):
         aux_lis=np.array([persistence_dic[i][0],persistence_dic[i][1],persistence_dic[i][2]], dtype=object)
@@ -133,6 +139,10 @@ def plot_persistence(persistence_dic,subj_dir,intervals=1000,repre='diagrams',sp
             a.set_title('{0} persistence {1} of \n motivational state {2} and band {3}'.format(space,repre,j,band_dic[i]))
             a.set_xlim(-0.05,x_max)
             a.set_ylim(0,y_max)
+        a=plot_func(persistence_dic[(i,-1)],axes=axes[i][3])
+        a.set_title('{0} persistence {1} of \n all motivational states and band {2}'.format(space,repre,band_dic[i]))
+        a.set_xlim(-0.05,x_max)
+        a.set_ylim(0,y_max)
     fig.suptitle('Persistence {0} of the {1} for\n different frequency bands and motivational space'.format(repre,space),fontsize=24)
     fig.tight_layout(pad=1.00)
     fig.subplots_adjust(top=0.8)
