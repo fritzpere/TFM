@@ -137,6 +137,13 @@ def plot_persistence(persistence_dic,subj_dir,intervals=1000,repre='diagrams',sp
     fig.tight_layout(pad=1.00)
     fig.subplots_adjust(top=0.8)
     
+    if save:
+        if not os.path.exists(subj_dir+space+'/'+measure):
+            print("create directory(plot):",subj_dir+space+'/'+measure)
+            os.makedirs(subj_dir+'/'+space+'/'+measure)
+        pyplot.savefig(subj_dir+space+'/'+measure+'/'+repre+'.png')
+    plt.show()
+    
     descriptors={}
     descriptors[0]=compute_topological_descriptors(persistence_dic[0],subj_dir,space,measure)
     descriptors[1]=compute_topological_descriptors(persistence_dic[1],subj_dir,space,measure)
@@ -144,12 +151,6 @@ def plot_persistence(persistence_dic,subj_dir,intervals=1000,repre='diagrams',sp
   
     save_tables(descriptors,subj_dir,space,measure)
     
-    if save:
-        if not os.path.exists(subj_dir+space+'/'+measure):
-            print("create directory(plot):",subj_dir+space+'/'+measure)
-            os.makedirs(subj_dir+'/'+space+'/'+measure)
-        pyplot.savefig(subj_dir+space+'/'+measure+'/'+repre+'.png')
-    plt.show()
     
     
 def save_tables(descriptors,subj_dir,space,measure):
