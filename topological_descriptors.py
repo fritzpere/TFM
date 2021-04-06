@@ -14,11 +14,11 @@ import matplotlib.pyplot as plt
 from matplotlib import pyplot
 import os
 
-def compute_topological_descriptors(pers_band_dic,subj_dir,space,measure):
+def compute_topological_descriptors(pers_band_dic,band_name,subj_dir,space,measure):
     zero_dim,one_dim=separate_dimensions(pers_band_dic)
     bottleneck_table=compute_bottleneck(zero_dim,one_dim)
-    avg_life_table=compute_stats(zero_dim,one_dim,subj_dir,space,measure,feat='life')
-    avg_midlife_table=compute_stats(zero_dim,one_dim,subj_dir,space,measure,feat='midlife')
+    avg_life_table=compute_stats(zero_dim,one_dim,band_name,subj_dir,space,measure,feat='life')
+    avg_midlife_table=compute_stats(zero_dim,one_dim,band_name,subj_dir,space,measure,feat='midlife')
 
     #add more descriptors
     descriptors_table=avg_life_table.join( avg_midlife_table,on=avg_life_table.index)
@@ -51,7 +51,7 @@ def compute_bottleneck(zero_dim,one_dim):
     table=pd.DataFrame(np.concatenate((distances_0_dim,distances_1_dim),axis=1),index=['Motivational state 0','Motivational state 1','Motivational state 2'],columns=['M0 dimension 0','M1 dimension 0','M2 dimension 0','M0 dimension 1','M1 dimension 1','M1 dimension 2'])
     return table
 
-def compute_stats(zero_dim,one_dim,subj_dir,space,measure,feat='life'):
+def compute_stats(zero_dim,one_dim,band_name,subj_dir,space,measure,feat='life'):
     zero_avg_lifes=[]
     one_avg_lifes=[]
     zero_std_lifes=[]
@@ -75,25 +75,28 @@ def compute_stats(zero_dim,one_dim,subj_dir,space,measure,feat='life'):
     zero_std_lifes=np.array(zero_std_lifes).reshape((1,-1))
     one_std_lifes=np.array(one_std_lifes).reshape((1,-1))
     
-    if not os.path.exists(subj_dir+space+'/'+measure+'/'+'descriptor_tables'):
-        print("create directory(plot):",subj_dir+space+'/'+measure+'/'+'descriptor_tables')
-        os.makedirs(subj_dir+space+'/'+measure+'/'+'descriptor_tables')
+    if not os.path.exists(subj_dir+space+'/'+measure+'/descriptor_tables/'+feat+'/dimension0'):
+        print("create directory(plot):",subj_dir+space+'/'+measure+'/'+'descriptor_tables/'+feat+'/dimension0')
+        os.makedirs(subj_dir+space+'/'+measure+'/'+'descriptor_tables/'+feat+'/dimension0')
+    if not os.path.exists(subj_dir+space+'/'+measure+'/'+'descriptor_tables/'+feat+'/dimension1'):
+        print("create directory(plot):",subj_dir+space+'/'+measure+'/'+'descriptor_tables/'+feat+'/dimension1')
+        os.makedirs(subj_dir+space+'/'+measure+'/'+'descriptor_tables/'+feat+'/dimension1')
     fig1, ax1 = plt.subplots()
     ax1.set_title('BoxPlot dimension 0')
-    ax1.boxplot(zero_lifes)
+    ax1.boxplot(zero_lifes,showfliers=False)
     #ax1.set_xticks(([1,2,3],['alpha', 'betta', 'gamma']))
     
-    pyplot.savefig(subj_dir+space+'/'+measure+'/descriptor_tables/'+feat+'boxplot_dimension_0.png')
+    pyplot.savefig(subj_dir+space+'/'+measure+'/descriptor_tables/'+feat+'/dimension0/boxplot_band_'+band_name+'.png')
 
     plt.show()
     
     fig2, ax2 = plt.subplots()
     ax2.set_title('BoxPlot dimension 1')
-    ax2.boxplot(one_lifes)
-    ax2.set_xticks([1, 2, 3], ['alpha', 'betta', 'gamma'])
+    ax2.boxplot(one_lifes,showfliers=False)
+    #ax2.set_xticks([1, 2, 3], ['alpha', 'betta', 'gamma'])
     
-    pyplot.savefig(subj_dir+space+'/'+measure+'/descriptor_tables/'+feat+'boxplot_dimension_1.png')
+    pyplot.savefig(subj_dir+space+'/'+measure+'/descriptor_tables/'+feat+'/dimension1/boxplot_band_'+band_name+'.png')
 
-    table=pd.DataFrame(np.concatenate((zero_avg_lifes,one_avg_lifes,zero_std_lifes,one_std_lifes),axis=0).T,index=['Motivational state 0','Motivational state 1','Motivational state 2'],columns=['Avg. '+feat+' dim0','Avg. '+feat+' dim1','std '+feat+'life dim0','std'+feat+' dim1'])
+    table=pd.DataFrame(np.concatenate((zero_avg_lifes,one_avg_lifes,zero_std_lifes,one_std_lifes),axis=0).T,index=['Motivational state 0','Motivational state 1','Motivational state 2'],columns=['Avg. '+feat+' dim0','Avg. '+feat+' dim1','std '+feat+'dim0','std'+feat+' dim1'])
     return table
 

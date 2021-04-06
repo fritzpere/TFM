@@ -46,7 +46,7 @@ def persistency_per_band_and_state(tensor,measure,n_bands=3):
             persistence_dic[band][i]= persistence #dictionary with key=(band,state) and value=persistence
     return persistence_dic 
 
-def compute_persistence_from_EEG(data,measure='intensities',reduc=100,subj_dir=None,space=None,save=True,):
+def compute_persistence_from_EEG(data,measure='intensities',reduc=5,subj_dir=None,space=None,save=True,):
     """
     Pipeline that beggins with raw_data and preprocess it
     to later compute Persistent Homology
@@ -145,9 +145,9 @@ def plot_persistence(persistence_dic,subj_dir,intervals=1000,repre='diagrams',sp
     plt.show()
     
     descriptors={}
-    descriptors[0]=compute_topological_descriptors(persistence_dic[0],subj_dir,space,measure)
-    descriptors[1]=compute_topological_descriptors(persistence_dic[1],subj_dir,space,measure)
-    descriptors[2]=compute_topological_descriptors(persistence_dic[2],subj_dir,space,measure)
+    descriptors[0]=compute_topological_descriptors(persistence_dic[0],'alpha',subj_dir,space,measure)
+    descriptors[1]=compute_topological_descriptors(persistence_dic[1],'beta',subj_dir,space,measure)
+    descriptors[2]=compute_topological_descriptors(persistence_dic[2],'gamma',subj_dir,space,measure)
   
     save_tables(descriptors,subj_dir,space,measure)
     
