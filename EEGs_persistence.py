@@ -122,14 +122,22 @@ def plot_persistence(persistence_dic,subj_dir,intervals=1000,repre='diagrams',sp
         plot_func=lambda x,axes: gd.plot_persistence_diagram(x,legend=True,max_intervals=intervals,axes=axes)#,inf_delta=0.5)
     else:
         plot_func=lambda x,axes: gd.plot_persistence_barcode(x,legend=True,max_intervals=intervals,axes=axes)
-    fig, axes = plt.subplots(nrows=3, ncols=3, figsize=(14, 12))
+            
+    zerodim_pers={}
+    onedim_pers={}
+    zerodim_pers[0],onedim_pers[0]=separate_dimensions(persistence_dic[0],infinity=True)
+    zerodim_pers[1],onedim_pers[1]=separate_dimensions(persistence_dic[1],infinity=True)
+    zerodim_pers[2],onedim_pers[2]=separate_dimensions(persistence_dic[2],infinity=True)
     band_dic={0:'alpha',1:'betta',2:'gamma'}
+    #dim0
+    fig, axes = plt.subplots(nrows=3, ncols=3, figsize=(14, 10))
+    
     for i in range(3):
-        aux_lis=np.array([persistence_dic[i][0],persistence_dic[i][1],persistence_dic[i][2]], dtype=object)
+        aux_lis=np.array([zerodim_pers[i][0],zerodim_pers[i][1],zerodim_pers[i][2]], dtype=object)
         x_max=np.amax(list(map(lambda y: np.amax(list(map(lambda x: x[1][0],y))),aux_lis)))+0.05
         y_max=np.amax(list(map(lambda y: np.amax(list(map(lambda x: x[1][1] if x[1][1]!=np.inf  else 0 ,y))),aux_lis)))*1.2
         for j in range(3):
-            a=plot_func(persistence_dic[i][j],axes=axes[i][j])
+            a=plot_func(zerodim_pers[i][j],axes=axes[i][j])
             a.set_title('{0} persistence {1} of \n motivational state {2} and band {3}'.format(space,repre,j,band_dic[i]))
             a.set_xlim(-0.05,x_max)
             a.set_ylim(0,y_max)
@@ -141,8 +149,32 @@ def plot_persistence(persistence_dic,subj_dir,intervals=1000,repre='diagrams',sp
         if not os.path.exists(subj_dir+space+'/'+measure):
             print("create directory(plot):",subj_dir+space+'/'+measure)
             os.makedirs(subj_dir+'/'+space+'/'+measure)
-        pyplot.savefig(subj_dir+space+'/'+measure+'/'+repre+'.png')
+        pyplot.savefig(subj_dir+space+'/'+measure+'/'+repre+'dimension0.png')
     plt.show()
+    
+    #dim1  
+    fig, axes = plt.subplots(nrows=3, ncols=3, figsize=(14, 10))
+    for i in range(3):
+        aux_lis=np.array([onedim_pers[i][0],onedim_pers[i][1],onedim_pers[i][2]], dtype=object)
+        x_max=np.amax(list(map(lambda y: np.amax(list(map(lambda x: x[1][0],y))),aux_lis)))+0.05
+        y_max=np.amax(list(map(lambda y: np.amax(list(map(lambda x: x[1][1] if x[1][1]!=np.inf  else 0 ,y))),aux_lis)))*1.2
+        for j in range(3):
+            a=plot_func(onedim_pers[i][j],axes=axes[i][j])
+            a.set_title('{0} persistence {1} of \n motivational state {2} and band {3}'.format(space,repre,j,band_dic[i]))
+            a.set_xlim(-0.05,x_max)
+            a.set_ylim(0,y_max)
+    fig.suptitle('Persistence {0} of the {1} for\n different frequency bands and motivational space'.format(repre,space),fontsize=24)
+    fig.tight_layout(pad=1.00)
+    fig.subplots_adjust(top=0.8)
+    
+    if save:
+        if not os.path.exists(subj_dir+space+'/'+measure):
+            print("create directory(plot):",subj_dir+space+'/'+measure)
+            os.makedirs(subj_dir+'/'+space+'/'+measure)
+        pyplot.savefig(subj_dir+space+'/'+measure+'/'+repre+'dimension1.png')
+    plt.show()
+    
+    
     
     descriptors={}
     descriptors[0]=compute_topological_descriptors(persistence_dic[0],'alpha',subj_dir,space,measure)

@@ -26,14 +26,19 @@ def compute_topological_descriptors(pers_band_dic,band_name,subj_dir,space,measu
     return bottleneck_table,descriptors_table
     
     
-def separate_dimensions(pers_band_dic):
+def separate_dimensions(pers_band_dic,infinity=False):
     zero_dim=[]
     one_dim=[]
     for i in range(3):
         dim_list=np.array(list(map(lambda x: x[0], pers_band_dic[i])))
         point_list=np.array(list(map(lambda x: x[1], pers_band_dic[i])))
-        zero_dim.append(point_list[np.logical_and(point_list[:,1]!=float('inf'),dim_list==0)])
-        one_dim.append(point_list[np.logical_and(point_list[:,1]!=float('inf'),dim_list==1)])
+        if infinity:
+            point_list=np.array(pers_band_dic[i])
+            zero_dim.append(point_list[dim_list==0])
+            one_dim.append(point_list[dim_list==1])
+        else:
+            zero_dim.append(point_list[np.logical_and(point_list[:,1]!=float('inf'),dim_list==0)])
+            one_dim.append(point_list[np.logical_and(point_list[:,1]!=float('inf'),dim_list==1)])
     return zero_dim,one_dim
     
 
