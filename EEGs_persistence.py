@@ -76,13 +76,8 @@ def compute_persistence_from_EEG(data,measure='intensities',reduc=5,subj_dir=Non
     for i_band in range(n_band):
         vect_features_dic[i_band]={}
         for i_state in range(n_motiv):
-            n_trials=filtered_ts_dic[i_state,i_band].shape[0]
-            temp=0
-            vect_temp=np.zeros((n_trials,T//reduc,N))
-            for i in range(T//reduc):
-                vect_temp[:,i,:] =np.abs(filtered_ts_dic[i_state,i_band][:,temp:temp+reduc,:]).mean(axis=1)
-                temp+=reduc
-            vect_features_dic[i_band][i_state]= vect_temp.reshape((n_trials,-1))
+            #n_trials=filtered_ts_dic[i_state,i_band].shape[0]
+            vect_features_dic[i_band][i_state]= filtered_ts_dic[i_band,i_state][13,:,:].T
 
     #print(vect_features.shape)
     persistence_dictionary=persistency_per_band_and_state(vect_features_dic,measure)
