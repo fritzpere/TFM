@@ -128,7 +128,7 @@ def plot_persistence(persistence_dic,subj_dir,intervals=1000,repre='diagrams',sp
             a.set_title('{0} persistence {1} of \n motivational state {2} and band {3}'.format(space,repre,j,band_dic[i]))
             a.set_xlim(-0.05,x_max)
             a.set_ylim(0,y_max)
-    fig.suptitle('Persistence {0} of the {1} for\n different frequency bands and motivational space'.format(repre,space),fontsize=24)
+    fig.suptitle('Persistence {0} of the {1} for\n different frequency bands and motivational state'.format(repre,space),fontsize=24)
     fig.tight_layout(pad=1.00)
     fig.subplots_adjust(top=0.8)
     
@@ -139,15 +139,16 @@ def plot_persistence(persistence_dic,subj_dir,intervals=1000,repre='diagrams',sp
         pyplot.savefig(subj_dir+space+'/'+measure+'/'+repre+'.png')
     plt.show()
     
-    descriptors={}
-    descriptors[0]=compute_topological_descriptors(persistence_dic[0],'alpha',subj_dir,space,measure)
-    descriptors[1]=compute_topological_descriptors(persistence_dic[1],'beta',subj_dir,space,measure)
-    descriptors[2]=compute_topological_descriptors(persistence_dic[2],'gamma',subj_dir,space,measure)
+    descriptors=compute_topological_descriptors(persistence_dic,subj_dir,space,measure)
   
-    save_tables(descriptors,subj_dir,space,measure)
     
+    if not os.path.exists(subj_dir+space+'/'+measure+'/'+'descriptor_tables'):
+        print("create directory(plot):",subj_dir+space+'/'+measure+'/'+'descriptor_tables')
+        os.makedirs(subj_dir+'/'+space+'/'+measure+'/'+'descriptor_tables')
+    descriptors[0].to_csv(subj_dir+space+'/'+measure+'/descriptor_tables/'+'bottleneck_tables.csv')
+    descriptors[1].to_csv(subj_dir+space+'/'+measure+'/descriptor_tables/'+'top_descriptors_tables.csv')
     
-    
+    '''
 def save_tables(descriptors,subj_dir,space,measure):
     band_dic={0:'alpha',1:'betta',2:'gamma'}
     bottleneck_alpha,alpha_descriptors=descriptors[0]
@@ -166,4 +167,4 @@ def save_tables(descriptors,subj_dir,space,measure):
         os.makedirs(subj_dir+'/'+space+'/'+measure+'/'+'descriptor_tables')
     alpha_descriptors.to_csv(subj_dir+space+'/'+measure+'/'+'descriptor_tables/'+band_dic[0]+'.csv')
     betta_descriptors.to_csv(subj_dir+space+'/'+measure+'/'+'descriptor_tables/'+band_dic[1]+'.csv')
-    gamma_descriptors.to_csv(subj_dir+space+'/'+measure+'/'+'descriptor_tables/'+band_dic[2]+'.csv')
+    gamma_descriptors.to_csv(subj_dir+space+'/'+measure+'/'+'descriptor_tables/'+band_dic[2]+'.csv')'''
