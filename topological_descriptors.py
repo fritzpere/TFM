@@ -18,7 +18,7 @@ def compute_topological_descriptors(pers_band_dic,subj_dir,space,measure):
     bottleneck_table={}
     zero_dim={}
     one_dim={}
-    for i in range(3):
+    for i in range(-1,3):
         zero_dim[i],one_dim[i]=separate_dimensions(pers_band_dic[i])
         bottleneck_table[i]=compute_bottleneck(zero_dim[i],one_dim[i],i)
         
@@ -29,9 +29,10 @@ def compute_topological_descriptors(pers_band_dic,subj_dir,space,measure):
     descriptors_table_0=avg_life_table[0].join( avg_midlife_table[0],on=avg_life_table[0].index)
     descriptors_table_1=avg_life_table[1].join( avg_midlife_table[1],on=avg_life_table[1].index)
     descriptors_table_2=avg_life_table[2].join( avg_midlife_table[2],on=avg_life_table[2].index)
-    descriptors_table=pd.concat([descriptors_table_0,descriptors_table_1,descriptors_table_2])
+    descriptors_table_3=avg_life_table[-1].join( avg_midlife_table[-1],on=avg_life_table[-1].index)
+    descriptors_table=pd.concat([descriptors_table_0,descriptors_table_1,descriptors_table_2,descriptors_table_3])
     
-    bottleneck_final_table=pd.concat([bottleneck_table[0],bottleneck_table[1],bottleneck_table[2]])
+    bottleneck_final_table=pd.concat([bottleneck_table[0],bottleneck_table[1],bottleneck_table[2],bottleneck_table[-1]])
     
     return bottleneck_final_table,descriptors_table
     
@@ -48,7 +49,7 @@ def separate_dimensions(pers_band_dic):
     
 
 def compute_bottleneck(zero_dim,one_dim,k):
-    band_dic={0:'alpha',1:'betta',2:'gamma'}
+    band_dic={-1: 'no_filter', 0:'alpha',1:'betta',2:'gamma'}
     distances_0_dim=np.zeros((3,3))
     distances_1_dim=np.zeros((3,3))
     for i in range(3):
@@ -66,8 +67,8 @@ def compute_stats(zero_dim,one_dim,subj_dir,space,measure,feat='life'):
     table={}
     zero_lifes={}
     one_lifes={}
-    band_dic={0:'alpha',1:'betta',2:'gamma'}
-    for i in range(3):
+    band_dic={-1: 'no_filter', 0:'alpha',1:'betta',2:'gamma'}
+    for i in range(-1,3):
         zero_avg_lifes=[]
         one_avg_lifes=[]
         zero_std_lifes=[]
@@ -86,10 +87,10 @@ def compute_stats(zero_dim,one_dim,subj_dir,space,measure,feat='life'):
             zero_std_lifes.append(zero_lifes[i][j].std())
             one_std_lifes.append(one_lifes[i][j].std())
     
-        zero_avg_lifes=np.array(zero_avg_lifes).reshape((1,-1))
-        one_avg_lifes=np.array(one_avg_lifes).reshape((1,-1))
-        zero_std_lifes=np.array(zero_std_lifes).reshape((1,-1))
-        one_std_lifes=np.array(one_std_lifes).reshape((1,-1))
+        zero_avg_lifes=np.array(zero_avg_lifes,dtype=object).reshape((1,-1))
+        one_avg_lifes=np.array(one_avg_lifes,dtype=object).reshape((1,-1))
+        zero_std_lifes=np.array(zero_std_lifes,dtype=object).reshape((1,-1))
+        one_std_lifes=np.array(one_std_lifes,dtype=object).reshape((1,-1))
     
     
         table[i]=pd.DataFrame(np.concatenate((zero_avg_lifes,one_avg_lifes,zero_std_lifes,one_std_lifes),axis=0).T,index=[band_dic[i]+' Motivational state 0',band_dic[i]+' Motivational state 1',band_dic[i]+' Motivational state 2'],columns=['Avg. '+feat+' dim0','Avg. '+feat+' dim1','std '+feat+'dim0','std'+feat+' dim1'])
@@ -97,8 +98,8 @@ def compute_stats(zero_dim,one_dim,subj_dir,space,measure,feat='life'):
     
     
     
-    fig, axes = plt.subplots(nrows=2, ncols=3, figsize=(10, 8))
-    for i in range(3):
+    fig, axes = plt.subplots(nrows=2, ncols=4, figsize=(24, 14))
+    for i in range(-1,3):
         axes[0][i].boxplot(zero_lifes[i],showfliers=False)
         axes[0][i].set_title(feat+' BoxPlot dimension 0 of band '+band_dic[i])
         axes[1][i].boxplot(one_lifes[i],showfliers=False)

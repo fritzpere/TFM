@@ -24,7 +24,7 @@ def persistency_per_band_and_state(tensor,measure,n_bands=3):
     :return: dictionary with key=(band,state) and value=persistence
     """
     persistence_dic={}
-    for band in range(n_bands):
+    for band in range(-1,n_bands):
         persistence_dic[band]={}
         for i in range (3):#motivational
             band_tensor = np.abs(tensor[band][i][:,:])
@@ -39,8 +39,8 @@ def persistency_per_band_and_state(tensor,measure,n_bands=3):
                 normalized_p=normalize(points-np.mean(points,axis=0),axis=1)
                 matrix= normalized_p @ normalized_p.T
                 matrix=1-matrix'''
-            max_edge=np.max(matrix)
-            Rips_complex_sample = gd.RipsComplex(distance_matrix=matrix,max_edge_length=max_edge)
+            #max_edge=np.max(matrix)
+            Rips_complex_sample = gd.RipsComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
             Rips_simplex_tree_sample = Rips_complex_sample.create_simplex_tree(max_dimension=2)
             persistence = Rips_simplex_tree_sample.persistence()
             persistence_dic[band][i]= persistence #dictionary with key=(band,state) and value=persistence
@@ -72,15 +72,19 @@ def compute_persistence_from_EEG(data,measure='intensities',reduc=5,subj_dir=Non
     #ts.shape=  (3, 432, 1200, 48) motivational state, trial, time, channel
     filtered_ts_dic=freq_filter(ts_dic,n_motiv,n_trials,T,N)
     
+    filtered_ts_dic[-1,0]=ts_dic[0]
+    filtered_ts_dic[-1,1]=ts_dic[1]
+    filtered_ts_dic[-1,2]=ts_dic[2]
+    
     vect_features_dic={}
-    for i_band in range(n_band):
+    for i_band in range(-1,n_band):
         vect_features_dic[i_band]={}
         for i_state in range(n_motiv):
-            n_trials=filtered_ts_dic[i_state,i_band].shape[0]
+            n_trials=filtered_ts_dic[i_band,i_state].shape[0]
             temp=0
             vect_temp=np.zeros((n_trials,T//reduc,N))
             for i in range(T//reduc):
-                vect_temp[:,i,:] =np.abs(filtered_ts_dic[i_state,i_band][:,temp:temp+reduc,:]).mean(axis=1)
+                vect_temp[:,i,:] =np.abs(filtered_ts_dic[i_band,i_state][:,temp:temp+reduc,:]).mean(axis=1)
                 temp+=reduc
             vect_features_dic[i_band][i_state]= vect_temp.reshape((n_trials,-1))
 
@@ -88,12 +92,12 @@ def compute_persistence_from_EEG(data,measure='intensities',reduc=5,subj_dir=Non
     persistence_dictionary=persistency_per_band_and_state(vect_features_dic,measure)
         
     if save:
-        band_dic={0:'alpha',1:'betta',2:'gamma'}
+        band_dic={-1: 'no_filter', 0:'alpha',1:'betta',2:'gamma'}
         if not os.path.exists(subj_dir+space+'/'+measure+'/'+'persistencies'):
             print("create directory:",subj_dir+space+'/'+measure+'/'+'persistencies')
             os.makedirs(subj_dir+space+'/'+measure+'/'+'persistencies')
 
-        for i in range(3):
+        for i in range(-1,3):
             for j in range(3):
                 f = open(subj_dir+'/'+space+'/'+measure+'/'+'persistencies'+'/'+str(j)+band_dic[i]+'persistence.txt', "w")
                 for persistence in persistence_dictionary[i][j] :
@@ -122,9 +126,9 @@ def plot_persistence(persistence_dic,subj_dir,intervals=1000,repre='diagrams',sp
         plot_func=lambda x,axes: gd.plot_persistence_diagram(x,legend=True,max_intervals=intervals,axes=axes)#,inf_delta=0.5)
     else:
         plot_func=lambda x,axes: gd.plot_persistence_barcode(x,legend=True,max_intervals=intervals,axes=axes)
-    fig, axes = plt.subplots(nrows=3, ncols=3, figsize=(14, 12))
-    band_dic={0:'alpha',1:'betta',2:'gamma'}
-    for i in range(3):
+    fig, axes = plt.subplots(nrows=4, ncols=3, figsize=(14, 14))
+    band_dic={-1: 'no_filter', 0:'alpha',1:'betta',2:'gamma'}
+    for i in range(-1,3):
         aux_lis=np.array([persistence_dic[i][0],persistence_dic[i][1],persistence_dic[i][2]], dtype=object)
         x_max=np.amax(list(map(lambda y: np.amax(list(map(lambda x: x[1][0],y))),aux_lis)))+0.05
         y_max=np.amax(list(map(lambda y: np.amax(list(map(lambda x: x[1][1] if x[1][1]!=np.inf  else 0 ,y))),aux_lis)))*1.2
@@ -142,7 +146,7 @@ def plot_persistence(persistence_dic,subj_dir,intervals=1000,repre='diagrams',sp
             print("create directory(plot):",subj_dir+space+'/'+measure)
             os.makedirs(subj_dir+'/'+space+'/'+measure)
         pyplot.savefig(subj_dir+space+'/'+measure+'/'+repre+'.png')
-    plt.show()
+    #plt.show()
     
     descriptors=compute_topological_descriptors(persistence_dic,subj_dir,space,measure)
   
