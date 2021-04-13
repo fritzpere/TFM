@@ -46,7 +46,7 @@ def persistency_per_band_and_state(tensor,measure,n_bands=3):
             persistence_dic[band][i]= persistence #dictionary with key=(band,state) and value=persistence
     return persistence_dic 
 
-def compute_persistence_from_EEG(data,measure='intensities',reduc=5,subj_dir=None,space=None,save=True,):
+def compute_persistence_from_EEG(data,measure='intensities',reduc=5,reduc_tr=108,subj_dir=None,space=None,save=True,):
     """
     Pipeline that beggins with raw_data and preprocess it
     to later compute Persistent Homology
@@ -86,7 +86,13 @@ def compute_persistence_from_EEG(data,measure='intensities',reduc=5,subj_dir=Non
             for i in range(T//reduc):
                 vect_temp[:,i,:] =np.abs(filtered_ts_dic[i_band,i_state][:,temp:temp+reduc,:]).mean(axis=1)
                 temp+=reduc
-            vect_features_dic[i_band][i_state]= vect_temp.reshape((n_trials*N,-1))
+            vect_temp2=np.zeros((n_trials//reduc_tr,T//reduc,N))
+            temp=0
+            for j in range(n_trials//reduc_tr):
+                vect_temp2[j,:,:] =np.abs(vect_temp[temp:temp+reduc_tr,:,:]).mean(axis=0)
+                temp+=reduc_tr
+            
+            vect_features_dic[i_band][i_state]= vect_temp2.reshape(((n_trials//reduc_tr)*N,-1))
 
 
     print('feature vector shape:', vect_features_dic[i_band][i_state].shape)
