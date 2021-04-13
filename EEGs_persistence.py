@@ -41,7 +41,7 @@ def persistency_per_band_and_state(tensor,measure,n_bands=3):
                 matrix=1-matrix'''
             #max_edge=np.max(matrix)
             Rips_complex_sample = gd.RipsComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
-            Rips_simplex_tree_sample = Rips_complex_sample.create_simplex_tree(max_dimension=3)
+            Rips_simplex_tree_sample = Rips_complex_sample.create_simplex_tree(max_dimension=2)
             persistence = Rips_simplex_tree_sample.persistence()
             persistence_dic[band][i]= persistence #dictionary with key=(band,state) and value=persistence
     return persistence_dic 
@@ -80,11 +80,16 @@ def compute_persistence_from_EEG(data,measure='intensities',reduc=5,subj_dir=Non
     for i_band in range(-1,n_band):
         vect_features_dic[i_band]={}
         for i_state in range(n_motiv):
-            #n_trials=filtered_ts_dic[i_state,i_band].shape[0]
-            vect_features_dic[i_band][i_state]= filtered_ts_dic[i_band,i_state][13,:,:].T
+            n_trials=filtered_ts_dic[i_band,i_state].shape[0]
+            temp=0
+            vect_temp=np.zeros((n_trials,T//reduc,N))
+            for i in range(T//reduc):
+                vect_temp[:,i,:] =np.abs(filtered_ts_dic[i_band,i_state][:,temp:temp+reduc,:]).mean(axis=1)
+                temp+=reduc
+            vect_features_dic[i_band][i_state]= vect_temp.reshape((n_trials*N,-1))
 
 
-    #print(vect_features.shape)
+    print('feature vector shape:', vect_features_dic[i_band][i_state].shape)
     persistence_dictionary=persistency_per_band_and_state(vect_features_dic,measure)
         
     if save:
