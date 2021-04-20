@@ -45,8 +45,8 @@ def load_data(i_sub,space='both'):
         return elec_space,font_space,subj_dir
 
 if __name__ == "__main__":    
-    #subjects=[27,28,29]
-    subjects=[25,26,27,28,29]
+    subjects=[28]
+    #subjects=[25,26,27,28,29]
     for subject in subjects:
         t=time.time()
         elec_space,font_space,subj_dir=load_data(subject)#,'space=electrode_space')
@@ -55,12 +55,12 @@ if __name__ == "__main__":
         #print('computing persistence of electrode space (with correlations) of subject',subject)
         #elec_space_pers_corr=compute_persistence_from_EEG(elec_space,measure='correlation',subj_dir=subj_dir,space='electrode_space',save=True) #pointcloud shape (432, 50)
         print('computing persistence of font space of subject',subject)
-        font_space_pers=compute_persistence_from_EEG(font_space,measure='intensities',subj_dir=subj_dir,space='font_space',save=True)
+       # font_space_pers=compute_persistence_from_EEG(font_space,measure='intensities',subj_dir=subj_dir,space='font_space',save=True)
         #print('computing persistence of font space (with correlations) of subject',subject)
         #font_space_pers_corr=compute_persistence_from_EEG(font_space,measure='correlation',subj_dir=subj_dir,space='font_space',save=True)
         print('plotting and saving data of subject',subject)
         plot_persistence(elec_space_pers,subj_dir,intervals=1000,space='electrode_space',measure='intensities',save=True)
-        plot_persistence(font_space_pers,subj_dir,intervals=1000,space='font_space',measure='intensities',save=True)
+       # plot_persistence(font_space_pers,subj_dir,intervals=1000,space='font_space',measure='intensities',save=True)
         #plot_persistence(elec_space_pers_corr,subj_dir,intervals=1000,space='electrode_space',measure='correlation',save=True)
         #plot_persistence(font_space_pers_corr,subj_dir,intervals=1000,space='font_space',measure='correlation',save=True)
         
