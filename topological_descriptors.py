@@ -64,11 +64,13 @@ def compute_bottleneck(zero_dim,one_dim,k):
     return table
 
 
-def compute_basicstats(zero_dim,one_dim,subj_dir,space,measure,feat='life'):
+def compute_basicstats(zero_dim,one_dim,subj_dir,space,measure,feat='life',pool_n=10):
     table={}
     zero_lifes={}
     one_lifes={}
     band_dic={-1: 'no_filter', 0:'alpha',1:'betta',2:'gamma'}
+    zero_pooling_vector={}
+    one_pooling_vector={}
     for i in range(-1,3):
         zero_avg_lifes=[]
         one_avg_lifes=[]
@@ -76,9 +78,7 @@ def compute_basicstats(zero_dim,one_dim,subj_dir,space,measure,feat='life'):
         one_std_lifes=[]
         zero_lifes[i]=[]
         one_lifes[i]=[]
-        
-        zero_pooling_vector=[]
-        one_pooling_vector=[]
+
         if feat=='life':
             fun=lambda x: x[1]-x[0]
             zero_persistent_entropies=[]
@@ -96,15 +96,19 @@ def compute_basicstats(zero_dim,one_dim,subj_dir,space,measure,feat='life'):
             one_std_lifes.append(one_lifes[i][j].std())
             
             if feat=='life':
-                zero_pooling_vector.append(np.sort(zero_lifes[i])[:10])
-                one_pooling_vector.append(np.sort(one_lifes[i])[:10])
+                n_zero=len(zero_lifes[i][j])
+                zero_lifes[i][j].sort()
+                zero_pooling_vector[i,j]=np.array([zero_lifes[i][j][-k] if k<=n_zero else 0 for k in range(1,pool_n+1)])
+                n_one=len(one_lifes[i][j])
+                one_lifes[i][j].sort()
+                one_pooling_vector[i,j]=np.array([one_lifes[i][j][-k] if k<=n_one else 0 for k in range(1,pool_n+1)])
                 zero_persistent_temp=[]
                 one_persistent_temp=[]
-                fun= lambda x: ((x[1]-x[0])/L)*np.log2((x[1]-x[0])/L)
+                fun_entr= lambda x: ((x[1]-x[0])/L)*np.log2((x[1]-x[0])/L)
                 L=zero_L
-                zero_persistent_temp.append(np.array(list(map(fun, zero_dim[i][j]))))
+                zero_persistent_temp.append(np.array(list(map(fun_entr, zero_dim[i][j]))))
                 L=one_L
-                one_persistent_temp.append(np.array(list(map(fun, one_dim[i][j]))))
+                one_persistent_temp.append(np.array(list(map(fun_entr, one_dim[i][j]))))
                 zero_persistent_entropies.append(-np.array(zero_persistent_temp).sum())
                 one_persistent_entropies.append(-np.array(one_persistent_temp).sum())
                 
@@ -112,22 +116,29 @@ def compute_basicstats(zero_dim,one_dim,subj_dir,space,measure,feat='life'):
         one_avg_lifes=np.array(one_avg_lifes,dtype=object).reshape((1,-1))
         zero_std_lifes=np.array(zero_std_lifes,dtype=object).reshape((1,-1))
         one_std_lifes=np.array(one_std_lifes,dtype=object).reshape((1,-1))
-            
+        
+
         if feat=='life':
-            zero_persistent_entropies=np.array(zero_std_lifes,dtype=object).reshape((1,-1)).T
-            one_persistent_entropies=np.array(one_persistent_entropies,dtype=object).reshape((1,-1)).T
+            
+            zero_persistent_entropies=np.array(zero_std_lifes,dtype=object).reshape((1,-1))
+            one_persistent_entropies=np.array(one_persistent_entropies,dtype=object).reshape((1,-1))
             table[i]=pd.DataFrame(np.concatenate((zero_avg_lifes,one_avg_lifes,zero_std_lifes,one_std_lifes,zero_persistent_entropies,one_persistent_entropies),axis=0).T,index=[band_dic[i]+' Motivational state 0',band_dic[i]+' Motivational state 1',band_dic[i]+' Motivational state 2'],columns=['Avg. '+feat+' dim0','Avg. '+feat+' dim1','std '+feat+'dim0','std '+feat+' dim1','persistent entropy dim0','persistent entropy dim1'])
         else:
             table[i]=pd.DataFrame(np.concatenate((zero_avg_lifes,one_avg_lifes,zero_std_lifes,one_std_lifes),axis=0).T,index=[band_dic[i]+' Motivational state 0',band_dic[i]+' Motivational state 1',band_dic[i]+' Motivational state 2'],columns=['Avg. '+feat+' dim0','Avg. '+feat+' dim1','std '+feat+'dim0','std '+feat+' dim1'])
     
-    
-    
+    if feat=='life':
+        pooling_table_dim0=pd.DataFrame.from_dict(zero_pooling_vector,orient='index',columns=list(range(1,11)))
+        pooling_table_dim0.index=list(map(lambda x: ('Dim0 '+band_dic[x[0]]+' Motivational state '+str(x[1])) ,[*zero_pooling_vector]))
+        pooling_table_dim1=pd.DataFrame.from_dict(one_pooling_vector,orient='index',columns=list(range(1,11)))#,index=list(map(lambda x: 'Dim1 '+band_dic[x[0]]+' Motivational state '+str(x[1])  ,[*one_pooling_vector])),columns=list(range(1,11)))
+        pooling_table_dim1.index=list(map(lambda x: ('Dim1 '+band_dic[x[0]]+' Motivational state '+str(x[1])) ,[*one_pooling_vector]))
+        pooling_table=pd.concat([pooling_table_dim0,pooling_table_dim1])
+
     
     fig, axes = plt.subplots(nrows=2, ncols=4, figsize=(24, 14))
     for i in range(-1,3):
-        axes[0][i].boxplot(zero_lifes[i],showfliers=False)
+        axes[0][i].boxplot(np.array(zero_lifes[i],dtype=object ),showfliers=False)
         axes[0][i].set_title(feat+' BoxPlot dimension 0 of band '+band_dic[i])
-        axes[1][i].boxplot(one_lifes[i],showfliers=False)
+        axes[1][i].boxplot(np.array(one_lifes[i],dtype=object ),showfliers=False)
         axes[1][i].set_title(feat+' BoxPlot dimension 1 of band '+band_dic[i])
         #a.set_xlim(-0.05,x_max)
         #a.set_ylim(0,y_max)
@@ -141,7 +152,8 @@ def compute_basicstats(zero_dim,one_dim,subj_dir,space,measure,feat='life'):
         os.makedirs(subj_dir+space+'/'+measure+'/'+'descriptor_tables')
     
     pyplot.savefig(subj_dir+space+'/'+measure+'/descriptor_tables/'+feat+'_boxplots''.png')
-
+    if feat=='life':
+        pooling_table.to_csv(subj_dir+space+'/'+measure+'/descriptor_tables/pooling_vectors.csv')
     plt.show()
     
     return table
