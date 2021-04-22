@@ -86,12 +86,12 @@ def compute_basicstats(zero_dim,one_dim,subj_dir,space,measure,feat='life',pool_
         else:
             fun=lambda x: (x[1]+x[0])/2
         for j in range(3):
-            zero_lifes[i].append(np.array(list(map(fun, zero_dim[i][j])),dtype=object))
-            one_lifes[i].append(np.array(list(map(fun, one_dim[i][j])),dtype=object))
+            zero_lifes[i].append(np.array(list(map(fun, zero_dim[i][j]))))
+            one_lifes[i].append(np.array(list(map(fun, one_dim[i][j]))))
             zero_L=zero_lifes[i][j].sum()
             zero_avg_lifes.append(zero_L/len(zero_lifes[i][j]))
             one_L=one_lifes[i][j].sum()
-            one_avg_lifes.append(one_L/(len(one_lifes[i][j])+1e-14))
+            one_avg_lifes.append(one_L/(len(one_lifes[i][j])))
             zero_std_lifes.append(zero_lifes[i][j].std())
             one_std_lifes.append(one_lifes[i][j].std())
             
