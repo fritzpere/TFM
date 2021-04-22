@@ -86,22 +86,22 @@ def compute_basicstats(zero_dim,one_dim,subj_dir,space,measure,feat='life',pool_
         else:
             fun=lambda x: (x[1]+x[0])/2
         for j in range(3):
-            zero_lifes[i].append(np.array(list(map(fun, zero_dim[i][j]))))
-            one_lifes[i].append(np.array(list(map(fun, one_dim[i][j]))))
+            zero_lifes[i].append(np.array(list(map(fun, zero_dim[i][j])),dtype=object))
+            one_lifes[i].append(np.array(list(map(fun, one_dim[i][j])),dtype=object))
             zero_L=zero_lifes[i][j].sum()
             zero_avg_lifes.append(zero_L/len(zero_lifes[i][j]))
             one_L=one_lifes[i][j].sum()
-            one_avg_lifes.append(one_L/len(one_lifes[i][j]))
+            one_avg_lifes.append(one_L/(len(one_lifes[i][j])+1e-14))
             zero_std_lifes.append(zero_lifes[i][j].std())
             one_std_lifes.append(one_lifes[i][j].std())
             
             if feat=='life':
                 n_zero=len(zero_lifes[i][j])
                 zero_lifes[i][j].sort()
-                zero_pooling_vector[i,j]=np.array([zero_lifes[i][j][-k] if k<=n_zero else 0 for k in range(1,pool_n+1)])
+                zero_pooling_vector[i,j]=np.array([zero_lifes[i][j][-k] if k<=n_zero else 0 for k in range(1,pool_n+1)],dtype=object)
                 n_one=len(one_lifes[i][j])
                 one_lifes[i][j].sort()
-                one_pooling_vector[i,j]=np.array([one_lifes[i][j][-k] if k<=n_one else 0 for k in range(1,pool_n+1)])
+                one_pooling_vector[i,j]=np.array([one_lifes[i][j][-k] if k<=n_one else 0 for k in range(1,pool_n+1)],dtype=object)
                 zero_persistent_temp=[]
                 one_persistent_temp=[]
                 fun_entr= lambda x: ((x[1]-x[0])/L)*np.log2((x[1]-x[0])/L)
@@ -136,9 +136,12 @@ def compute_basicstats(zero_dim,one_dim,subj_dir,space,measure,feat='life',pool_
     
     fig, axes = plt.subplots(nrows=2, ncols=4, figsize=(24, 14))
     for i in range(-1,3):
-        axes[0][i].boxplot(np.array(zero_lifes[i],dtype=object ),showfliers=False)
+        for j in range(3):
+            zero_lifes[i][j]=zero_lifes[i][j].flatten()
+            one_lifes[i][j]=one_lifes[i][j].flatten()
+        axes[0][i].boxplot(zero_lifes[i],showfliers=False)
         axes[0][i].set_title(feat+' BoxPlot dimension 0 of band '+band_dic[i])
-        axes[1][i].boxplot(np.array(one_lifes[i],dtype=object ),showfliers=False)
+        axes[1][i].boxplot(np.array(one_lifes[i],dtype=object),showfliers=False)
         axes[1][i].set_title(feat+' BoxPlot dimension 1 of band '+band_dic[i])
         #a.set_xlim(-0.05,x_max)
         #a.set_ylim(0,y_max)
@@ -154,7 +157,7 @@ def compute_basicstats(zero_dim,one_dim,subj_dir,space,measure,feat='life',pool_
     pyplot.savefig(subj_dir+space+'/'+measure+'/descriptor_tables/'+feat+'_boxplots''.png')
     if feat=='life':
         pooling_table.to_csv(subj_dir+space+'/'+measure+'/descriptor_tables/pooling_vectors.csv')
-    plt.show()
+    #plt.show()
     
     return table
 
