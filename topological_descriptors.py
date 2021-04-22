@@ -89,22 +89,32 @@ def compute_basicstats(zero_dim,one_dim,subj_dir,space,measure,feat='life',pool_
             zero_lifes[i].append(np.array(list(map(fun, zero_dim[i][j]))))
             one_lifes[i].append(np.array(list(map(fun, one_dim[i][j]))))
             zero_L=zero_lifes[i][j].sum()
-            zero_avg_lifes.append(zero_L/len(zero_lifes[i][j]))
+            n_zero=len(zero_lifes[i][j])
+            if  n_zero==0:
+                zero_avg_lifes.append(-1)
+                zero_std_lifes.append(-1)
+            else:
+                zero_avg_lifes.append(zero_L/ n_zero)
+                zero_std_lifes.append(zero_lifes[i][j].std())
             one_L=one_lifes[i][j].sum()
-            one_avg_lifes.append(one_L/(len(one_lifes[i][j])))
-            zero_std_lifes.append(zero_lifes[i][j].std())
-            one_std_lifes.append(one_lifes[i][j].std())
+            n_one=len(one_lifes[i][j])
+            if  n_one==0:
+                one_avg_lifes.append(-1)
+                one_std_lifes.append(-1)
+            else:
+                one_avg_lifes.append(zero_L/ n_one)
+                one_std_lifes.append(one_lifes[i][j].std())
+
             
             if feat=='life':
-                n_zero=len(zero_lifes[i][j])
+            
                 zero_lifes[i][j].sort()
                 zero_pooling_vector[i,j]=np.array([zero_lifes[i][j][-k] if k<=n_zero else 0 for k in range(1,pool_n+1)],dtype=object)
-                n_one=len(one_lifes[i][j])
                 one_lifes[i][j].sort()
                 one_pooling_vector[i,j]=np.array([one_lifes[i][j][-k] if k<=n_one else 0 for k in range(1,pool_n+1)],dtype=object)
                 zero_persistent_temp=[]
                 one_persistent_temp=[]
-                fun_entr= lambda x: ((x[1]-x[0])/L)*np.log2((x[1]-x[0])/L)
+                fun_entr= lambda x: ((x[1]-x[0])/L)*np.log2((x[1]-x[0])/L if L!=0 else -1)
                 L=zero_L
                 zero_persistent_temp.append(np.array(list(map(fun_entr, zero_dim[i][j]))))
                 L=one_L
@@ -134,14 +144,14 @@ def compute_basicstats(zero_dim,one_dim,subj_dir,space,measure,feat='life',pool_
         pooling_table=pd.concat([pooling_table_dim0,pooling_table_dim1])
 
     
-    fig, axes = plt.subplots(nrows=2, ncols=4, figsize=(24, 14))
+    fig, axes = plt.subplots(nrows=2, ncols=4, figsize=(14, 14))
     for i in range(-1,3):
         for j in range(3):
             zero_lifes[i][j]=zero_lifes[i][j].flatten()
             one_lifes[i][j]=one_lifes[i][j].flatten()
         axes[0][i].boxplot(zero_lifes[i],showfliers=False)
         axes[0][i].set_title(feat+' BoxPlot dimension 0 of band '+band_dic[i])
-        axes[1][i].boxplot(np.array(one_lifes[i],dtype=object),showfliers=False)
+        axes[1][i].boxplot(one_lifes[i],showfliers=False)
         axes[1][i].set_title(feat+' BoxPlot dimension 1 of band '+band_dic[i])
         #a.set_xlim(-0.05,x_max)
         #a.set_ylim(0,y_max)

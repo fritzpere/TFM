@@ -126,7 +126,7 @@ def plot_persistence(persistence_dic,subj_dir,intervals=1000,repre='diagrams',sp
         plot_func=lambda x,axes: gd.plot_persistence_diagram(x,legend=True,max_intervals=intervals,axes=axes)#,inf_delta=0.5)
     else:
         plot_func=lambda x,axes: gd.plot_persistence_barcode(x,legend=True,max_intervals=intervals,axes=axes)
-    fig, axes = plt.subplots(nrows=4, ncols=3, figsize=(14, 14))
+    fig, axes = plt.subplots(nrows=4, ncols=3, figsize=(16, 16))
     band_dic={-1: 'no_filter', 0:'alpha',1:'betta',2:'gamma'}
     for i in range(-1,3):
         aux_lis=np.array([persistence_dic[i][0],persistence_dic[i][1],persistence_dic[i][2]], dtype=object)
@@ -138,7 +138,7 @@ def plot_persistence(persistence_dic,subj_dir,intervals=1000,repre='diagrams',sp
             a.set_xlim(-0.05,x_max)
             a.set_ylim(0,y_max)
     fig.suptitle('Persistence {0} of the {1} for\n different frequency bands and motivational state'.format(repre,space),fontsize=24)
-    fig.tight_layout(pad=1.00)
+    fig.tight_layout(pad=0.5)
     fig.subplots_adjust(top=0.8)
     
     if save:
