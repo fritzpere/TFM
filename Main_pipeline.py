@@ -60,14 +60,6 @@ if __name__ == "__main__":
         #print('computing persistence of font space (with correlations) of subject',subject)
         #font_space_pers_corr=compute_persistence_from_EEG(font_space,measure='correlation',subj_dir=subj_dir,space='font_space',save=True)
         print('plotting and saving data of subject',subject)
-        plot_persistence(elec_space_pers,subj_dir,intervals=1000,space='electrode_space',measure='intensities',save=True)
-      #  plot_persistence(font_space_pers,subj_dir,intervals=1000,space='font_space',measure='intensities',save=True)
-        #plot_persistence(elec_space_pers_corr,subj_dir,intervals=1000,space='electrode_space',measure='correlation',save=True)
-        #plot_persistence(font_space_pers_corr,subj_dir,intervals=1000,space='font_space',measure='correlation',save=True)
+        descriptors=compute_topological_descriptors(elec_space_pers,subj_dir,space,measure='intensities')
         
-        '''
-        plot_persistence(elec_space_pers,subj_dir,intervals=1000,space='electrode_space',repre='barcodes',measure='intensities',save=True)
-        plot_persistence(font_space_pers,subj_dir,intervals=1000,space='font_space',repre='barcodes',measure='intensities',save=True)
-        #plot_persistence(elec_space_pers_corr,subj_dir,intervals=1000,space='electrode_space',repre='barcodes',measure='correlation',save=True)
-        #plot_persistence(font_space_pers_corr,subj_dir,intervals=1000,space='font_space',repre='barcodes',measure='correlation',save=True) '''
         print((time.time()-t)/60, 'minuts')

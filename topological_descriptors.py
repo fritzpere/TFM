@@ -15,7 +15,7 @@ from matplotlib import pyplot
 import os
 
 def compute_topological_descriptors(pers_band_dic,subj_dir,space,measure):
-    bottleneck_table={}
+    #bottleneck_table={}
     zero_dim={}
     one_dim={}
     for i in range(-1,3):
@@ -41,11 +41,15 @@ def separate_dimensions(pers_band_dic):
     zero_dim=[]
     one_dim=[]
     for i in range(3):
-        dim_list=np.array(list(map(lambda x: x[0], pers_band_dic[i])))
-        point_list=np.array(list(map(lambda x: x[1], pers_band_dic[i])))
-        zero_dim.append(point_list[np.logical_and(point_list[:,1]!=float('inf'),dim_list==0)])
-        one_dim.append(point_list[np.logical_and(point_list[:,1]!=float('inf'),dim_list==1)])
-    return zero_dim,one_dim
+        trials=len(pers_band_dic[i])
+        zero_dim.append([])
+        one_dim.append([])
+        for k in range(trials)
+            dim_list=np.array(list(map(lambda x: x[0], pers_band_dic[i][k])))
+            point_list=np.array(list(map(lambda x: x[1], pers_band_dic[i][k])))
+            zero_dim[i].append(point_list[np.logical_and(point_list[:,1]!=float('inf'),dim_list==0)])
+            one_dim[i].append(point_list[np.logical_and(point_list[:,1]!=float('inf'),dim_list==1)])
+        return zero_dim,one_dim
     
 
 def compute_bottleneck(zero_dim,one_dim,k):
@@ -64,7 +68,7 @@ def compute_bottleneck(zero_dim,one_dim,k):
     return table
 
 
-def compute_basicstats(zero_dim,one_dim,subj_dir,space,measure,feat='life',pool_n=10):
+def compute_basicstats(zero_dim,one_dim,subj_dir,space,measure,feat='life',pool_n=10): ## Falta aixo
     table={}
     zero_lifes={}
     one_lifes={}
