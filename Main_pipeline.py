@@ -63,7 +63,7 @@ if __name__ == "__main__":
         elec_space_descriptor_vector_dic,labels=compute_topological_descriptors(elec_space_pers,subj_dir,space='electrode_space',measure='intensities')
         font_space_descriptors_vector_dic,labels=compute_topological_descriptors(font_space_pers,subj_dir,space='font_space',measure='intensities')
         
-        acc_table=get_accuracies_per_band(elec_space_descriptor_vector_dic,labels)
+        #acc_table=get_accuracies_per_band(elec_space_descriptor_vector_dic,labels)
         
         
         
