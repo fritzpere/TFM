@@ -25,7 +25,11 @@ def compute_topological_descriptors(pers_band_dic,subj_dir,space,measure):
     avg_life, std_life, entropy, pooling=compute_basicstats(zero_dim,one_dim,subj_dir,space,measure,feat='life')
     avg_midlife, std_midlife=compute_basicstats(zero_dim,one_dim,subj_dir,space,measure,feat='midlife')
     
-    #plot boxplots
+    plot_descriptorBoxplots(avg_life,'Average Life',subj_dir,space,measure)
+    plot_descriptorBoxplots(std_life,'Standard Deviation Life',subj_dir,space,measure)
+    plot_descriptorBoxplots(avg_midlife,'Average Midlife',subj_dir,space,measure)
+    plot_descriptorBoxplots(std_midlife,'Standard Deviation Life Midife',subj_dir,space,measure)
+    plot_descriptorBoxplots(entropy,'Persistent Entropy',subj_dir,space,measure)
     #contruct feature vectors
     return avg_life, std_life, entropy, pooling, avg_midlife, std_midlife
 def separate_dimensions(pers_band_dic):
@@ -63,7 +67,6 @@ def compute_bottleneck(zero_dim,one_dim,k):
 def compute_basicstats(zero_dim,one_dim,subj_dir,space,measure,feat='life',pool_n=10): ## Falta aixo
     #zero_feat={}
     #one_feat={}
-    band_dic={-1: 'no_filter', 0:'alpha',1:'betta',2:'gamma'}
     zero_pooling_vector={}
     one_pooling_vector={}
     
@@ -76,34 +79,34 @@ def compute_basicstats(zero_dim,one_dim,subj_dir,space,measure,feat='life',pool_
     zero_persistent_entropies={}
     one_persistent_entropies={}
     for i in range(-1,3):
-        zero_avg_feat[i]={}
-        one_avg_feat[i]={}
-        zero_std_feat[i]={}
-        one_std_feat[i]={}
+        zero_avg_feat[i]=[]
+        one_avg_feat[i]=[]
+        zero_std_feat[i]=[]
+        one_std_feat[i]=[]
         #zero_feat[i]=[]
         #one_feat[i]=[]
 
         if feat=='life':
             fun=lambda x: x[1]-x[0]
-            zero_persistent_entropies[i]={}
-            one_persistent_entropies[i]={}
+            zero_persistent_entropies[i]=[]
+            one_persistent_entropies[i]=[]
             zero_pooling_vector[i]={}
             one_pooling_vector[i]={}
         else:
             fun=lambda x: (x[1]+x[0])/2
         for j in range(3):
             trials=len(zero_dim[i][j])
-            zero_avg_feat[i][j]=[]
-            one_avg_feat[i][j]=[]
-            zero_std_feat[i][j]=[]
-            one_std_feat[i][j]=[]
+            zero_avg_feat[i].append([])
+            one_avg_feat[i].append([])
+            zero_std_feat[i].append([])
+            one_std_feat[i].append([])
 
             
             if feat=='life':
                 zero_pooling_vector[i][j]=[]
                 one_pooling_vector[i][j]=[]
-                zero_persistent_entropies[i][j]=[]
-                one_persistent_entropies[i][j]=[]
+                zero_persistent_entropies[i].append([])
+                one_persistent_entropies[i].append([])
             for k in range(trials):
                 zero_feat=[]
                 one_feat=[]
@@ -156,20 +159,23 @@ def compute_basicstats(zero_dim,one_dim,subj_dir,space,measure,feat='life',pool_
     if feat=='life':
         return (zero_avg_feat, one_avg_feat), (zero_std_feat, one_std_feat), (zero_persistent_entropies, one_persistent_entropies), (zero_pooling_vector, one_pooling_vector)
     
-    return (zero_avg_feat, one_avg_feat), (zero_std_feat, one_std_feat),
-    '''
-    fig, axes = plt.subplots(nrows=2, ncols=4, figsize=(14, 14))
+    return (zero_avg_feat, one_avg_feat), (zero_std_feat, one_std_feat)
+
+
+def plot_descriptorBoxplots(feature, name,subj_dir,space,measure):
+    feat0,feat1=feature
+    band_dic={-1: 'no_filter', 0:'alpha',1:'betta',2:'gamma'}
+    
+    fig, axes = plt.subplots(nrows=2, ncols=4, figsize=(19, 14))
     for i in range(-1,3):
-        for j in range(3):
-            zero_lifes[i][j]=zero_lifes[i][j].flatten()
-            one_lifes[i][j]=one_lifes[i][j].flatten()
-        axes[0][i].boxplot(zero_lifes[i],showfliers=False)
-        axes[0][i].set_title(feat+' BoxPlot dimension 0 of band '+band_dic[i])
-        axes[1][i].boxplot(one_lifes[i],showfliers=False)
-        axes[1][i].set_title(feat+' BoxPlot dimension 1 of band '+band_dic[i])
+
+        axes[0][i].boxplot(feat0[i],showfliers=False)
+        axes[0][i].set_title(name+' BoxPlot dimension 0 of band '+band_dic[i])
+        axes[1][i].boxplot(feat1[i],showfliers=False)
+        axes[1][i].set_title(name+' BoxPlot dimension 1 of band '+band_dic[i])
         #a.set_xlim(-0.05,x_max)
         #a.set_ylim(0,y_max)
-    fig.suptitle('{0} Boxplots of the {1} for\n different frequency bands and motivational state'.format(feat,space),fontsize=24)
+    fig.suptitle('{0} Boxplots of the {1} for\n different frequency bands and motivational state'.format(name,space),fontsize=24)
     fig.tight_layout(pad=1.00)
     fig.subplots_adjust(top=0.8)
     
@@ -178,10 +184,8 @@ def compute_basicstats(zero_dim,one_dim,subj_dir,space,measure,feat='life',pool_
         print("create directory(plot):",subj_dir+space+'/'+measure+'/'+'descriptor_tables')
         os.makedirs(subj_dir+space+'/'+measure+'/'+'descriptor_tables')
     
-    pyplot.savefig(subj_dir+space+'/'+measure+'/descriptor_tables/'+feat+'_boxplots''.png')
-    if feat=='life':
-        pooling_table.to_csv(subj_dir+space+'/'+measure+'/descriptor_tables/pooling_vectors.csv')
+    pyplot.savefig(subj_dir+space+'/'+measure+'/descriptor_tables/'+name+'_boxplots''.png')
     #plt.show()
     
-    return table'''
+
 
