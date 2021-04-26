@@ -68,7 +68,7 @@ def compute_bottleneck(zero_dim,one_dim,k):
     return table'''
 
 
-def compute_basicstats(zero_dim,one_dim,subj_dir,space,measure,feat='life',pool_n=3): ## Falta aixo
+def compute_basicstats(zero_dim,one_dim,subj_dir,space,measure,feat='life',pool_n=10): ## Falta aixo
     #zero_feat={}
     #one_feat={}
     zero_pooling_vector={}
