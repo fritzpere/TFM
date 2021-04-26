@@ -13,6 +13,7 @@ import gudhi as gd
 import matplotlib.pyplot as plt
 from matplotlib import pyplot
 import os
+from classification import *
 
 def compute_topological_descriptors(pers_band_dic,subj_dir,space,measure):
     #bottleneck_table={}
@@ -31,7 +32,10 @@ def compute_topological_descriptors(pers_band_dic,subj_dir,space,measure):
     plot_descriptorBoxplots(std_midlife,'Standard Deviation Life Midife',subj_dir,space,measure)
     plot_descriptorBoxplots(entropy,'Persistent Entropy',subj_dir,space,measure)
     #contruct feature vectors
-    return avg_life, std_life, entropy, pooling, avg_midlife, std_midlife
+    return feature_vector_per_band(avg_life, std_life, entropy, pooling, avg_midlife, std_midlife)
+    
+    
+    
 def separate_dimensions(pers_band_dic):
     zero_dim=[]
     one_dim=[]
@@ -64,7 +68,7 @@ def compute_bottleneck(zero_dim,one_dim,k):
     return table'''
 
 
-def compute_basicstats(zero_dim,one_dim,subj_dir,space,measure,feat='life',pool_n=10): ## Falta aixo
+def compute_basicstats(zero_dim,one_dim,subj_dir,space,measure,feat='life',pool_n=3): ## Falta aixo
     #zero_feat={}
     #one_feat={}
     zero_pooling_vector={}
