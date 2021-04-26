@@ -97,7 +97,8 @@ def freq_filter(ts,n_motiv,n_trials,T,N): #dont need all variables if using dict
         # apply filter ts[n_motiv,n_trials,T,N]
         b,a = spsg.iirfilter(n_order, [low_f,high_f], btype='bandpass', ftype='butter')
         #filtered_ts[i_band,:,:,:,:] = spsg.filtfilt(b, a, ts, axis=2)
-        filtered_ts_dic[i_band,0]=spsg.filtfilt(b, a, ts[0], axis=1)
-        filtered_ts_dic[i_band,1]=spsg.filtfilt(b, a, ts[1], axis=1)
-        filtered_ts_dic[i_band,2]=spsg.filtfilt(b, a, ts[2], axis=1)
+        filtered_ts_dic[i_band]={}
+        filtered_ts_dic[i_band][0]=spsg.filtfilt(b, a, ts[0], axis=1)
+        filtered_ts_dic[i_band][1]=spsg.filtfilt(b, a, ts[1], axis=1)
+        filtered_ts_dic[i_band][2]=spsg.filtfilt(b, a, ts[2], axis=1)
     return filtered_ts_dic

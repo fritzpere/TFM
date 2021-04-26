@@ -25,11 +25,11 @@ def persistency_per_band_and_state(tensor,measure,n_bands=3):
     :return: dictionary with key=(band,state) and value=persistence
     """
     persistence_dic={}
-    trials=tensor.shape[0]
     for band in range(-1,n_bands):
         persistence_dic[band]={}
         for i in range (3):#motivational
             persistence_dic[band][i]=[]
+            trials=tensor[band][i].shape[0]
             for k in range(trials):
                 band_tensor = np.abs(tensor[band][i][k,:,:].T)
             #print('nans?',np.isnan(band_tensor[i]).any())
@@ -77,10 +77,10 @@ def compute_persistence_from_EEG(data,measure='intensities',reduc=5,subj_dir=Non
     #n_trials=n_trials*4
     #ts.shape=  (3, 432, 1200, 48) motivational state, trial, time, channel
     filtered_ts_dic=freq_filter(ts_dic,n_motiv,n_trials,T,N)
-    
-    filtered_ts_dic[-1,0]=ts_dic[0]
-    filtered_ts_dic[-1,1]=ts_dic[1]
-    filtered_ts_dic[-1,2]=ts_dic[2]
+    filtered_ts_dic[-1]={}
+    filtered_ts_dic[-1][0]=ts_dic[0]
+    filtered_ts_dic[-1][1]=ts_dic[1]
+    filtered_ts_dic[-1][2]=ts_dic[2]
     
 
     persistence_dictionary=persistency_per_band_and_state(filtered_ts_dic,measure)

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+ #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Created on Wed Feb 10 10:51:44 2021
@@ -45,8 +45,8 @@ def load_data(i_sub,space='both'):
         return elec_space,font_space,subj_dir
 
 if __name__ == "__main__":    
-    #subjects=[29]
-    subjects=[25,26,27,28,29]
+    subjects=[29]
+    #subjects=[25,26,27,28,29]
     for subject in subjects:
         t=time.time()
        # elec_space,font_space,subj_dir=load_data(subject)
@@ -60,6 +60,6 @@ if __name__ == "__main__":
         #print('computing persistence of font space (with correlations) of subject',subject)
         #font_space_pers_corr=compute_persistence_from_EEG(font_space,measure='correlation',subj_dir=subj_dir,space='font_space',save=True)
         print('plotting and saving data of subject',subject)
-        descriptors=compute_topological_descriptors(elec_space_pers,subj_dir,space,measure='intensities')
+        descriptors=compute_topological_descriptors(elec_space_pers,subj_dir,space='electrode_space',measure='intensities')
         
         print((time.time()-t)/60, 'minuts')
