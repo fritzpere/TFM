@@ -29,9 +29,9 @@ def compute_topological_descriptors(pers_band_dic,subj_dir,space,measure):
     plot_descriptorBoxplots(avg_life,'Average Life',subj_dir,space,measure)
     plot_descriptorBoxplots(std_life,'Standard Deviation Life',subj_dir,space,measure)
     plot_descriptorBoxplots(avg_midlife,'Average Midlife',subj_dir,space,measure)
-    plot_descriptorBoxplots(std_midlife,'Standard Deviation Life Midife',subj_dir,space,measure)
+    plot_descriptorBoxplots(std_midlife,'Standard Deviation Midlife',subj_dir,space,measure)
     plot_descriptorBoxplots(entropy,'Persistent Entropy',subj_dir,space,measure)
-    #contruct feature vectors
+
     return feature_vector_per_band(avg_life, std_life, entropy, pooling, avg_midlife, std_midlife)
     
     
@@ -70,7 +70,7 @@ def compute_bottleneck(zero_dim,one_dim,k):
 
 def compute_basicstats(zero_dim,one_dim,subj_dir,space,measure,feat='life',pool_n=10): ## Falta aixo
     #zero_feat={}
-    #one_feat={}
+    #one_feat={}feat_vect_size
     zero_pooling_vector={}
     one_pooling_vector={}
     
@@ -132,7 +132,7 @@ def compute_basicstats(zero_dim,one_dim,subj_dir,space,measure,feat='life',pool_
                     one_avg_feat[i][j].append(-1)
                     one_std_feat[i][j].append(-1)
                 else:
-                    one_avg_feat[i][j].append(zero_L/ n_one)
+                    one_avg_feat[i][j].append(one_L/ n_one)
                     one_std_feat[i][j].append(one_feat.std())
 
             

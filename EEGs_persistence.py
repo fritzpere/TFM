@@ -37,13 +37,19 @@ def persistency_per_band_and_state(tensor,measure,n_bands=3):
             
                 if measure=='intensities':
                     matrix=distance_matrix(band_tensor,band_tensor)
-                   
+                    
+                    from scipy.spatial.distance import pdist
+                    '''
+                    n_coor = band_tensor.shape[0]
+                    dist = np.zeros((n_coor, n_coor))
+                    row,col = np.tril_indices(n_coor,1)
+                    dist[row,col] = pdist(band_tensor)'''
                 else:
                     #TODO
-                    '''points=band_tensor.copy()
+                    points=band_tensor.copy()
                     normalized_p=normalize(points-np.mean(points,axis=0),axis=1)
                     matrix= normalized_p @ normalized_p.T
-                    matrix=1-matrix'''
+                    matrix=1-matrix
                 #max_edge=np.max(matrix)
                 Rips_complex_sample = gd.RipsComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
                 Rips_simplex_tree_sample = Rips_complex_sample.create_simplex_tree(max_dimension=2)

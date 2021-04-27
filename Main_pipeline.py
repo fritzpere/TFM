@@ -53,16 +53,18 @@ if __name__ == "__main__":
         #elec_space,subj_dir=load_data(subject,space='electrode_space')
         print('computing persistence of electrode space of subject',subject)
         elec_space_pers=compute_persistence_from_EEG(elec_space,measure='intensities',subj_dir=subj_dir,space='electrode_space',save=True) #pointcloud shape (432, 50)
-        #print('computing persistence of electrode space (with correlations) of subject',subject)
-        #elec_space_pers_corr=compute_persistence_from_EEG(elec_space,measure='correlation',subj_dir=subj_dir,space='electrode_space',save=True) #pointcloud shape (432, 50)
+        print('computing persistence of electrode space (with correlations) of subject',subject)
+        elec_space_pers_corr=compute_persistence_from_EEG(elec_space,measure='correlation',subj_dir=subj_dir,space='electrode_space',save=True) #pointcloud shape (432, 50)
         print('computing persistence of font space of subject',subject)
         font_space_pers=compute_persistence_from_EEG(font_space,measure='intensities',subj_dir=subj_dir,space='font_space',save=True)
-        #print('computing persistence of font space (with correlations) of subject',subject)
-        #font_space_pers_corr=compute_persistence_from_EEG(font_space,measure='correlation',subj_dir=subj_dir,space='font_space',save=True)
+        print('computing persistence of font space (with correlations) of subject',subject)
+        font_space_pers_corr=compute_persistence_from_EEG(font_space,measure='correlation',subj_dir=subj_dir,space='font_space',save=True)
         print('plotting and saving data of subject',subject)
         elec_space_descriptor_vector_dic,labels=compute_topological_descriptors(elec_space_pers,subj_dir,space='electrode_space',measure='intensities')
         font_space_descriptors_vector_dic,labels=compute_topological_descriptors(font_space_pers,subj_dir,space='font_space',measure='intensities')
         
+        elec_space_descriptor_vector_dic,labels=compute_topological_descriptors(elec_space_pers,subj_dir,space='electrode_space',measure='correlation')
+        font_space_descriptors_vector_dic,labels=compute_topological_descriptors(font_space_pers,subj_dir,space='font_space',measure='correlation')
         #acc_table=get_accuracies_per_band(elec_space_descriptor_vector_dic,labels)
         
         
