@@ -188,7 +188,7 @@ def plot_descriptorBoxplots(feature, name,subj_dir,space,measure):
         print("create directory(plot):",subj_dir+space+'/'+measure+'/'+'descriptor_tables')
         os.makedirs(subj_dir+space+'/'+measure+'/'+'descriptor_tables')
     
-    pyplot.savefig(subj_dir+space+'/'+measure+'/descriptor_tables/'+name+'_boxplots''.png')
+    plt.savefig(subj_dir+space+'/'+measure+'/descriptor_tables/'+name+'_boxplots''.png')
     plt.clf()
     #plt.show()
     

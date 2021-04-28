@@ -50,7 +50,6 @@ def get_ts(data,n_block,n_trials,T,N):
         i_motiv=i_block//2%3
         for i_trial in range(n_trials):
             # swap axes for time and channelsi
-
             ts[i_motiv,i_trial+i+j,:,:] = data[:,:,i_trial,i_block].T 
     clean_trials= lambda x: np.logical_and(np.isnan(ts[x,:,0,:]).sum(axis=1)==0,ts[x,:,0,:].sum(axis=1)!=0)
     ts_dic[0]=ts[0,clean_trials(0),:,:]

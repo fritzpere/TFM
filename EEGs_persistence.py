@@ -7,7 +7,6 @@ Created on Wed Feb 10 11:07:20 2021
 """
 from scipy.spatial import distance_matrix
 import matplotlib.pyplot as plt
-from matplotlib import pyplot
 import gudhi as gd
 import gudhi.representations
 from sklearn.preprocessing import normalize
@@ -32,15 +31,18 @@ def persistency_per_band_and_state(tensor,measure,n_bands=3):
             persistence_dic[band][i]=[]
             trials=tensor[band][i].shape[0]
             for k in range(trials):
-                band_tensor = np.abs(tensor[band][i][k,:,:].T)
+                band_tensor = tensor[band][i][k,:,:].T
             #print('nans?',np.isnan(band_tensor[i]).any())
             #print('cloud shape:',band_tensor.shape)
             
                 if measure=='intensities':
+                    band_tensor = np.abs(tensor[band][i][k,:,:].T)
                     matrix=distance_matrix(band_tensor,band_tensor)
                     
-                    from scipy.spatial.distance import pdist
+                    
                     '''
+                    from scipy.spatial.distance import pdist
+                    
                     n_coor = band_tensor.shape[0]
                     dist = np.zeros((n_coor, n_coor))
                     row,col = np.tril_indices(n_coor,1)
@@ -51,6 +53,14 @@ def persistency_per_band_and_state(tensor,measure,n_bands=3):
                     normalized_p=normalize(points-np.mean(points,axis=0),axis=1)
                     matrix= normalized_p @ normalized_p.T
                     matrix=1-matrix
+                    
+                    T=1200
+                    ts_tmp = band_tensor.T.copy()
+                    ts_tmp -= np.outer(np.ones(T),ts_tmp.mean(0))
+                    matrix2= np.tensordot(ts_tmp,ts_tmp,axes=(0,0)) / float(T-1)
+                    
+                    matrix2/= np.sqrt(np.outer(matrix2.diagonal(),matrix2.diagonal()))
+                    matrix2=1-matrix2
                 #max_edge=np.max(matrix)
                 Rips_complex_sample = gd.RipsComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
                 Rips_simplex_tree_sample = Rips_complex_sample.create_simplex_tree(max_dimension=2)
@@ -98,21 +108,22 @@ def compute_persistence_from_EEG(data,measure='intensities',reduc=5,subj_dir=Non
 
 def plot_landscapes(persistences,subj_dir,space='',measure='',save=False):
     fig, axes = plt.subplots(nrows=4, ncols=3, figsize=(16, 16))
-    
+    zero_dim={}
+    one_dim={}
     band_dic={-1: 'no_filter', 0:'alpha',1:'betta',2:'gamma'}
     for i in range(-1,3):
-        zero_dim,one_dim=separate_dimensions(persistences[i])
+        zero_dim[i],one_dim[i]=separate_dimensions(persistences[i])
         for j in range(3):
-            
+                
             LS = gd.representations.Landscape(resolution=1000)
-            L0=LS.fit_transform(zero_dim[j])
+            L0=LS.fit_transform(zero_dim[i][j])
             mean_landscape0=L0.mean(axis=0)
             axes[i][j].plot(mean_landscape0[:1000])
             axes[i][j].plot(mean_landscape0[1000:2000])
             axes[i][j].plot(mean_landscape0[2000:3000])
             axes[i][j].plot(mean_landscape0[3000:4000])
             axes[i][j].plot(mean_landscape0[4000:5000])
-
+    
             axes[i][j].set_title('{0} persistence Landscapes of \n motivational state {1} and band {2}'.format(space,j,band_dic[i]))
             
             
@@ -123,13 +134,13 @@ def plot_landscapes(persistences,subj_dir,space='',measure='',save=False):
     if not os.path.exists(subj_dir+space+'/'+measure):
         print("create directory(plot):",subj_dir+space+'/'+measure)
         os.makedirs(subj_dir+'/'+space+'/'+measure)
-    pyplot.savefig(subj_dir+space+'/'+measure+'/Landscapes_dim0.png')
+    plt.savefig(subj_dir+space+'/'+measure+'/Landscapes_dim0.png')
     #fig.clf()
     fig2, axes2 = plt.subplots(nrows=4, ncols=3, figsize=(16, 16))
     for i in range(-1,3):
-        zero_dim,one_dim=separate_dimensions(persistences[i])
+
         for j in range(3):
-            L1=LS.fit_transform(one_dim[j])
+            L1=LS.fit_transform(one_dim[i][j])
             mean_landscape=L1.mean(axis=0)
             axes2[i][j].plot(mean_landscape[:1000])
             axes2[i][j].plot(mean_landscape[1000:2000])
@@ -143,8 +154,9 @@ def plot_landscapes(persistences,subj_dir,space='',measure='',save=False):
     fig2.tight_layout(pad=0.5)
     fig2.subplots_adjust(top=0.8)
     
-    pyplot.savefig(subj_dir+space+'/'+measure+'/Landscapes_dim1.png')
+    plt.savefig(subj_dir+space+'/'+measure+'/Landscapes_dim1.png')
     #fig2.clf()
+
     
 
     
