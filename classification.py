@@ -161,6 +161,6 @@ def get_accuracies_per_band(feature_vector_dic,labels,subj_dir,space,measure):
             axes2[i_band][i_vector].set_xlabel('true label',fontsize=8)
             axes2[i_band][i_vector].set_ylabel('predicted label',fontsize=8)
             axes2[i_band][i_vector].set_title(band+', '+measure_label)
-    plt.savefig(subj_dir+space+'/'+measure+'/conf_matrix/confusion_matrix.png', format=fmt_grph)
+    plt.savefig(subj_dir+space+'/'+measure+'/conf_matrix/confusion_matrix_MLR.png', format=fmt_grph)
     plt.close()
 

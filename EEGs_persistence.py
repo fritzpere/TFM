@@ -53,14 +53,14 @@ def persistency_per_band_and_state(tensor,measure,n_bands=3):
                     normalized_p=normalize(points-np.mean(points,axis=0),axis=1)
                     matrix= normalized_p @ normalized_p.T
                     matrix=1-matrix
-                    
+                    '''
                     T=1200
                     ts_tmp = band_tensor.T.copy()
                     ts_tmp -= np.outer(np.ones(T),ts_tmp.mean(0))
                     matrix2= np.tensordot(ts_tmp,ts_tmp,axes=(0,0)) / float(T-1)
                     
                     matrix2/= np.sqrt(np.outer(matrix2.diagonal(),matrix2.diagonal()))
-                    matrix2=1-matrix2
+                    matrix2=1-matrix2'''
                 #max_edge=np.max(matrix)
                 Rips_complex_sample = gd.RipsComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
                 Rips_simplex_tree_sample = Rips_complex_sample.create_simplex_tree(max_dimension=2)
@@ -106,7 +106,7 @@ def compute_persistence_from_EEG(data,measure='intensities',reduc=5,subj_dir=Non
     return persistence_dictionary #dictionary with key=(band,state) and value=persistence
 
 
-def plot_landscapes(persistences,subj_dir,space='',measure='',save=False):
+def plot_landscapes(persistences,subj_dir,space='',measure='',save=False):##SCAAAAAAAAAAAAALE
     fig, axes = plt.subplots(nrows=4, ncols=3, figsize=(16, 16))
     zero_dim={}
     one_dim={}
