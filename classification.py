@@ -58,7 +58,7 @@ def get_accuracies_per_band(feature_vector_dic,labels,subj_dir,space,measure):
     c_MLR = skppl.Pipeline([('std_scal',skprp.StandardScaler()),('clf',skllm.LogisticRegression(C=10, penalty='l2', multi_class='multinomial', solver='lbfgs', max_iter=500))])   
     c_1NN = sklnn.KNeighborsClassifier(n_neighbors=1, algorithm='brute', metric='correlation')          
     cv_schem = skms.StratifiedShuffleSplit(n_splits=1, test_size=0.2)
-    n_rep = 3 # number of repetitions
+    n_rep = 15 # number of repetitions
     band_dic={-1: 'no_filter', 0:'alpha',1:'betta',2:'gamma'}
     labels=np.array(labels)
     
@@ -118,8 +118,10 @@ def get_accuracies_per_band(feature_vector_dic,labels,subj_dir,space,measure):
     np.save(subj_dir+space+'/'+measure+'/conf_matrix.npy',conf_matrix)
 
     fmt_grph = 'png'
-    
     cmapcolours = ['Blues','Greens','Oranges']
+    
+    fig, axes = plt.subplots(nrows=4, ncols=6, figsize=(24, 24))
+
     for i_band in range(-1,3):
         band = band_dic[i_band]
         for i_vector in range(n_vector):
@@ -129,27 +131,36 @@ def get_accuracies_per_band(feature_vector_dic,labels,subj_dir,space,measure):
             chance_level = np.max(np.unique(labels, return_counts=True)[1]) / labels.size
         
             # plot performance and surrogate
-            plt.figure(figsize=[4,6])
-            plt.axes([0.2,0.2,0.7,0.7])
-            plt.violinplot(perf[i_band,i_vector,:,0],positions=[-0.2],widths=[0.3])
-            plt.violinplot(perf[i_band,i_vector,:,1],positions=[0.2],widths=[0.3])
-            plt.violinplot(perf_shuf[i_band,i_vector,:,0],positions=[0.8],widths=[0.3])
-            plt.violinplot(perf_shuf[i_band,i_vector,:,1],positions=[1.2],widths=[0.3])
-            plt.plot([-1,2],[chance_level]*2,'--k')
-            plt.axis(xmin=-0.6,xmax=1.6,ymin=0,ymax=1.05)
+            #axes[i_band][i_vector].axes([0.2,0.2,0.7,0.7])
+            axes[i_band][i_vector].violinplot(perf[i_band,i_vector,:,0],positions=[-0.2],widths=[0.3])
+            axes[i_band][i_vector].violinplot(perf[i_band,i_vector,:,1],positions=[0.2],widths=[0.3])
+            axes[i_band][i_vector].violinplot(perf_shuf[i_band,i_vector,:,0],positions=[0.8],widths=[0.3])
+            axes[i_band][i_vector].violinplot(perf_shuf[i_band,i_vector,:,1],positions=[1.2],widths=[0.3])
+            axes[i_band][i_vector].plot([-1,2],[chance_level]*2,'--k')
+            axes[i_band][i_vector].axis(xmin=-0.6,xmax=1.6,ymin=0,ymax=1.05)
             #plt.xticks([0,1],['Pearson Correlation','surrogate'],fontsize=8)
-            plt.ylabel('accuracy_'+band+'_'+str(i_vector),fontsize=8)
-            plt.title(band+', '+measure_label)
-            plt.savefig(subj_dir+space+'/'+measure+'/acc/accuracy_'+band+'_'+measure_label, format=fmt_grph)
-            plt.close()
+            axes[i_band][i_vector].set_ylabel('accuracy_'+band+'_'+str(i_vector),fontsize=8)
+            axes[i_band][i_vector].set_title(band+', '+measure_label)
+    plt.savefig(subj_dir+space+'/'+measure+'/acc/accuracies.png', format=fmt_grph)
+    plt.close()
     
-            # plot confusion matrix for MLR
-            plt.figure(figsize=[4,3])
-            plt.axes([0.2,0.2,0.7,0.7])
-            plt.imshow(conf_matrix[i_band,i_vector,:,0,:,:].mean(0), vmin=0, cmap=cmapcolours[i_band])
-            plt.colorbar()
-            plt.xlabel('true label',fontsize=8)
-            plt.ylabel('predicted label',fontsize=8)
-            plt.title(band+', '+measure_label)
-            plt.savefig(subj_dir+space+'/'+measure+'/conf_matrix/conf_mat_MLR_'+band+'_'+measure_label, format=fmt_grph)
-            plt.close()
+    fig2, axes2 = plt.subplots(nrows=4, ncols=6, figsize=(24, 24))
+
+    for i_band in range(-1,3):
+        band = band_dic[i_band]
+        for i_vector in range(n_vector):
+            measure_label=feat_vectors[i_vector]
+    
+            # the chance level is defined as the trivial classifier that predicts the label with more occurrences 
+            chance_level = np.max(np.unique(labels, return_counts=True)[1]) / labels.size
+        
+            # plot performance and surrogate
+            #axes[i_band][i_vector].axes([0.2,0.2,0.7,0.7])
+            axes2[i_band][i_vector].imshow(conf_matrix[i_band,i_vector,:,0,:,:].mean(0), vmin=0, cmap=cmapcolours[i_band])
+            #plt.colorbar()
+            axes2[i_band][i_vector].set_xlabel('true label',fontsize=8)
+            axes2[i_band][i_vector].set_ylabel('predicted label',fontsize=8)
+            axes2[i_band][i_vector].set_title(band+', '+measure_label)
+    plt.savefig(subj_dir+space+'/'+measure+'/conf_matrix/confusion_matrix.png', format=fmt_grph)
+    plt.close()
+
