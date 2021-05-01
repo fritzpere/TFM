@@ -138,7 +138,7 @@ def get_accuracies_per_band(feature_vector_dic,labels,subj_dir,space,measure):
             axes[i_band][i_vector].violinplot(perf_shuf[i_band,i_vector,:,1],positions=[1.2],widths=[0.3])
             axes[i_band][i_vector].plot([-1,2],[chance_level]*2,'--k')
             axes[i_band][i_vector].axis(xmin=-0.6,xmax=1.6,ymin=0,ymax=1.05)
-            #plt.xticks([0,1],['Pearson Correlation','surrogate'],fontsize=8)
+            #axes[i_band][i_vector].set_xticks([0,1,2,3],['MLR','1NN','control1','control2'])##Provar
             axes[i_band][i_vector].set_ylabel('accuracy_'+band+'_'+str(i_vector),fontsize=8)
             axes[i_band][i_vector].set_title(band+', '+measure_label)
     plt.savefig(subj_dir+space+'/'+measure+'/acc/accuracies.png', format=fmt_grph)

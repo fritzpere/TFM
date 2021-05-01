@@ -111,21 +111,25 @@ def plot_landscapes(persistences,subj_dir,space='',measure='',save=False):##SCAA
     zero_dim={}
     one_dim={}
     band_dic={-1: 'no_filter', 0:'alpha',1:'betta',2:'gamma'}
+    
+    LS = gd.representations.Landscape(resolution=1000)
+    
     for i in range(-1,3):
         zero_dim[i],one_dim[i]=separate_dimensions(persistences[i])
+        L0=[LS.fit_transform(zero_dim[i][0]),LS.fit_transform(zero_dim[i][1]),LS.fit_transform(zero_dim[i][2])]
+        mean_landscape0=np.array([L0[0].mean(axis=0),L0[1].mean(axis=0),L0[2].mean(axis=0)])
+        y_max=np.max(mean_landscape0)
         for j in range(3):
-                
-            LS = gd.representations.Landscape(resolution=1000)
-            L0=LS.fit_transform(zero_dim[i][j])
-            mean_landscape0=L0.mean(axis=0)
-            axes[i][j].plot(mean_landscape0[:1000])
-            axes[i][j].plot(mean_landscape0[1000:2000])
-            axes[i][j].plot(mean_landscape0[2000:3000])
-            axes[i][j].plot(mean_landscape0[3000:4000])
-            axes[i][j].plot(mean_landscape0[4000:5000])
+
+            axes[i][j].plot(mean_landscape0[j][:1000])
+            axes[i][j].plot(mean_landscape0[j][1000:2000])
+            axes[i][j].plot(mean_landscape0[j][2000:3000])
+            axes[i][j].plot(mean_landscape0[j][3000:4000])
+            axes[i][j].plot(mean_landscape0[j][4000:5000])
     
             axes[i][j].set_title('{0} persistence Landscapes of \n motivational state {1} and band {2}'.format(space,j,band_dic[i]))
-            
+            axes[i][j].set_xlim(-2,1000)
+            axes[i][j].set_ylim(0,y_max*1.1)
             
     fig.suptitle('Persistence Landscapes of the {0} for\n different frequency bands and motivational state of 0 dimensional features'.format(space),fontsize=24)
     fig.tight_layout(pad=0.5)
@@ -139,17 +143,20 @@ def plot_landscapes(persistences,subj_dir,space='',measure='',save=False):##SCAA
     fig2, axes2 = plt.subplots(nrows=4, ncols=3, figsize=(16, 16))
     for i in range(-1,3):
 
+        L1=[LS.fit_transform(one_dim[i][0]),LS.fit_transform(one_dim[i][1]),LS.fit_transform(one_dim[i][2])]
+        mean_landscape1=np.array([L1[0].mean(axis=0),L1[1].mean(axis=0),L1[2].mean(axis=0)])
+        y_max=np.max(mean_landscape1)
         for j in range(3):
-            L1=LS.fit_transform(one_dim[i][j])
-            mean_landscape=L1.mean(axis=0)
-            axes2[i][j].plot(mean_landscape[:1000])
-            axes2[i][j].plot(mean_landscape[1000:2000])
-            axes2[i][j].plot(mean_landscape[2000:3000])
-            axes2[i][j].plot(mean_landscape[3000:4000])
-            axes2[i][j].plot(mean_landscape[4000:5000])
+
+            axes2[i][j].plot(mean_landscape1[j][:1000])
+            axes2[i][j].plot(mean_landscape1[j][1000:2000])
+            axes2[i][j].plot(mean_landscape1[j][2000:3000])
+            axes2[i][j].plot(mean_landscape1[j][3000:4000])
+            axes2[i][j].plot(mean_landscape1[j][4000:5000])
             
             axes2[i][j].set_title('{0} persistence Landscapes of \n motivational state {1} and band {2}'.format(space,j,band_dic[i]))
-            
+            axes[i][j].set_xlim(-2,1000)
+            axes[i][j].set_ylim(0,y_max*1.1)
     fig2.suptitle('Persistence Landscapes of the {0} for\n different frequency bands and motivational state of 1 dimensional features'.format(space),fontsize=24)
     fig2.tight_layout(pad=0.5)
     fig2.subplots_adjust(top=0.8)
