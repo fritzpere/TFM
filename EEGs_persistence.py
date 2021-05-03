@@ -106,14 +106,13 @@ def compute_persistence_from_EEG(data,measure='intensities',reduc=5,subj_dir=Non
     return persistence_dictionary #dictionary with key=(band,state) and value=persistence
 
 
-def plot_landscapes(persistences,subj_dir,space='',measure='',save=False):##SCAAAAAAAAAAAAALE
+def plot_landscapes(persistences,subj_dir,space='',measure='',save=False):
     fig, axes = plt.subplots(nrows=4, ncols=3, figsize=(16, 16))
     zero_dim={}
     one_dim={}
     band_dic={-1: 'no_filter', 0:'alpha',1:'betta',2:'gamma'}
     
     LS = gd.representations.Landscape(resolution=1000)
-    
     for i in range(-1,3):
         zero_dim[i],one_dim[i]=separate_dimensions(persistences[i])
         L0=[LS.fit_transform(zero_dim[i][0]),LS.fit_transform(zero_dim[i][1]),LS.fit_transform(zero_dim[i][2])]
@@ -139,7 +138,9 @@ def plot_landscapes(persistences,subj_dir,space='',measure='',save=False):##SCAA
         print("create directory(plot):",subj_dir+space+'/'+measure)
         os.makedirs(subj_dir+'/'+space+'/'+measure)
     plt.savefig(subj_dir+space+'/'+measure+'/Landscapes_dim0.png')
-    #fig.clf()
+    plt.close()
+    
+    
     fig2, axes2 = plt.subplots(nrows=4, ncols=3, figsize=(16, 16))
     for i in range(-1,3):
 
@@ -162,8 +163,53 @@ def plot_landscapes(persistences,subj_dir,space='',measure='',save=False):##SCAA
     fig2.subplots_adjust(top=0.8)
     
     plt.savefig(subj_dir+space+'/'+measure+'/Landscapes_dim1.png')
-    #fig2.clf()
+    plt.close()
+    
+    
+    SH = gd.representations.Silhouette(resolution=1000, weight=lambda x: np.power(x[1]-x[0],1)
+    fig3, axes3 = plt.subplots(nrows=4, ncols=3, figsize=(16, 16))
+    for i in range(-1,3):
+        S0=[SH.fit_transform(zero_dim[i][0]),SH.fit_transform(zero_dim[i][1]),SH.fit_transform(zero_dim[i][2])]
+        mean_silhouette0=np.array([S0[0].mean(axis=0),S0[1].mean(axis=0),S0[2].mean(axis=0)])
+        y_max=np.max(mean_silhouette0)
+        for j in range(3):
 
+            axes3[i][j].plot(mean_silhouette0[j])
+            axes3[i][j].set_title('{0} persistence Silhouette of \n motivational state {1} and band {2}'.format(space,j,band_dic[i]))
+            axes3[i][j].set_xlim(-2,1000)
+            axes3[i][j].set_ylim(0,y_max*1.1)
+            
+    fig3.suptitle('Persistence Silhouette of the {0} for\n different frequency bands and motivational state of 0 dimensional features'.format(space),fontsize=24)
+    fig3.tight_layout(pad=0.5)
+    fig3.subplots_adjust(top=0.8)
+    
+    if not os.path.exists(subj_dir+space+'/'+measure):
+        print("create directory(plot):",subj_dir+space+'/'+measure)
+        os.makedirs(subj_dir+'/'+space+'/'+measure)
+    plt.savefig(subj_dir+space+'/'+measure+'/Silhouette_dim0.png')
+    plt.close()
+    
+    fig4, axes4 = plt.subplots(nrows=4, ncols=3, figsize=(16, 16))
+    for i in range(-1,3):
+        S1=[SH.fit_transform(one_dim[i][0]),SH.fit_transform(one_dim[i][1]),SH.fit_transform(one_dim[i][2])]
+        mean_silhouette1=np.array([S1[0].mean(axis=0),S1[1].mean(axis=0),S1[2].mean(axis=0)])
+        y_max=np.max(mean_silhouette1)
+        for j in range(3):
+
+            axes4[i][j].plot(mean_silhouette1[j])
+            axes4[i][j].set_title('{0} persistence Silhouette of \n motivational state {1} and band {2}'.format(space,j,band_dic[i]))
+            axes4[i][j].set_xlim(-2,1000)
+            axes4[i][j].set_ylim(0,y_max*1.1)
+            
+    fig4.suptitle('Persistence Silhouette of the {0} for\n different frequency bands and motivational state of 1 dimensional features'.format(space),fontsize=24)
+    fig4.tight_layout(pad=0.5)
+    fig4.subplots_adjust(top=0.8)
+    
+    if not os.path.exists(subj_dir+space+'/'+measure):
+        print("create directory(plot):",subj_dir+space+'/'+measure)
+        os.makedirs(subj_dir+'/'+space+'/'+measure)
+    plt.savefig(subj_dir+space+'/'+measure+'/Silhouette_dim1.png')
+    plt.close()
     
 
     
