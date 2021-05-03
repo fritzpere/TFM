@@ -12,6 +12,7 @@ import sklearn.neighbors as sklnn
 import sklearn.metrics as skm
 import sklearn.model_selection as skms
 import sklearn.preprocessing as skprp
+import sklearn.feature_selection as skfs
 
 import matplotlib.pyplot as plt
 import os
@@ -55,7 +56,16 @@ def feature_vector_per_band(avg_life, std_life, entropy, pooling, avg_midlife, s
 
 
 def get_accuracies_per_band(feature_vector_dic,labels,subj_dir,space,measure):
-    c_MLR = skppl.Pipeline([('std_scal',skprp.StandardScaler()),('clf',skllm.LogisticRegression(C=10, penalty='l2', multi_class='multinomial', solver='lbfgs', max_iter=500))])   
+    
+    class RFE_pipeline(skppl.Pipeline):
+        def fit(self, X, y=None, **fit_params):
+            """simply extends the pipeline to recover the coefficients (used by RFE) from the last element (the classifier)
+            """
+            super(RFE_pipeline, self).fit(X, y, **fit_params)
+            self.coef_ = self.steps[-1][-1].coef_
+            return self
+        
+    c_MLR = RFE_pipeline([('std_scal',skprp.StandardScaler()),('clf',skllm.LogisticRegression(C=10, penalty='l2', multi_class='multinomial', solver='lbfgs', max_iter=500))])
     c_1NN = sklnn.KNeighborsClassifier(n_neighbors=1, algorithm='brute', metric='correlation')          
     cv_schem = skms.StratifiedShuffleSplit(n_splits=1, test_size=0.2)
     n_rep = 15 # number of repetitions
@@ -63,19 +73,18 @@ def get_accuracies_per_band(feature_vector_dic,labels,subj_dir,space,measure):
     labels=np.array(labels)
     
     feat_vectors=[*feature_vector_dic['no_filter']]
-    '''
+    
     # RFE wrappers
-    RFE_pow = skfs.RFE(c_MLR, n_features_to_select=3)
-    RFE_FC = skfs.RFE(c_MLR, n_features_to_select=90)'''
+    RFE = skfs.RFE(c_MLR, n_features_to_select=1)
     
     # record classification performance 
     n_vector=len(feat_vectors) 
     perf = np.zeros([4,n_vector,n_rep,2]) # (last index: MLR/1NN)
     perf_shuf = np.zeros([4,n_vector,n_rep,2]) # (last index: MLR/1NN)
     conf_matrix = np.zeros([4,n_vector,n_rep,2,3,3]) # (fourthindex: MLR/1NN)
-    #rk_pow = np.zeros([n_bands,n_rep,N],dtype=np.int) # RFE rankings for power (N feature)
-    #rk_FC = np.zeros([n_bands,2,n_rep,int(N*(N-1)/2)],dtype=np.int) # RFE rankings for FC-type measures (N(N-1)/2 feature)
-    #pearson_corr_rk = np.zeros([n_bands,n_measures,int(n_rep*(n_rep-1)/2)]) # stability of rankings measured by Pearson correlation
+    rk_0 = np.zeros([4,n_rep,8],dtype=np.int) # RFE rankings for power (N feature)
+    rk_1 = np.zeros([4,n_rep,8],dtype=np.int)
+    rk_01 = np.zeros([4,n_rep,16],dtype=np.int) 
     
     # repeat classification for several splits for indices of sliding windows (train/test sets)
     
@@ -101,8 +110,15 @@ def get_accuracies_per_band(feature_vector_dic,labels,subj_dir,space,measure):
             
                     c_1NN.fit(vect_features[ind_train,:], shuf_labels[ind_train])
                     perf_shuf[i_band,i_vector,i_rep,1] = c_1NN.score(vect_features[ind_test,:], shuf_labels[ind_test])
-
-    
+		     
+                    if i_vector < 3 :
+                    	RFE.fit(vect_features[ind_train,:], labels[ind_train])
+                    	if i_vector==0:
+                    	    rk_0[i_band,i_rep,:] = RFE.ranking_
+                    	elif i_vector==1:
+                    		rk_1[i_band,i_rep,:] = RFE.ranking_   
+                    	else:
+                    		rk_01[i_band,i_rep,:] = RFE.ranking_    
 
     if not os.path.exists(subj_dir+space+'/'+measure+'/acc'):
         print("create directory(plot):",subj_dir+space+'/'+measure+'/acc')
@@ -116,6 +132,9 @@ def get_accuracies_per_band(feature_vector_dic,labels,subj_dir,space,measure):
     np.save(subj_dir+space+'/'+measure+'/perf.npy',perf)
     np.save(subj_dir+space+'/'+measure+'/perf_shuf.npy',perf_shuf)
     np.save(subj_dir+space+'/'+measure+'/conf_matrix.npy',conf_matrix)
+    np.save(subj_dir+space+'/'+measure+'/rk_0.npy',rk_0)
+    np.save(subj_dir+space+'/'+measure+'/rk_1.npy',rk_1)
+    np.save(subj_dir+space+'/'+measure+'/rk_01.npy',rk_01)
 
     fmt_grph = 'png'
     cmapcolours = ['Blues','Greens','Oranges']
@@ -163,4 +182,6 @@ def get_accuracies_per_band(feature_vector_dic,labels,subj_dir,space,measure):
             axes2[i_band][i_vector].set_title(band+', '+measure_label)
     plt.savefig(subj_dir+space+'/'+measure+'/conf_matrix/confusion_matrix_MLR.png', format=fmt_grph)
     plt.close()
+    
+    
 
