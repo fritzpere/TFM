@@ -48,7 +48,7 @@ def persistency_per_band_and_state(tensor,measure,n_bands=3):
                     row,col = np.tril_indices(n_coor,1)
                     dist[row,col] = pdist(band_tensor)'''
                 else:
-                    #TODO
+                    '''
                     points=band_tensor.copy()
                     normalized_p=normalize(points-np.mean(points,axis=0),axis=1)
                     matrix= normalized_p @ normalized_p.T
@@ -57,10 +57,10 @@ def persistency_per_band_and_state(tensor,measure,n_bands=3):
                     T=1200
                     ts_tmp = band_tensor.T.copy()
                     ts_tmp -= np.outer(np.ones(T),ts_tmp.mean(0))
-                    matrix2= np.tensordot(ts_tmp,ts_tmp,axes=(0,0)) / float(T-1)
+                    matrix= np.tensordot(ts_tmp,ts_tmp,axes=(0,0)) / float(T-1)
                     
-                    matrix2/= np.sqrt(np.outer(matrix2.diagonal(),matrix2.diagonal()))
-                    matrix2=1-matrix2'''
+                    matrix/= np.sqrt(np.outer(matrix.diagonal(),matrix.diagonal()))
+                    matrix=1-matrix
                 #max_edge=np.max(matrix)
                 Rips_complex_sample = gd.RipsComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
                 Rips_simplex_tree_sample = Rips_complex_sample.create_simplex_tree(max_dimension=2)
@@ -166,7 +166,7 @@ def plot_landscapes(persistences,subj_dir,space='',measure='',save=False):
     plt.close()
     
     
-    SH = gd.representations.Silhouette(resolution=1000, weight=lambda x: np.power(x[1]-x[0],1)
+    SH = gd.representations.Silhouette(resolution=1000, weight=lambda x: np.power(x[1]-x[0],1))
     fig3, axes3 = plt.subplots(nrows=4, ncols=3, figsize=(16, 16))
     for i in range(-1,3):
         S0=[SH.fit_transform(zero_dim[i][0]),SH.fit_transform(zero_dim[i][1]),SH.fit_transform(zero_dim[i][2])]
