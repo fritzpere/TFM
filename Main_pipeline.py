@@ -75,6 +75,6 @@ if __name__ == "__main__":
         get_accuracies_per_band(font_space_descriptor_vector_dic,labels,subj_dir=subj_dir,space='font_space',measure='intensities')
         get_accuracies_per_band(elec_space_descriptor_vector_dic_corr,labels,subj_dir=subj_dir,space='electrode_space',measure='correlation')
         get_accuracies_per_band(font_space_descriptor_vector_dic_corr,labels,subj_dir=subj_dir,space='font_space',measure='correlation')
-        
-        
+
+           
         print((time.time()-t)/60, 'minuts')
