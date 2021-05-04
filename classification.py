@@ -45,11 +45,11 @@ def feature_vector_per_band(avg_life, std_life, entropy, pooling, avg_midlife, s
                 
                 feat_vect[band_dic[i_band]]['dim0'][cum_trials[i_state]+k]=np.concatenate((np.array([avg_life[0][i_band][i_state][k],std_life[0][i_band][i_state][k],avg_midlife[0][i_band][i_state][k],std_midlife[0][i_band][i_state][k],entropy[0][i_band][i_state][k]]),pooling[0][i_band][i_state][k][:3]),axis=0)
                 feat_vect[band_dic[i_band]]['dim1'][cum_trials[i_state]+k]=np.concatenate((np.array([avg_life[1][i_band][i_state][k],std_life[1][i_band][i_state][k],avg_midlife[1][i_band][i_state][k],std_midlife[1][i_band][i_state][k],entropy[1][i_band][i_state][k]]),pooling[1][i_band][i_state][k][:3]),axis=0)
-                feat_vect[band_dic[i_band]]['dim0dim1'][cum_trials[i_state]+k]=np.concatenate((feat_vect[band_dic[i_band]]['dim0'][k],feat_vect[band_dic[i_band]]['dim1'][k]),axis=0)
+                feat_vect[band_dic[i_band]]['dim0dim1'][cum_trials[i_state]+k]=np.concatenate((feat_vect[band_dic[i_band]]['dim0'][cum_trials[i_state]+k],feat_vect[band_dic[i_band]]['dim1'][cum_trials[i_state]+k]),axis=0)
                 
                 feat_vect[band_dic[i_band]]['dim0pooling'][cum_trials[i_state]+k]=pooling[0][i_band][i_state][k]
                 feat_vect[band_dic[i_band]]['dim1pooling'][cum_trials[i_state]+k]=pooling[1][i_band][i_state][k]
-                feat_vect[band_dic[i_band]]['dim0dim1pooling'][cum_trials[i_state]+k]=np.concatenate((feat_vect[band_dic[i_band]]['dim0pooling'][k],feat_vect[band_dic[i_band]]['dim1pooling'][k]),axis=0)
+                feat_vect[band_dic[i_band]]['dim0dim1pooling'][cum_trials[i_state]+k]=np.concatenate((feat_vect[band_dic[i_band]]['dim0pooling'][cum_trials[i_state]+k],feat_vect[band_dic[i_band]]['dim1pooling'][cum_trials[i_state]+k]),axis=0)
                 
                 if i_band==-1 : #to only do it once
                     labels.append(i_state)
