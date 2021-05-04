@@ -22,84 +22,84 @@ def feature_vector_per_band(avg_life, std_life, entropy, pooling, avg_midlife, s
     #feat_vect_size=8
     feat_vect={}
     labels=[]
-
+    trials=np.zeros(3,dtype='int')
     for i_band in range(-1,3):
         feat_vect[band_dic[i_band]]={}
-        trials=0
+        trials_total=0
         for i_state in range(3):
-            trials+=len(avg_life[0][i_band][i_state])
-        feat_vect[band_dic[i_band]]['Life0']=np.zeros((trials,2))
-        feat_vect[band_dic[i_band]]['entropy0']=np.zeros((trials,1))
-        feat_vect[band_dic[i_band]]['3vec0']=np.zeros((trials,3))
-        feat_vect[band_dic[i_band]]['Life,3vec0']=np.zeros((trials,5))
-        feat_vect[band_dic[i_band]]['Life,entropy0']=np.zeros((trials,3))
-        feat_vect[band_dic[i_band]]['entropy,3vec0']=np.zeros((trials,4))
-        feat_vect[band_dic[i_band]]['Life,entropy,3vec0']=np.zeros((trials,6))
+            trials[i_state]=len(avg_life[0][i_band][i_state])
+            trials_total+=trials[i_state]
+        feat_vect[band_dic[i_band]]['Life0']=np.zeros((trials_total,2))
+        feat_vect[band_dic[i_band]]['entropy0']=np.zeros((trials_total,1))
+        feat_vect[band_dic[i_band]]['3vec0']=np.zeros((trials_total,3))
+        feat_vect[band_dic[i_band]]['Life,3vec0']=np.zeros((trials_total,5))
+        feat_vect[band_dic[i_band]]['Life,entropy0']=np.zeros((trials_total,3))
+        feat_vect[band_dic[i_band]]['entropy,3vec0']=np.zeros((trials_total,4))
+        feat_vect[band_dic[i_band]]['Life,entropy,3vec0']=np.zeros((trials_total,6))
         
-        feat_vect[band_dic[i_band]]['Life1']=np.zeros((trials,2))
-        feat_vect[band_dic[i_band]]['entropy1']=np.zeros((trials,1))
-        feat_vect[band_dic[i_band]]['3vec1']=np.zeros((trials,3))
-        feat_vect[band_dic[i_band]]['Life,3vec1']=np.zeros((trials,5))
-        feat_vect[band_dic[i_band]]['Life,entropy1']=np.zeros((trials,3))
-        feat_vect[band_dic[i_band]]['entropy,3vec1']=np.zeros((trials,4))
-        feat_vect[band_dic[i_band]]['Life,entropy,3vec1']=np.zeros((trials,6))
+        feat_vect[band_dic[i_band]]['Life1']=np.zeros((trials_total,2))
+        feat_vect[band_dic[i_band]]['entropy1']=np.zeros((trials_total,1))
+        feat_vect[band_dic[i_band]]['3vec1']=np.zeros((trials_total,3))
+        feat_vect[band_dic[i_band]]['Life,3vec1']=np.zeros((trials_total,5))
+        feat_vect[band_dic[i_band]]['Life,entropy1']=np.zeros((trials_total,3))
+        feat_vect[band_dic[i_band]]['entropy,3vec1']=np.zeros((trials_total,4))
+        feat_vect[band_dic[i_band]]['Life,entropy,3vec1']=np.zeros((trials_total,6))
         
-        feat_vect[band_dic[i_band]]['midlife1']=np.zeros((trials,2))
-        feat_vect[band_dic[i_band]]['midlife,Life1']=np.zeros((trials,4))
-        feat_vect[band_dic[i_band]]['midlife,entropy1']=np.zeros((trials,3))
-        feat_vect[band_dic[i_band]]['midlife,3vec1']=np.zeros((trials,5))
-        feat_vect[band_dic[i_band]]['midlife,Life,3vec1']=np.zeros((trials,7))
-        feat_vect[band_dic[i_band]]['midlife,Life,entropy1']=np.zeros((trials,5))
-        feat_vect[band_dic[i_band]]['midlife,entropy,3vec1']=np.zeros((trials,6))
-        feat_vect[band_dic[i_band]]['midlife,Life,entropy,3vec1']=np.zeros((trials,8))
+        feat_vect[band_dic[i_band]]['midlife1']=np.zeros((trials_total,2))
+        feat_vect[band_dic[i_band]]['midlife,Life1']=np.zeros((trials_total,4))
+        feat_vect[band_dic[i_band]]['midlife,entropy1']=np.zeros((trials_total,3))
+        feat_vect[band_dic[i_band]]['midlife,3vec1']=np.zeros((trials_total,5))
+        feat_vect[band_dic[i_band]]['midlife,Life,3vec1']=np.zeros((trials_total,7))
+        feat_vect[band_dic[i_band]]['midlife,Life,entropy1']=np.zeros((trials_total,5))
+        feat_vect[band_dic[i_band]]['midlife,entropy,3vec1']=np.zeros((trials_total,6))
+        feat_vect[band_dic[i_band]]['midlife,Life,entropy,3vec1']=np.zeros((trials_total,8))
         
-        feat_vect[band_dic[i_band]]['Life01']=np.zeros((trials,4))
-        feat_vect[band_dic[i_band]]['entropy01']=np.zeros((trials,2))
-        feat_vect[band_dic[i_band]]['3vec01']=np.zeros((trials,6))
-        feat_vect[band_dic[i_band]]['Life,3vec01']=np.zeros((trials,10))
-        feat_vect[band_dic[i_band]]['Life,entropy01']=np.zeros((trials,6))
-        feat_vect[band_dic[i_band]]['entropy,3vec01']=np.zeros((trials,8))
-        feat_vect[band_dic[i_band]]['Life,entropy,3vec01']=np.zeros((trials,12))
-        
-        
+        feat_vect[band_dic[i_band]]['Life01']=np.zeros((trials_total,4))
+        feat_vect[band_dic[i_band]]['entropy01']=np.zeros((trials_total,2))
+        feat_vect[band_dic[i_band]]['3vec01']=np.zeros((trials_total,6))
+        feat_vect[band_dic[i_band]]['Life,3vec01']=np.zeros((trials_total,10))
+        feat_vect[band_dic[i_band]]['Life,entropy01']=np.zeros((trials_total,6))
+        feat_vect[band_dic[i_band]]['entropy,3vec01']=np.zeros((trials_total,8))
+        feat_vect[band_dic[i_band]]['Life,entropy,3vec01']=np.zeros((trials_total,12))
         
         
+        
+    cum_trials=np.concatenate((np.zeros(1,dtype='int'),trials.cumsum(dtype='int')),axis=0) 
     for i_band in range(-1,3):
         for i_state in range(3):
-            trials=len(avg_life[0][i_band][i_state])
-            for k in range(i_state*trials):##Aqui!!!!!
-                feat_vect[band_dic[i_band]]['Life0'][k]=np.array([avg_life[0][i_band][i_state][k],std_life[0][i_band][i_state][k]])
-                feat_vect[band_dic[i_band]]['entropy0'][k]=np.array([entropy[0][i_band][i_state][k]])
-                feat_vect[band_dic[i_band]]['3vec0'][k]=pooling[0][i_band][i_state][k][:3]
-                feat_vect[band_dic[i_band]]['Life,3vec0'][k]=np.concatenate((feat_vect[band_dic[i_band]]['Life0'][k],feat_vect[band_dic[i_band]]['3vec0'][k]),axis=0)
-                feat_vect[band_dic[i_band]]['Life,entropy0'][k]=np.concatenate((feat_vect[band_dic[i_band]]['Life0'][k],feat_vect[band_dic[i_band]]['entropy0'][k]),axis=0)
-                feat_vect[band_dic[i_band]]['entropy,3vec0'][k]=np.concatenate((feat_vect[band_dic[i_band]]['entropy0'][k],feat_vect[band_dic[i_band]]['3vec0'][k]),axis=0)
-                feat_vect[band_dic[i_band]]['Life,entropy,3vec0'][k]=np.concatenate((feat_vect[band_dic[i_band]]['Life,entropy0'][k],feat_vect[band_dic[i_band]]['3vec0'][k]),axis=0)
+            for k in range(trials[i_state]):
+                feat_vect[band_dic[i_band]]['Life0'][cum_trials[i_state]+k]=np.array([avg_life[0][i_band][i_state][k],std_life[0][i_band][i_state][k]])
+                feat_vect[band_dic[i_band]]['entropy0'][cum_trials[i_state]+k]=np.array([entropy[0][i_band][i_state][k]])
+                feat_vect[band_dic[i_band]]['3vec0'][cum_trials[i_state]+k]=pooling[0][i_band][i_state][k][:3]
+                feat_vect[band_dic[i_band]]['Life,3vec0'][cum_trials[i_state]+k]=np.concatenate((feat_vect[band_dic[i_band]]['Life0'][k],feat_vect[band_dic[i_band]]['3vec0'][k]),axis=0)
+                feat_vect[band_dic[i_band]]['Life,entropy0'][cum_trials[i_state]+k]=np.concatenate((feat_vect[band_dic[i_band]]['Life0'][k],feat_vect[band_dic[i_band]]['entropy0'][k]),axis=0)
+                feat_vect[band_dic[i_band]]['entropy,3vec0'][cum_trials[i_state]+k]=np.concatenate((feat_vect[band_dic[i_band]]['entropy0'][k],feat_vect[band_dic[i_band]]['3vec0'][k]),axis=0)
+                feat_vect[band_dic[i_band]]['Life,entropy,3vec0'][cum_trials[i_state]+k]=np.concatenate((feat_vect[band_dic[i_band]]['Life,entropy0'][k],feat_vect[band_dic[i_band]]['3vec0'][k]),axis=0)
                 
-                feat_vect[band_dic[i_band]]['Life1'][k]=np.array([avg_life[1][i_band][i_state][k],std_life[1][i_band][i_state][k]])
-                feat_vect[band_dic[i_band]]['entropy1'][k]=np.array([entropy[1][i_band][i_state][k]])
-                feat_vect[band_dic[i_band]]['3vec1'][k]=pooling[1][i_band][i_state][k][:3]
-                feat_vect[band_dic[i_band]]['Life,3vec1'][k]=np.concatenate((feat_vect[band_dic[i_band]]['Life1'][k],feat_vect[band_dic[i_band]]['3vec1'][k]),axis=0)
-                feat_vect[band_dic[i_band]]['Life,entropy1'][k]=np.concatenate((feat_vect[band_dic[i_band]]['Life1'][k],feat_vect[band_dic[i_band]]['entropy1'][k]),axis=0)
-                feat_vect[band_dic[i_band]]['entropy,3vec1'][k]=np.concatenate((feat_vect[band_dic[i_band]]['entropy1'][k],feat_vect[band_dic[i_band]]['3vec1'][k]),axis=0)
-                feat_vect[band_dic[i_band]]['Life,entropy,3vec1'][k]=np.concatenate((feat_vect[band_dic[i_band]]['Life,entropy1'][k],feat_vect[band_dic[i_band]]['3vec1'][k]),axis=0)
+                feat_vect[band_dic[i_band]]['Life1'][cum_trials[i_state]+k]=np.array([avg_life[1][i_band][i_state][k],std_life[1][i_band][i_state][k]])
+                feat_vect[band_dic[i_band]]['entropy1'][cum_trials[i_state]+k]=np.array([entropy[1][i_band][i_state][k]])
+                feat_vect[band_dic[i_band]]['3vec1'][cum_trials[i_state]+k]=pooling[1][i_band][i_state][k][:3]
+                feat_vect[band_dic[i_band]]['Life,3vec1'][cum_trials[i_state]+k]=np.concatenate((feat_vect[band_dic[i_band]]['Life1'][k],feat_vect[band_dic[i_band]]['3vec1'][k]),axis=0)
+                feat_vect[band_dic[i_band]]['Life,entropy1'][cum_trials[i_state]+k]=np.concatenate((feat_vect[band_dic[i_band]]['Life1'][k],feat_vect[band_dic[i_band]]['entropy1'][k]),axis=0)
+                feat_vect[band_dic[i_band]]['entropy,3vec1'][cum_trials[i_state]+k]=np.concatenate((feat_vect[band_dic[i_band]]['entropy1'][k],feat_vect[band_dic[i_band]]['3vec1'][k]),axis=0)
+                feat_vect[band_dic[i_band]]['Life,entropy,3vec1'][cum_trials[i_state]+k]=np.concatenate((feat_vect[band_dic[i_band]]['Life,entropy1'][k],feat_vect[band_dic[i_band]]['3vec1'][k]),axis=0)
                 
-                feat_vect[band_dic[i_band]]['midlife1'][k]=np.array([avg_midlife[1][i_band][i_state][k],std_midlife[1][i_band][i_state][k]])
-                feat_vect[band_dic[i_band]]['midlife,Life1'][k]=np.concatenate((feat_vect[band_dic[i_band]]['midlife1'][k],feat_vect[band_dic[i_band]]['Life1'][k]),axis=0)
-                feat_vect[band_dic[i_band]]['midlife,entropy1'][k]=np.concatenate((feat_vect[band_dic[i_band]]['midlife1'][k],feat_vect[band_dic[i_band]]['entropy1'][k]),axis=0)
-                feat_vect[band_dic[i_band]]['midlife,3vec1'][k]=np.concatenate((feat_vect[band_dic[i_band]]['midlife1'][k],feat_vect[band_dic[i_band]]['3vec1'][k]),axis=0)
-                feat_vect[band_dic[i_band]]['midlife,Life,3vec1'][k]=np.concatenate((feat_vect[band_dic[i_band]]['midlife1'][k],feat_vect[band_dic[i_band]]['Life,3vec1'][k]),axis=0)
-                feat_vect[band_dic[i_band]]['midlife,Life,entropy1'][k]=np.concatenate((feat_vect[band_dic[i_band]]['midlife1'][k],feat_vect[band_dic[i_band]]['Life,entropy1'][k]),axis=0)
-                feat_vect[band_dic[i_band]]['midlife,entropy,3vec1'][k]=np.concatenate((feat_vect[band_dic[i_band]]['midlife1'][k],feat_vect[band_dic[i_band]]['entropy,3vec1'][k]),axis=0)
-                feat_vect[band_dic[i_band]]['midlife,Life,entropy,3vec1'][k]=np.concatenate((feat_vect[band_dic[i_band]]['midlife,Life1'][k],feat_vect[band_dic[i_band]]['entropy,3vec1'][k]),axis=0)
+                feat_vect[band_dic[i_band]]['midlife1'][cum_trials[i_state]+k]=np.array([avg_midlife[1][i_band][i_state][k],std_midlife[1][i_band][i_state][k]])
+                feat_vect[band_dic[i_band]]['midlife,Life1'][cum_trials[i_state]+k]=np.concatenate((feat_vect[band_dic[i_band]]['midlife1'][k],feat_vect[band_dic[i_band]]['Life1'][k]),axis=0)
+                feat_vect[band_dic[i_band]]['midlife,entropy1'][cum_trials[i_state]+k]=np.concatenate((feat_vect[band_dic[i_band]]['midlife1'][k],feat_vect[band_dic[i_band]]['entropy1'][k]),axis=0)
+                feat_vect[band_dic[i_band]]['midlife,3vec1'][cum_trials[i_state]+k]=np.concatenate((feat_vect[band_dic[i_band]]['midlife1'][k],feat_vect[band_dic[i_band]]['3vec1'][k]),axis=0)
+                feat_vect[band_dic[i_band]]['midlife,Life,3vec1'][cum_trials[i_state]+k]=np.concatenate((feat_vect[band_dic[i_band]]['midlife1'][k],feat_vect[band_dic[i_band]]['Life,3vec1'][k]),axis=0)
+                feat_vect[band_dic[i_band]]['midlife,Life,entropy1'][cum_trials[i_state]+k]=np.concatenate((feat_vect[band_dic[i_band]]['midlife1'][k],feat_vect[band_dic[i_band]]['Life,entropy1'][k]),axis=0)
+                feat_vect[band_dic[i_band]]['midlife,entropy,3vec1'][cum_trials[i_state]+k]=np.concatenate((feat_vect[band_dic[i_band]]['midlife1'][k],feat_vect[band_dic[i_band]]['entropy,3vec1'][k]),axis=0)
+                feat_vect[band_dic[i_band]]['midlife,Life,entropy,3vec1'][cum_trials[i_state]+k]=np.concatenate((feat_vect[band_dic[i_band]]['midlife,Life1'][k],feat_vect[band_dic[i_band]]['entropy,3vec1'][k]),axis=0)
 
-                feat_vect[band_dic[i_band]]['Life01']=np.concatenate((feat_vect[band_dic[i_band]]['Life0'][k],feat_vect[band_dic[i_band]]['Life1'][k]),axis=0)
-                feat_vect[band_dic[i_band]]['entropy01']=np.concatenate((feat_vect[band_dic[i_band]]['entropy0'][k],feat_vect[band_dic[i_band]]['entropy1'][k]),axis=0)
-                feat_vect[band_dic[i_band]]['3vec01']=np.concatenate((feat_vect[band_dic[i_band]]['3vec0'][k],feat_vect[band_dic[i_band]]['3vec1'][k]),axis=0)
-                feat_vect[band_dic[i_band]]['Life,3vec01']=np.concatenate((feat_vect[band_dic[i_band]]['Life,3vec0'][k],feat_vect[band_dic[i_band]]['Life,3vec1'][k]),axis=0)
-                feat_vect[band_dic[i_band]]['Life,entropy01']=np.concatenate((feat_vect[band_dic[i_band]]['Life,entropy0'][k],feat_vect[band_dic[i_band]]['Life,entropy1'][k]),axis=0)
-                feat_vect[band_dic[i_band]]['entropy,3vec01']=np.concatenate((feat_vect[band_dic[i_band]]['entropy,3vec0'][k],feat_vect[band_dic[i_band]]['entropy,3vec1'][k]),axis=0)
-                feat_vect[band_dic[i_band]]['Life,entropy,3vec01']=np.concatenate((feat_vect[band_dic[i_band]]['Life,entropy,3vec0'][k],feat_vect[band_dic[i_band]]['Life,entropy,3vec1'][k]),axis=0)
+                feat_vect[band_dic[i_band]]['Life01'][cum_trials[i_state]+k]=np.concatenate((feat_vect[band_dic[i_band]]['Life0'][k],feat_vect[band_dic[i_band]]['Life1'][k]),axis=0)
+                feat_vect[band_dic[i_band]]['entropy01'][cum_trials[i_state]+k]=np.concatenate((feat_vect[band_dic[i_band]]['entropy0'][k],feat_vect[band_dic[i_band]]['entropy1'][k]),axis=0)
+                feat_vect[band_dic[i_band]]['3vec01'][cum_trials[i_state]+k]=np.concatenate((feat_vect[band_dic[i_band]]['3vec0'][k],feat_vect[band_dic[i_band]]['3vec1'][k]),axis=0)
+                feat_vect[band_dic[i_band]]['Life,3vec01'][cum_trials[i_state]+k]=np.concatenate((feat_vect[band_dic[i_band]]['Life,3vec0'][k],feat_vect[band_dic[i_band]]['Life,3vec1'][k]),axis=0)
+                feat_vect[band_dic[i_band]]['Life,entropy01'][cum_trials[i_state]+k]=np.concatenate((feat_vect[band_dic[i_band]]['Life,entropy0'][k],feat_vect[band_dic[i_band]]['Life,entropy1'][k]),axis=0)
+                feat_vect[band_dic[i_band]]['entropy,3vec01'][cum_trials[i_state]+k]=np.concatenate((feat_vect[band_dic[i_band]]['entropy,3vec0'][k],feat_vect[band_dic[i_band]]['entropy,3vec1'][k]),axis=0)
+                feat_vect[band_dic[i_band]]['Life,entropy,3vec01'][cum_trials[i_state]+k]=np.concatenate((feat_vect[band_dic[i_band]]['Life,entropy,3vec0'][k],feat_vect[band_dic[i_band]]['Life,entropy,3vec1'][k]),axis=0)
                 if i_band==-1 : #to only do it once
                     labels.append(i_state)
     return feat_vect,labels
@@ -171,7 +171,7 @@ def get_accuracies_per_band(feature_vector_dic,labels,subj_dir,space,measure):
     np.save(subj_dir+space+'/'+measure+'/conf_matrix.npy',conf_matrix)
 
     fmt_grph = 'png'
-    cmapcolours = ['Blues','Greens','Oranges']
+    cmapcolours = ['Blues','Greens','Oranges', 'Reds']
     
     fig, axes = plt.subplots(nrows=4, ncols=n_vector, figsize=(72, 24))
 
