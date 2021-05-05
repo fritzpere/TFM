@@ -55,10 +55,36 @@ def feature_vector_per_band(avg_life, std_life, entropy, pooling, avg_midlife, s
                     labels.append(i_state)
     return feat_vect,labels
 
+def feat_vect_silhouettes(s0,s1):
+    band_dic={-1: 'no_filter', 0:'alpha',1:'betta',2:'gamma'}
+    feat_vect_size=1000
+    feat_vect={}
+    labels=[]
+    trials=np.zeros(3,dtype='int')
+    for i_band in range(-1,3):
+        feat_vect[band_dic[i_band]]={}
+        trials_total=0
+        for i_state in range(3):
+            trials[i_state]=len(s0[i_band][i_state])
+            trials_total+=trials[i_state]
+        #trials_total=int(trials_total)
+        feat_vect[band_dic[i_band]]['dim0silhouette']=np.zeros((trials_total,feat_vect_size))
+        feat_vect[band_dic[i_band]]['dim1silhouette']=np.zeros((trials_total,feat_vect_size))
+        feat_vect[band_dic[i_band]]['dim0dim1silhouette']=np.zeros((trials_total,feat_vect_size*2))
+    cum_trials=np.concatenate((np.zeros(1,dtype='int'),trials.cumsum(dtype='int')),axis=0)
+    for i_band in range(-1,3):
+        for i_state in range(3):
+            for k in range(trials[i_state]):
+                
+                feat_vect[band_dic[i_band]]['dim0silhouette'][cum_trials[i_state]+k]=s0[i_band][i_state][k]
+                feat_vect[band_dic[i_band]]['dim1silhouette'][cum_trials[i_state]+k]=s1[i_band][i_state][k]
+                feat_vect[band_dic[i_band]]['dim0dim1silhouette'][cum_trials[i_state]+k]=np.concatenate((feat_vect[band_dic[i_band]]['dim0silhouette'][cum_trials[i_state]+k],feat_vect[band_dic[i_band]]['dim1silhouette'][cum_trials[i_state]+k]),axis=0)
+                
+                if i_band==-1 : #to only do it once
+                    labels.append(i_state)
+    return feat_vect,labels
 
-
-
-def get_accuracies_per_band(feature_vector_dic,labels,subj_dir,space,measure):
+def get_accuracies_per_band(feature_vector_dic,labels,subj_dir,space,measure,name=''):
     c_MLR = skppl.Pipeline([('std_scal',skprp.StandardScaler()),('clf',skllm.LogisticRegression(C=10, penalty='l2', multi_class='multinomial', solver='lbfgs', max_iter=500))])   
     c_1NN = sklnn.KNeighborsClassifier(n_neighbors=1, algorithm='brute', metric='correlation')          
     cv_schem = skms.StratifiedShuffleSplit(n_splits=1, test_size=0.2)
@@ -124,7 +150,7 @@ def get_accuracies_per_band(feature_vector_dic,labels,subj_dir,space,measure):
     fmt_grph = 'png'
     cmapcolours = ['Blues','Greens','Oranges']
     
-    fig, axes = plt.subplots(nrows=4, ncols=6, figsize=(24, 24))
+    fig, axes = plt.subplots(nrows=4, ncols=n_vector, figsize=(24, 24))
 
     for i_band in range(-1,3):
         band = band_dic[i_band]
@@ -145,10 +171,10 @@ def get_accuracies_per_band(feature_vector_dic,labels,subj_dir,space,measure):
             #axes[i_band][i_vector].set_xticks([0,1,2,3],['MLR','1NN','control1','control2'])##Provar
             axes[i_band][i_vector].set_ylabel('accuracy_'+band+'_'+str(i_vector),fontsize=8)
             axes[i_band][i_vector].set_title(band+', '+measure_label)
-    plt.savefig(subj_dir+space+'/'+measure+'/acc/accuracies.png', format=fmt_grph)
+    plt.savefig(subj_dir+space+'/'+measure+'/acc/'+name+'accuracies.png', format=fmt_grph)
     plt.close()
     
-    fig2, axes2 = plt.subplots(nrows=4, ncols=6, figsize=(24, 24))
+    fig2, axes2 = plt.subplots(nrows=4, ncols=n_vector, figsize=(24, 24))
 
     for i_band in range(-1,3):
         band = band_dic[i_band]
@@ -165,6 +191,6 @@ def get_accuracies_per_band(feature_vector_dic,labels,subj_dir,space,measure):
             axes2[i_band][i_vector].set_xlabel('true label',fontsize=8)
             axes2[i_band][i_vector].set_ylabel('predicted label',fontsize=8)
             axes2[i_band][i_vector].set_title(band+', '+measure_label)
-    plt.savefig(subj_dir+space+'/'+measure+'/conf_matrix/confusion_matrix_MLR.png', format=fmt_grph)
+    plt.savefig(subj_dir+space+'/'+measure+'/conf_matrix/'+name+'confusion_matrix_MLR.png', format=fmt_grph)
     plt.close()
 

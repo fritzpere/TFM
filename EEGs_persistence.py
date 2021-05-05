@@ -167,15 +167,16 @@ def plot_landscapes(persistences,subj_dir,space='',measure='',save=False):
     plt.close()
     
     
-    SH = gd.representations.Silhouette(resolution=1000, weight=lambda x: np.power(x[1]-x[0],1))
+    SH = gd.representations.Silhouette(resolution=100, weight=lambda x: np.power(x[1]-x[0],1))
     fig3, axes3 = plt.subplots(nrows=4, ncols=3, figsize=(16, 16))
+    mean_silhouette0=np.zeros((4,3,1000))
     for i in range(-1,3):
         S0=[SH.fit_transform(zero_dim[i][0]),SH.fit_transform(zero_dim[i][1]),SH.fit_transform(zero_dim[i][2])]
-        mean_silhouette0=np.array([S0[0].mean(axis=0),S0[1].mean(axis=0),S0[2].mean(axis=0)])
-        y_max=np.max(mean_silhouette0)
+        mean_silhouette0[i]=np.array([S0[0].mean(axis=0),S0[1].mean(axis=0),S0[2].mean(axis=0)])
+        y_max=np.max(mean_silhouette0[i])
         for j in range(3):
 
-            axes3[i][j].plot(mean_silhouette0[j])
+            axes3[i][j].plot(mean_silhouette0[i][j])
             axes3[i][j].set_title('{0} persistence Silhouette of \n motivational state {1} and band {2}'.format(space,j,band_dic[i]))
             axes3[i][j].set_xlim(-2,1000)
             axes3[i][j].set_ylim(0,y_max*1.1)
@@ -191,13 +192,14 @@ def plot_landscapes(persistences,subj_dir,space='',measure='',save=False):
     plt.close()
     
     fig4, axes4 = plt.subplots(nrows=4, ncols=3, figsize=(16, 16))
+    mean_silhouette1=np.zeros((4,3,1000))
     for i in range(-1,3):
         S1=[SH.fit_transform(one_dim[i][0]),SH.fit_transform(one_dim[i][1]),SH.fit_transform(one_dim[i][2])]
-        mean_silhouette1=np.array([S1[0].mean(axis=0),S1[1].mean(axis=0),S1[2].mean(axis=0)])
-        y_max=np.max(mean_silhouette1)
+        mean_silhouette1[i]=np.array([S1[0].mean(axis=0),S1[1].mean(axis=0),S1[2].mean(axis=0)])
+        y_max=np.max(mean_silhouette1[i])
         for j in range(3):
 
-            axes4[i][j].plot(mean_silhouette1[j])
+            axes4[i][j].plot(mean_silhouette1[i][j])
             axes4[i][j].set_title('{0} persistence Silhouette of \n motivational state {1} and band {2}'.format(space,j,band_dic[i]))
             axes4[i][j].set_xlim(-2,1000)
             axes4[i][j].set_ylim(0,y_max*1.1)
@@ -212,5 +214,9 @@ def plot_landscapes(persistences,subj_dir,space='',measure='',save=False):
     plt.savefig(subj_dir+space+'/'+measure+'/Silhouette_dim1.png')
     plt.close()
     
+    
+    feat_vect,labels=feat_vect_silhouettes(mean_silhouette0,mean_silhouette1)
+    
+    get_accuracies_per_band(feat_vect,labels,subj_dir,space,measure,'silhouettes')
 
     
