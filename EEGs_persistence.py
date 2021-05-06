@@ -60,7 +60,7 @@ def persistency_per_band_and_state(tensor,measure,n_bands=3):
                     matrix= np.tensordot(ts_tmp,ts_tmp,axes=(0,0)) / float(T-1)
                     
                     matrix/= np.sqrt(np.outer(matrix.diagonal(),matrix.diagonal()))
-                    matrix=1-matrix
+                    matrix=np.arccos(matrix)
                 #max_edge=np.max(matrix)
                 Rips_complex_sample = gd.RipsComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
                 #Rips_complex_sample = gd.AlphaComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
@@ -114,10 +114,11 @@ def plot_landscapes(persistences,subj_dir,space='',measure='',save=False):
     band_dic={-1: 'no_filter', 0:'alpha',1:'betta',2:'gamma'}
     
     LS = gd.representations.Landscape(resolution=1000)
+    L0 = []
     for i in range(-1,3):
         zero_dim[i],one_dim[i]=separate_dimensions(persistences[i])
-        L0=[LS.fit_transform(zero_dim[i][0]),LS.fit_transform(zero_dim[i][1]),LS.fit_transform(zero_dim[i][2])]
-        mean_landscape0=np.array([L0[0].mean(axis=0),L0[1].mean(axis=0),L0[2].mean(axis=0)])
+        L0.append([LS.fit_transform(zero_dim[i][0]),LS.fit_transform(zero_dim[i][1]),LS.fit_transform(zero_dim[i][2])])
+        mean_landscape0=np.array([L0[i][0].mean(axis=0),L0[i][1].mean(axis=0),L0[i][2].mean(axis=0)])
         y_max=np.max(mean_landscape0)
         for j in range(3):
 
@@ -143,10 +144,11 @@ def plot_landscapes(persistences,subj_dir,space='',measure='',save=False):
     
     
     fig2, axes2 = plt.subplots(nrows=4, ncols=3, figsize=(16, 16))
+    L1=[]
     for i in range(-1,3):
 
-        L1=[LS.fit_transform(one_dim[i][0]),LS.fit_transform(one_dim[i][1]),LS.fit_transform(one_dim[i][2])]
-        mean_landscape1=np.array([L1[0].mean(axis=0),L1[1].mean(axis=0),L1[2].mean(axis=0)])
+        L1.append([LS.fit_transform(one_dim[i][0]),LS.fit_transform(one_dim[i][1]),LS.fit_transform(one_dim[i][2])])
+        mean_landscape1=np.array([L1[i][0].mean(axis=0),L1[i][1].mean(axis=0),L1[i][2].mean(axis=0)])
         y_max=np.max(mean_landscape1)
         for j in range(3):
 
@@ -167,16 +169,16 @@ def plot_landscapes(persistences,subj_dir,space='',measure='',save=False):
     plt.close()
     
     
-    SH = gd.representations.Silhouette(resolution=100, weight=lambda x: np.power(x[1]-x[0],1))
+    SH = gd.representations.Silhouette(resolution=1000, weight=lambda x: np.power(x[1]-x[0],1))
     fig3, axes3 = plt.subplots(nrows=4, ncols=3, figsize=(16, 16))
-    mean_silhouette0=np.zeros((4,3,1000))
+    S0=[]
     for i in range(-1,3):
-        S0=[SH.fit_transform(zero_dim[i][0]),SH.fit_transform(zero_dim[i][1]),SH.fit_transform(zero_dim[i][2])]
-        mean_silhouette0[i]=np.array([S0[0].mean(axis=0),S0[1].mean(axis=0),S0[2].mean(axis=0)])
-        y_max=np.max(mean_silhouette0[i])
+        S0.append([SH.fit_transform(zero_dim[i][0]),SH.fit_transform(zero_dim[i][1]),SH.fit_transform(zero_dim[i][2])])
+        mean_silhouette0=np.array([S0[i][0].mean(axis=0),S0[i][1].mean(axis=0),S0[i][2].mean(axis=0)])
+        y_max=np.max(mean_silhouette0)
         for j in range(3):
 
-            axes3[i][j].plot(mean_silhouette0[i][j])
+            axes3[i][j].plot(mean_silhouette0[j])
             axes3[i][j].set_title('{0} persistence Silhouette of \n motivational state {1} and band {2}'.format(space,j,band_dic[i]))
             axes3[i][j].set_xlim(-2,1000)
             axes3[i][j].set_ylim(0,y_max*1.1)
@@ -192,14 +194,14 @@ def plot_landscapes(persistences,subj_dir,space='',measure='',save=False):
     plt.close()
     
     fig4, axes4 = plt.subplots(nrows=4, ncols=3, figsize=(16, 16))
-    mean_silhouette1=np.zeros((4,3,1000))
+    S1=[]
     for i in range(-1,3):
-        S1=[SH.fit_transform(one_dim[i][0]),SH.fit_transform(one_dim[i][1]),SH.fit_transform(one_dim[i][2])]
-        mean_silhouette1[i]=np.array([S1[0].mean(axis=0),S1[1].mean(axis=0),S1[2].mean(axis=0)])
+        S1.append([SH.fit_transform(one_dim[i][0]),SH.fit_transform(one_dim[i][1]),SH.fit_transform(one_dim[i][2])])
+        mean_silhouette1=np.array([S1[i][0].mean(axis=0),S1[i][1].mean(axis=0),S1[i][2].mean(axis=0)])
         y_max=np.max(mean_silhouette1[i])
         for j in range(3):
 
-            axes4[i][j].plot(mean_silhouette1[i][j])
+            axes4[i][j].plot(mean_silhouette1[j])
             axes4[i][j].set_title('{0} persistence Silhouette of \n motivational state {1} and band {2}'.format(space,j,band_dic[i]))
             axes4[i][j].set_xlim(-2,1000)
             axes4[i][j].set_ylim(0,y_max*1.1)
@@ -214,9 +216,17 @@ def plot_landscapes(persistences,subj_dir,space='',measure='',save=False):
     plt.savefig(subj_dir+space+'/'+measure+'/Silhouette_dim1.png')
     plt.close()
     
+    feat_vect_land,labels=feat_vect_silhouettes(np.array(L0),np.array(L1),5000)
     
-    feat_vect,labels=feat_vect_silhouettes(mean_silhouette0,mean_silhouette1)
+    get_accuracies_per_band(feat_vect_land,labels,subj_dir,space,measure,500,'landscapes500')
+    get_accuracies_per_band(feat_vect_land,labels,subj_dir,space,measure,1000,'landscapes1000')
     
-    get_accuracies_per_band(feat_vect,labels,subj_dir,space,measure,'silhouettes')
+    
+    feat_vect_sil,labels=feat_vect_silhouettes(np.array(S0),np.array(S1))
+    
+    get_accuracies_per_band(feat_vect_sil,labels,subj_dir,space,measure,500,'silhouettes500')
+    get_accuracies_per_band(feat_vect_sil,labels,subj_dir,space,measure,1000,'silhouettes1000')
+    get_accuracies_per_band(feat_vect_sil,labels,subj_dir,space,measure,2000,'silhouettes2000')
+
 
     

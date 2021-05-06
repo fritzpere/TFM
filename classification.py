@@ -55,9 +55,9 @@ def feature_vector_per_band(avg_life, std_life, entropy, pooling, avg_midlife, s
                     labels.append(i_state)
     return feat_vect,labels
 
-def feat_vect_silhouettes(s0,s1):
+def feat_vect_silhouettes(s0,s1,size=1000):
     band_dic={-1: 'no_filter', 0:'alpha',1:'betta',2:'gamma'}
-    feat_vect_size=1000
+    feat_vect_size=size
     feat_vect={}
     labels=[]
     trials=np.zeros(3,dtype='int')
@@ -84,11 +84,11 @@ def feat_vect_silhouettes(s0,s1):
                     labels.append(i_state)
     return feat_vect,labels
 
-def get_accuracies_per_band(feature_vector_dic,labels,subj_dir,space,measure,name=''):
-    c_MLR = skppl.Pipeline([('std_scal',skprp.StandardScaler()),('clf',skllm.LogisticRegression(C=10, penalty='l2', multi_class='multinomial', solver='lbfgs', max_iter=500))])   
+def get_accuracies_per_band(feature_vector_dic,labels,subj_dir,space,measure,iters=500,name=''):
+    c_MLR = skppl.Pipeline([('std_scal',skprp.StandardScaler()),('clf',skllm.LogisticRegression(C=10, penalty='l2', multi_class='multinomial', solver='lbfgs', max_iter=iters))])   
     c_1NN = sklnn.KNeighborsClassifier(n_neighbors=1, algorithm='brute', metric='correlation')          
     cv_schem = skms.StratifiedShuffleSplit(n_splits=1, test_size=0.2)
-    n_rep = 15 # number of repetitions
+    n_rep = 10 # number of repetitions
     band_dic={-1: 'no_filter', 0:'alpha',1:'betta',2:'gamma'}
     labels=np.array(labels)
     
@@ -148,7 +148,7 @@ def get_accuracies_per_band(feature_vector_dic,labels,subj_dir,space,measure,nam
     np.save(subj_dir+space+'/'+measure+'/conf_matrix.npy',conf_matrix)
 
     fmt_grph = 'png'
-    cmapcolours = ['Blues','Greens','Oranges']
+    cmapcolours = ['Blues','Greens','Oranges','Reds']
     
     fig, axes = plt.subplots(nrows=4, ncols=n_vector, figsize=(24, 24))
 
