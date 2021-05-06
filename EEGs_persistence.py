@@ -219,14 +219,13 @@ def plot_landscapes(persistences,subj_dir,space='',measure='',save=False):
     feat_vect_land,labels=feat_vect_silhouettes(np.array(L0),np.array(L1),5000)
     
     get_accuracies_per_band(feat_vect_land,labels,subj_dir,space,measure,500,'landscapes500')
-    get_accuracies_per_band(feat_vect_land,labels,subj_dir,space,measure,1000,'landscapes1000')
+
     
     
     feat_vect_sil,labels=feat_vect_silhouettes(np.array(S0),np.array(S1))
     
     get_accuracies_per_band(feat_vect_sil,labels,subj_dir,space,measure,500,'silhouettes500')
-    get_accuracies_per_band(feat_vect_sil,labels,subj_dir,space,measure,1000,'silhouettes1000')
-    get_accuracies_per_band(feat_vect_sil,labels,subj_dir,space,measure,2000,'silhouettes2000')
+
 
 
     
