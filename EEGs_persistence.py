@@ -103,17 +103,17 @@ def compute_persistence_from_EEG(data,measure='intensities',reduc=5,subj_dir=Non
     
 
     persistence_dictionary=persistency_per_band_and_state(filtered_ts_dic,measure)
-    plot_landscapes(persistence_dictionary,subj_dir,space, measure)
+    plot_landscapes(persistence_dictionary,subj_dir,space, measure,100)
     return persistence_dictionary #dictionary with key=(band,state) and value=persistence
 
 
-def plot_landscapes(persistences,subj_dir,space='',measure='',resolut=1000,save=False):
+def plot_landscapes(persistences,subj_dir,space='',measure='',resolut=1000):
     fig, axes = plt.subplots(nrows=4, ncols=3, figsize=(16, 16))
     zero_dim={}
     one_dim={}
     band_dic={-1: 'no_filter', 0:'alpha',1:'betta',2:'gamma'}
     
-    LS = gd.representations.Landscape(resolution=resolut)
+    LS = gd.representations.Landscape(num_landscapes=2,resolution=resolut)
     L0 = []
     for i in range(-1,3):
         zero_dim[i],one_dim[i]=separate_dimensions(persistences[i])
@@ -124,9 +124,10 @@ def plot_landscapes(persistences,subj_dir,space='',measure='',resolut=1000,save=
 
             axes[i][j].plot(mean_landscape0[j][:resolut])
             axes[i][j].plot(mean_landscape0[j][resolut:2*resolut])
+            '''
             axes[i][j].plot(mean_landscape0[j][2*resolut:3*resolut])
             axes[i][j].plot(mean_landscape0[j][3*resolut:4*resolut])
-            axes[i][j].plot(mean_landscape0[j][4*resolut:5*resolut])
+            axes[i][j].plot(mean_landscape0[j][4*resolut:5*resolut])'''
     
             axes[i][j].set_title('{0} persistence Landscapes of \n motivational state {1} and band {2}'.format(space,j,band_dic[i]))
             axes[i][j].set_xlim(-2,resolut)
@@ -154,9 +155,10 @@ def plot_landscapes(persistences,subj_dir,space='',measure='',resolut=1000,save=
 
             axes2[i][j].plot(mean_landscape1[j][:resolut])
             axes2[i][j].plot(mean_landscape1[j][resolut:2*resolut])
+            '''
             axes2[i][j].plot(mean_landscape1[j][2*resolut:3*resolut])
             axes2[i][j].plot(mean_landscape1[j][3*resolut:4*resolut])
-            axes2[i][j].plot(mean_landscape1[j][4*resolut:5*resolut])
+            axes2[i][j].plot(mean_landscape1[j][4*resolut:5*resolut])'''
             
             axes2[i][j].set_title('{0} persistence Landscapes of \n motivational state {1} and band {2}'.format(space,j,band_dic[i]))
             axes[i][j].set_xlim(-2,resolut)
@@ -216,17 +218,17 @@ def plot_landscapes(persistences,subj_dir,space='',measure='',resolut=1000,save=
     plt.savefig(subj_dir+space+'/'+measure+'/Silhouette_dim1.png')
     plt.close()
     
-    feat_vect_land,labels=feat_vect_repr(np.array(L0),np.array(L1),'landscapes',5000)
+    feat_vect_land,labels=feat_vect_repr(np.array(L0),np.array(L1),'landscapes',resolut*2)
     print('plotting accuracies and confusion matrixes for Landscapes Classification')
     t=time.time()
-    get_accuracies_per_band(feat_vect_land,labels,subj_dir,space,measure,500,'landscapes500')
+    get_accuracies_per_band(feat_vect_land,labels,subj_dir,space,measure,500,'landscapes'+str(resolut))
     print((time.time()-t)/60, 'minuts for Landscape classification')
     
     
-    feat_vect_sil,labels=feat_vect_repr(np.array(S0),np.array(S1),'silhouetes')
+    feat_vect_sil,labels=feat_vect_repr(np.array(S0),np.array(S1),'silhouetes',resolut)
     print('plotting accuracies and confusion matrixes for Silhouetes Classification')
     t=time.time()
-    get_accuracies_per_band(feat_vect_sil,labels,subj_dir,space,measure,500,'silhouettes500')
+    get_accuracies_per_band(feat_vect_sil,labels,subj_dir,space,measure,500,'silhouettes'+str(resolut))
     print((time.time()-t)/60, 'minuts for silhouettes classification')
 
 
