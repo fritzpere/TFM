@@ -46,12 +46,12 @@ def load_data(i_sub,space='both'):
 
 if __name__ == "__main__":    
     #subjects=[25]
-    subjects=list(range(25,36))
+    subjects=list(range(26,36))
     for subject in subjects:
         t=time.time()
         
-        elec_space,subj_dir=load_data(subject,space='electrode_space')
-        #elec_space,font_space,subj_dir=load_data(subject)
+        #elec_space,subj_dir=load_data(subject,space='electrode_space')
+        elec_space,font_space,subj_dir=load_data(subject)
         
         print('computing persistence of electrode space of subject',subject)
         elec_space_pers=compute_persistence_from_EEG(elec_space,measure='intensities',subj_dir=subj_dir,space='electrode_space',save=True) #pointcloud shape (432, 50)
