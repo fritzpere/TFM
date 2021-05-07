@@ -14,7 +14,7 @@ from preprocess_data import *
 from topological_descriptors import *
 import os
 #plt.style.use(['seaborn-bright'])
-
+import time  
 def persistency_per_band_and_state(tensor,measure,n_bands=3):
     """
     Computes Persistent Homology for each band of
@@ -107,13 +107,13 @@ def compute_persistence_from_EEG(data,measure='intensities',reduc=5,subj_dir=Non
     return persistence_dictionary #dictionary with key=(band,state) and value=persistence
 
 
-def plot_landscapes(persistences,subj_dir,space='',measure='',save=False):
+def plot_landscapes(persistences,subj_dir,space='',measure='',resolut=1000,save=False):
     fig, axes = plt.subplots(nrows=4, ncols=3, figsize=(16, 16))
     zero_dim={}
     one_dim={}
     band_dic={-1: 'no_filter', 0:'alpha',1:'betta',2:'gamma'}
     
-    LS = gd.representations.Landscape(resolution=1000)
+    LS = gd.representations.Landscape(resolution=resolut)
     L0 = []
     for i in range(-1,3):
         zero_dim[i],one_dim[i]=separate_dimensions(persistences[i])
@@ -122,14 +122,14 @@ def plot_landscapes(persistences,subj_dir,space='',measure='',save=False):
         y_max=np.max(mean_landscape0)
         for j in range(3):
 
-            axes[i][j].plot(mean_landscape0[j][:1000])
-            axes[i][j].plot(mean_landscape0[j][1000:2000])
-            axes[i][j].plot(mean_landscape0[j][2000:3000])
-            axes[i][j].plot(mean_landscape0[j][3000:4000])
-            axes[i][j].plot(mean_landscape0[j][4000:5000])
+            axes[i][j].plot(mean_landscape0[j][:resolut])
+            axes[i][j].plot(mean_landscape0[j][resolut:2*resolut])
+            axes[i][j].plot(mean_landscape0[j][2*resolut:3*resolut])
+            axes[i][j].plot(mean_landscape0[j][3*resolut:4*resolut])
+            axes[i][j].plot(mean_landscape0[j][4*resolut:5*resolut])
     
             axes[i][j].set_title('{0} persistence Landscapes of \n motivational state {1} and band {2}'.format(space,j,band_dic[i]))
-            axes[i][j].set_xlim(-2,1000)
+            axes[i][j].set_xlim(-2,resolut)
             axes[i][j].set_ylim(0,y_max*1.1)
             
     fig.suptitle('Persistence Landscapes of the {0} for\n different frequency bands and motivational state of 0 dimensional features'.format(space),fontsize=24)
@@ -152,14 +152,14 @@ def plot_landscapes(persistences,subj_dir,space='',measure='',save=False):
         y_max=np.max(mean_landscape1)
         for j in range(3):
 
-            axes2[i][j].plot(mean_landscape1[j][:1000])
-            axes2[i][j].plot(mean_landscape1[j][1000:2000])
-            axes2[i][j].plot(mean_landscape1[j][2000:3000])
-            axes2[i][j].plot(mean_landscape1[j][3000:4000])
-            axes2[i][j].plot(mean_landscape1[j][4000:5000])
+            axes2[i][j].plot(mean_landscape1[j][:resolut])
+            axes2[i][j].plot(mean_landscape1[j][resolut:2*resolut])
+            axes2[i][j].plot(mean_landscape1[j][2*resolut:3*resolut])
+            axes2[i][j].plot(mean_landscape1[j][3*resolut:4*resolut])
+            axes2[i][j].plot(mean_landscape1[j][4*resolut:5*resolut])
             
             axes2[i][j].set_title('{0} persistence Landscapes of \n motivational state {1} and band {2}'.format(space,j,band_dic[i]))
-            axes[i][j].set_xlim(-2,1000)
+            axes[i][j].set_xlim(-2,resolut)
             axes[i][j].set_ylim(0,y_max*1.1)
     fig2.suptitle('Persistence Landscapes of the {0} for\n different frequency bands and motivational state of 1 dimensional features'.format(space),fontsize=24)
     fig2.tight_layout(pad=0.5)
@@ -169,7 +169,7 @@ def plot_landscapes(persistences,subj_dir,space='',measure='',save=False):
     plt.close()
     
     
-    SH = gd.representations.Silhouette(resolution=1000, weight=lambda x: np.power(x[1]-x[0],1))
+    SH = gd.representations.Silhouette(resolution=resolut, weight=lambda x: np.power(x[1]-x[0],1))
     fig3, axes3 = plt.subplots(nrows=4, ncols=3, figsize=(16, 16))
     S0=[]
     for i in range(-1,3):
@@ -180,7 +180,7 @@ def plot_landscapes(persistences,subj_dir,space='',measure='',save=False):
 
             axes3[i][j].plot(mean_silhouette0[j])
             axes3[i][j].set_title('{0} persistence Silhouette of \n motivational state {1} and band {2}'.format(space,j,band_dic[i]))
-            axes3[i][j].set_xlim(-2,1000)
+            axes3[i][j].set_xlim(-2,resolut)
             axes3[i][j].set_ylim(0,y_max*1.1)
             
     fig3.suptitle('Persistence Silhouette of the {0} for\n different frequency bands and motivational state of 0 dimensional features'.format(space),fontsize=24)
@@ -203,7 +203,7 @@ def plot_landscapes(persistences,subj_dir,space='',measure='',save=False):
 
             axes4[i][j].plot(mean_silhouette1[j])
             axes4[i][j].set_title('{0} persistence Silhouette of \n motivational state {1} and band {2}'.format(space,j,band_dic[i]))
-            axes4[i][j].set_xlim(-2,1000)
+            axes4[i][j].set_xlim(-2,resolut)
             axes4[i][j].set_ylim(0,y_max*1.1)
             
     fig4.suptitle('Persistence Silhouette of the {0} for\n different frequency bands and motivational state of 1 dimensional features'.format(space),fontsize=24)
@@ -216,16 +216,18 @@ def plot_landscapes(persistences,subj_dir,space='',measure='',save=False):
     plt.savefig(subj_dir+space+'/'+measure+'/Silhouette_dim1.png')
     plt.close()
     
-    feat_vect_land,labels=feat_vect_silhouettes(np.array(L0),np.array(L1),5000)
-    
+    feat_vect_land,labels=feat_vect_repr(np.array(L0),np.array(L1),'landscapes',5000)
+    print('plotting accuracies and confusion matrixes for Landscapes Classification')
+    t=time.time()
     get_accuracies_per_band(feat_vect_land,labels,subj_dir,space,measure,500,'landscapes500')
-
+    print((time.time()-t)/60, 'minuts for Landscape classification')
     
     
-    feat_vect_sil,labels=feat_vect_silhouettes(np.array(S0),np.array(S1))
-    
+    feat_vect_sil,labels=feat_vect_repr(np.array(S0),np.array(S1),'silhouetes')
+    print('plotting accuracies and confusion matrixes for Silhouetes Classification')
+    t=time.time()
     get_accuracies_per_band(feat_vect_sil,labels,subj_dir,space,measure,500,'silhouettes500')
-
+    print((time.time()-t)/60, 'minuts for silhouettes classification')
 
 
     
