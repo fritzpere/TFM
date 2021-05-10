@@ -103,6 +103,14 @@ def compute_persistence_from_EEG(data,measure='intensities',reduc=5,subj_dir=Non
     
 
     persistence_dictionary=persistency_per_band_and_state(filtered_ts_dic,measure)
+    
+    
+    
+    
+    
+    
+    
+    
     plot_landscapes(persistence_dictionary,subj_dir,space, measure,100)
     return persistence_dictionary #dictionary with key=(band,state) and value=persistence
 
@@ -218,6 +226,9 @@ def plot_landscapes(persistences,subj_dir,space='',measure='',resolut=1000):
     plt.savefig(subj_dir+space+'/'+measure+'/Silhouette_dim1.png')
     plt.close()
     
+    return
+    
+
     feat_vect_land,labels=feat_vect_repr(np.array(L0),np.array(L1),'landscapes',resolut*2)
     print('plotting accuracies and confusion matrixes for Landscapes Classification')
     t=time.time()
