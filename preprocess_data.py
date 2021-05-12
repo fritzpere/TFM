@@ -143,14 +143,13 @@ class Preprocessor:
             self.trials_total+=trials[i_state]
     
     
-        ts_band={}
+        ts_band=np.zeros((self.trials_total,4,self.T,self.N))
         cum_trials=np.concatenate((np.zeros(1,dtype='int'),trials.cumsum(dtype='int')),axis=0)
         for i_band in range(-1,3):
-            ts_band[i_band]=np.zeros((self.trials_total,self.T,self.N))
             for i_state in range(3):
                 for k in range(trials[i_state]):
                     
-                    ts_band[i_band][cum_trials[i_state]+k]=self.ts_dic[i_band][i_state][k]
+                    ts_band[cum_trials[i_state]+k][i_band]=self.ts_dic[i_band][i_state][k]
                     
         labels=np.concatenate((np.zeros(trials[0]),np.ones(trials[1]),np.ones(trials[2])*2),axis=0)         
     
