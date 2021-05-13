@@ -76,7 +76,7 @@ if __name__ == "__main__":
         
         
         
-        bands=[-1,0,1,2]
+        bands=[-1,2]
         n_band=len(bands)
         measures=["correlation"]
         n_measure=len(measures)
