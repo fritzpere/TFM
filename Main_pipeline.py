@@ -76,11 +76,11 @@ if __name__ == "__main__":
         
         
         
-        bands=[-1,2]
+        bands=[-1,0,1,2]
         n_band=len(bands)
         measures=["correlation"]
         n_measure=len(measures)
-        dimensions=["both","zero"]
+        dimensions=["both","zero","one"]
         n_dim=len(dimensions)
         feat_vect=[DimensionLandScape(),DimensionSilhouette(),TopologicalDescriptors()]
         n_vectors=len(feat_vect)
@@ -157,7 +157,7 @@ if __name__ == "__main__":
                         axes[i_band][i].axis(xmin=-0.6,xmax=2.4,ymin=0,ymax=1.05)
                         #axes[i_band][i].set_xticks([0,1,2,3],['MLR','1NN','control1','control2'])##Provar
                         axes[i_band][i].set_ylabel('accuracy_'+band+'_'+str(i_vector),fontsize=8)
-                        axes[i_band][i].set_title(band+', '+measure[i_measure]+dimensions[i_dim]+i_vector)
+                        axes[i_band][i].set_title(band+', '+measures[i_measure]+dimensions[i_dim]+i_vector)
                         i=1+i
         plt.savefig(subj_dir+'accuracies.png', format=fmt_grph)
         plt.close()
