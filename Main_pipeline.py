@@ -78,7 +78,7 @@ if __name__ == "__main__":
         
         bands=[-1,2]
         n_band=len(bands)
-        measures=["intensities"]
+        measures=["correlation"]
         n_measure=len(measures)
         dimensions=["both","zero"]
         n_dim=len(dimensions)

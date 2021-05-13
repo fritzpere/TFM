@@ -56,9 +56,9 @@ class PH_computer:
                 T=1200
                 ts_tmp = band_tensor.copy()
                 ts_tmp -= np.outer(ts_tmp.mean(1),np.ones(T))
-                matrix= np.tensordot(ts_tmp,ts_tmp,axes=(0,0)) / float(T-1)
+                matrix= np.tensordot(ts_tmp,ts_tmp,axes=(1,1)) / float(T-1)
                 
-                matrix/= np.sqrt(np.outer(matrix.diagonal(),matrix.diagonal()))
+                matrix/= np.sqrt(np.outer(matrix.diagonal(),matrix.diagonal())) ##Nomes falta això 
                 matrix=np.arccos(matrix)
             #max_edge=np.max(matrix)
             Rips_complex_sample = gd.RipsComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
