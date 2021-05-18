@@ -107,7 +107,7 @@ class DimensionDiagramScaler(gdr.DiagramScaler):
         
         
 class DimensionLandScape:
-    def __init__(self,num_landscapes=2,resolution=100):
+    def __init__(self,num_landscapes=2,resolution=100):##canviar
         self.L0=gdr.Landscape(num_landscapes, resolution)
         self.L1=gdr.Landscape(num_landscapes, resolution)
 
@@ -134,7 +134,7 @@ class DimensionLandScape:
         return self
         
 class DimensionSilhouette:
-    def __init__(self,resolut=100,p=1):
+    def __init__(self,resolut=100,p=1):##canviar
         self.S0=gdr.Silhouette(resolution=resolut, weight=lambda x: np.power(x[1]-x[0],p))
         self.S1=gdr.Silhouette(resolution=resolut, weight=lambda x: np.power(x[1]-x[0],p))
 

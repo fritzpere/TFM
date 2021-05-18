@@ -76,9 +76,9 @@ if __name__ == "__main__":
         
         
         
-        bands=[-1,2]
+        bands=[-1,0,1,2]
         n_band=len(bands)
-        measures=["correlation"]
+        measures=["correlation","intensities"]
         n_measure=len(measures)
         dimensions=["both","zero","one"]
         n_dim=len(dimensions)
@@ -105,9 +105,9 @@ if __name__ == "__main__":
                                     print('band',bands[i_band],'measure',measures[i_measure],'dim',dimensions[i_dim],'vector',i_vector,'classifier',i_classifier,'repetition:',i_rep)
 
                                     pipe_MLR = skppl.Pipeline([("band_election", Band_election(bands[i_band])),("persistence", PH_computer(measure=measures[i_measure])),("scaler",DimensionDiagramScaler(dimensions=dimensions[i_dim])),("TDA",feat_vect[i_vector]),('clf',classifiers[i_classifier])])
-                                    
+                                    ##pujaaaar memory
                                     pipe_MLR.fit(ts_band[ind_train,:], labels[ind_train])
-                                    
+                                
                                     perf[i_band,i_measure,i_dim,i_vector,i_rep,i_classifier] = pipe_MLR.score(ts_band[ind_test,:], labels[ind_test])
                                     conf_matrix[i_band,i_measure,i_dim,i_vector,i_rep,i_classifier,:,:] += skm.confusion_matrix(y_true=labels[ind_test], y_pred=pipe_MLR.predict(ts_band[ind_test,:]))  
                                     
@@ -131,7 +131,7 @@ if __name__ == "__main__":
         fmt_grph = 'png'
         cmapcolours = ['Blues','Greens','Oranges','Reds']
         
-        fig, axes = plt.subplots(nrows=n_band, ncols=n_vectors*n_measure*n_dim, figsize=(24, 24))
+        fig, axes = plt.subplots(nrows=n_band, ncols=n_vectors*n_measure*n_dim, figsize=(24, 48))
             
         for i_band in bands:
             band = band_dic[i_band]
@@ -156,9 +156,10 @@ if __name__ == "__main__":
                         axes[i_band][i].plot([-1,2],[chance_level]*2,'--k')
                         axes[i_band][i].axis(xmin=-0.6,xmax=2.4,ymin=0,ymax=1.05)
                         #axes[i_band][i].set_xticks([0,1,2,3],['MLR','1NN','control1','control2'])##Provar
-                        axes[i_band][i].set_ylabel('accuracy_'+band+'_'+str(i_vector),fontsize=8)
-                        axes[i_band][i].set_title(band+', '+measures[i_measure]+dimensions[i_dim]+i_vector)
+                        axes[i_band][i].set_ylabel('accuracy_'+str(band)+'_'+str(i_vector),fontsize=8)
+                        axes[i_band][i].set_title(str(band)+', '+measures[i_measure]+dimensions[i_dim]+str(i_vector))
                         i=1+i
+        fig.tight_layout(pad=0.5)
         plt.savefig(subj_dir+'accuracies.png', format=fmt_grph)
         plt.close()
         '''
