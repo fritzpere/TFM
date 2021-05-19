@@ -19,7 +19,8 @@ import matplotlib.pyplot as plt
 import sklearn.preprocessing as skprp
 import pandas as pd
 import sklearn.neighbors as sklnn
-
+from joblib import Memory
+from shutil import rmtree
 
 from sklearn.utils.testing import ignore_warnings
 from sklearn.exceptions import ConvergenceWarning
@@ -84,7 +85,7 @@ if __name__ == "__main__":
         n_dim=len(dimensions)
         feat_vect=[DimensionLandScape(),DimensionSilhouette(),TopologicalDescriptors()]
         n_vectors=len(feat_vect)
-        classifiers=[skppl.Pipeline([('Std_scal',skprp.StandardScaler()),('Clf',skllm.LogisticRegression(C=10, penalty='l2', multi_class='multinomial', solver='lbfgs', max_iter=500))]),sklnn.KNeighborsClassifier(n_neighbors=1, algorithm='brute', metric='correlation'),sklnn.KNeighborsClassifier(n_neighbors=1, algorithm='brute')  ]
+        classifiers=[skppl.Pipeline([('Std_scal',skprp.StandardScaler()),('Clf',skllm.LogisticRegression(C=10, penalty='l2', multi_class='multinomial', solver='lbfgs', max_iter=1000))]),sklnn.KNeighborsClassifier(n_neighbors=1, algorithm='brute', metric='correlation'),sklnn.KNeighborsClassifier(n_neighbors=1, algorithm='brute')  ]
         n_classifiers=len(classifiers)
         
         
@@ -95,17 +96,20 @@ if __name__ == "__main__":
         perf_shuf = np.zeros([n_band,n_measure,n_dim,n_vectors,n_rep,n_classifiers])# (last index: MLR/1NN)
         conf_matrix = np.zeros([n_band,n_measure,n_dim,n_vectors,n_rep,n_classifiers,3,3]) # (fourthindex: MLR/1NN)
         
+        
+
+
         for i_band in range(n_band):
             for i_measure in range(n_measure):
                 for i_dim in range(n_dim):
                     for i_vector in range(n_vectors):
                         for i_classifier in range(n_classifiers):
+                            pipe_MLR = skppl.Pipeline([("band_election", Band_election(bands[i_band])),("persistence", PH_computer(measure=measures[i_measure])),("scaler",DimensionDiagramScaler(dimensions=dimensions[i_dim])),("TDA",feat_vect[i_vector]),('clf',classifiers[i_classifier])])
                             for i_rep in range(n_rep):
                                 for ind_train, ind_test in cv_schem.split(ts_band,labels): # false loop, just 1 
                                     print('band',bands[i_band],'measure',measures[i_measure],'dim',dimensions[i_dim],'vector',i_vector,'classifier',i_classifier,'repetition:',i_rep)
 
-                                    pipe_MLR = skppl.Pipeline([("band_election", Band_election(bands[i_band])),("persistence", PH_computer(measure=measures[i_measure])),("scaler",DimensionDiagramScaler(dimensions=dimensions[i_dim])),("TDA",feat_vect[i_vector]),('clf',classifiers[i_classifier])])
-                                    ##pujaaaar memory
+
                                     pipe_MLR.fit(ts_band[ind_train,:], labels[ind_train])
                                 
                                     perf[i_band,i_measure,i_dim,i_vector,i_rep,i_classifier] = pipe_MLR.score(ts_band[ind_test,:], labels[ind_test])
@@ -131,7 +135,7 @@ if __name__ == "__main__":
         fmt_grph = 'png'
         cmapcolours = ['Blues','Greens','Oranges','Reds']
         
-        fig, axes = plt.subplots(nrows=n_band, ncols=n_vectors*n_measure*n_dim, figsize=(24, 48))
+        fig, axes = plt.subplots(nrows=n_band, ncols=n_vectors*n_measure*n_dim, figsize=(48, 24))
             
         for i_band in bands:
             band = band_dic[i_band]
@@ -162,6 +166,8 @@ if __name__ == "__main__":
         fig.tight_layout(pad=0.5)
         plt.savefig(subj_dir+'accuracies.png', format=fmt_grph)
         plt.close()
+        
+
         '''
         fig2, axes2 = plt.subplots(nrows=4, ncols=n_vector, figsize=(24, 24))
     
