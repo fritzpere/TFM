@@ -8,8 +8,9 @@ Created on Mon May 10 11:36:48 2021
 import numpy as np
 import gudhi as gd
 from sklearn.preprocessing   import MinMaxScaler
-from scipy.spatial.distance import pdist
-from scipy.spatial import distance_matrix
+from scipy.spatial.distance import cdist
+from tslearn.metrics import dtw
+
 import gudhi.representations as gdr
 class Band_election:
     def __init__(self,band=-1):
@@ -44,9 +45,9 @@ class PH_computer:
             
             if self.measure=='intensities':
                 band_tensor = np.abs(band_tensor[:,:])
-                matrix=distance_matrix(band_tensor,band_tensor)
+                matrix=cdist(band_tensor,band_tensor)
 
-            else:
+            elif self.measure=='correlation':
                 '''
                 points=band_tensor.copy()
                 normalized_p=normalize(points-np.mean(points,axis=0),axis=1)
@@ -60,6 +61,12 @@ class PH_computer:
                 
                 matrix/= np.sqrt(np.outer(matrix.diagonal(),matrix.diagonal())) ##Nomes falta això 
                 matrix=np.arccos(matrix)
+                
+            else:
+                band_tensor = np.abs(band_tensor[:,:])
+                matrix=cdist(band_tensor,band_tensor,dtw)
+                
+                
             #max_edge=np.max(matrix)
             Rips_complex_sample = gd.RipsComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
             #Rips_complex_sample = gd.AlphaComplex(distance_matrix=matrix)#,max_edge_length=max_edge)

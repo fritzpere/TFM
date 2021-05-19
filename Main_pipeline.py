@@ -78,13 +78,13 @@ if __name__ == "__main__":
         
         bands=[-1,0,1,2]
         n_band=len(bands)
-        measures=["correlation","intensities"]
+        measures=["intensitites","correlation","dtw"]
         n_measure=len(measures)
-        dimensions=["both","zero","one"]
+        dimensions=["zero","one","both"]
         n_dim=len(dimensions)
         feat_vect=[DimensionLandScape(),DimensionSilhouette(),TopologicalDescriptors()]
         n_vectors=len(feat_vect)
-        classifiers=[skppl.Pipeline([('Std_scal',skprp.StandardScaler()),('Clf',skllm.LogisticRegression(C=10, penalty='l2', multi_class='multinomial', solver='lbfgs', max_iter=500))]),sklnn.KNeighborsClassifier(n_neighbors=1, algorithm='brute', metric='correlation'),sklnn.KNeighborsClassifier(n_neighbors=1, algorithm='brute')  ]
+        classifiers=[skppl.Pipeline([('Std_scal',skprp.StandardScaler()),('Clf',skllm.LogisticRegression(C=10, penalty='l2', multi_class='multinomial', solver='lbfgs', max_iter=500))]),sklnn.KNeighborsClassifier(n_neighbors=1, algorithm='brute', metric='correlation'),sklnn.KNeighborsClassifier(n_neighbors=1, algorithm='brute']
         n_classifiers=len(classifiers)
         
         
