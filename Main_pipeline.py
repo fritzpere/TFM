@@ -242,10 +242,7 @@ if __name__ == "__main__":
             plt.close()
             
             
-        
 
-                        
-        
         
         dimensions.append('both')
         
