@@ -87,10 +87,12 @@ if __name__ == "__main__":
         bands=[-1,0,1,2]
         n_band=len(bands)
         measures=["intensities","correlation"]#,"dtw"]
+
         n_measure=len(measures)
         dimensions=["zero","one"]
         n_dim=len(dimensions)
         feat_vect=[DimensionLandScape(),DimensionSilhouette(),TopologicalDescriptors()]
+
         n_vectors=len(feat_vect)
         
         
@@ -183,7 +185,7 @@ if __name__ == "__main__":
             fig.suptitle('Persistence Silhouette of the {0} for\n different frequency bands and motivational state of {1}'.format(space,measures[i_measure]),fontsize=24)
             fig.tight_layout(pad=0.5)
             fig.subplots_adjust(top=0.8)
-            plt.savefig(subj_dir+space+'/'+measures[i_measure]+'Landscapes.png')
+            plt.savefig(subj_dir+space+'/'+measures[i_measure]+'Silhouette.png')
             plt.close()
         
         
@@ -238,20 +240,20 @@ if __name__ == "__main__":
             fig.suptitle('Persistence Landscapes of the {0} for\n different frequency bands and motivational state of {1}'.format(space,measures[i_measure]),fontsize=24)
             fig.tight_layout(pad=0.5)
             fig.subplots_adjust(top=0.8)
-            plt.savefig(subj_dir+space+'/'+measures[i_measure]+'Silhouettes.png')
+            plt.savefig(subj_dir+space+'/'+measures[i_measure]+'Landscapes.png')
             plt.close()
             
             
 
         
         dimensions.append('both')
-        
+        n_dim+=1
         classifiers=[skppl.Pipeline([('Std_scal',skprp.StandardScaler()),('Clf',skllm.LogisticRegression(C=10, penalty='l2', multi_class='multinomial', solver='lbfgs', max_iter=1000))]),sklnn.KNeighborsClassifier(n_neighbors=1, algorithm='brute', metric='correlation')  ]
         n_classifiers=len(classifiers)
         
         
         cv_schem = skms.StratifiedShuffleSplit(n_splits=1, test_size=0.2)
-        n_rep = 5 # number of repetitions
+        n_rep = 10 # number of repetitions
         
         perf = np.zeros([n_band,n_measure,n_dim,n_vectors,n_rep,n_classifiers]) # (last index: MLR/1NN)
         perf_shuf = np.zeros([n_band,n_measure,n_dim,n_vectors,n_rep,n_classifiers])# (last index: MLR/1NN)
