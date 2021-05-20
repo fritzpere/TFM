@@ -95,7 +95,7 @@ if __name__ == "__main__":
 
         n_vectors=len(feat_vect)
         
-        
+        '''
         for i_measure in range(n_measure):
             print('plotting topological descriptors with ', measures[i_measure])
             fig, axes = plt.subplots(nrows=n_band*n_dim, ncols=5, figsize=(36, 36))
@@ -241,7 +241,7 @@ if __name__ == "__main__":
             fig.tight_layout(pad=0.5)
             fig.subplots_adjust(top=0.8)
             plt.savefig(subj_dir+space+'/'+measures[i_measure]+'Landscapes.png')
-            plt.close()
+            plt.close()'''
             
             
 
@@ -260,8 +260,7 @@ if __name__ == "__main__":
         conf_matrix = np.zeros([n_band,n_measure,n_dim,n_vectors,n_rep,n_classifiers,3,3]) # (fourthindex: MLR/1NN)
         
         
-
-
+        pooling_list=[]
         for i_band in range(n_band):
             for i_measure in range(n_measure):
                 for i_dim in range(n_dim):
@@ -269,24 +268,28 @@ if __name__ == "__main__":
                         for i_classifier in range(n_classifiers):
                             topo_pipe= skppl.Pipeline([("band_election", Band_election(bands[i_band])),("persistence", PH_computer(measure=measures[i_measure])),("scaler",DimensionDiagramScaler(dimensions=dimensions[i_dim])),("TDA",feat_vect[i_vector]),('clf',classifiers[i_classifier])])
                             for i_rep in range(n_rep):
-                                for ind_train, ind_test in cv_schem.split(ts_band,labels): # false loop, just 1 
-                                    print('band',bands[i_band],'measure',measures[i_measure],'dim',dimensions[i_dim],'vector',i_vector,'classifier',i_classifier,'repetition:',i_rep)
-
-                                    topo_pipe.fit(ts_band[ind_train,:], labels[ind_train])
-                                
-                                    perf[i_band,i_measure,i_dim,i_vector,i_rep,i_classifier] = topo_pipe.score(ts_band[ind_test,:], labels[ind_test])
-                                    conf_matrix[i_band,i_measure,i_dim,i_vector,i_rep,i_classifier,:,:] += skm.confusion_matrix(y_true=labels[ind_test], y_pred=topo_pipe.predict(ts_band[ind_test,:]))  
+                                ind_tr ,ind_te=cv_schem.split(ts_band,labels)
+                                pooling_list.append((ind_tr,ind_te,i_rep))
+                            pool.map(evaluate, pooling_list)
+                            
                                     
+                            
                                     
-                                    shuf_labels = np.random.permutation(labels)
+        from multiprocessing import Pool                           
+        def evaluate(inpu):
+            ind_train,ind_test,i_rep=inpu
+            print('band',bands[i_band],'measure',measures[i_measure],'dim',dimensions[i_dim],'vector',i_vector,'classifier',i_classifier,'repetition:',i_rep)
             
-                                    topo_pipe.fit(ts_band[ind_train,:], shuf_labels[ind_train])
-                                    perf_shuf[i_band,i_measure,i_dim,i_vector,i_rep,i_classifier]= topo_pipe.score(ts_band[ind_test,:], shuf_labels[ind_test])
-                            
-                                    
-                            
+            topo_pipe.fit(ts_band[ind_train,:], labels[ind_train])
+            perf[i_band,i_measure,i_dim,i_vector,i_rep,i_classifier] = topo_pipe.score(ts_band[ind_test,:], labels[ind_test])
+            conf_matrix[i_band,i_measure,i_dim,i_vector,i_rep,i_classifier,:,:] += skm.confusion_matrix(y_true=labels[ind_test], y_pred=topo_pipe.predict(ts_band[ind_test,:]))  
+            
+            
+            shuf_labels = np.random.permutation(labels)
+        
+            topo_pipe.fit(ts_band[ind_train,:], shuf_labels[ind_train])
+            perf_shuf[i_band,i_measure,i_dim,i_vector,i_rep,i_classifier]= topo_pipe.score(ts_band[ind_test,:], shuf_labels[ind_test])
 
-    
     
         # save results       
         np.save(subj_dir+space+'/perf.npy',perf)
