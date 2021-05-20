@@ -20,11 +20,12 @@ class Band_election:
         return self
     def transform(self, X):
         return X[:,self.band,:,:]
-    
     def set_params(self, **parameters):
         for parameter, value in parameters.items():
           setattr(self, parameter, value)
         return self
+    def get_params(self, deep=True):
+        return {"band": self.band}
     
 class PH_computer:
     def __init__(self,measure='intensities'):
@@ -48,12 +49,7 @@ class PH_computer:
                 matrix=cdist(band_tensor,band_tensor)
 
             elif self.measure=='correlation':
-                '''
-                points=band_tensor.copy()
-                normalized_p=normalize(points-np.mean(points,axis=0),axis=1)
-                matrix= normalized_p @ normalized_p.T
-                matrix=1-matrix
-                '''
+
                 T=1200
                 ts_tmp = band_tensor.copy()
                 ts_tmp -= np.outer(ts_tmp.mean(1),np.ones(T))
@@ -86,6 +82,9 @@ class PH_computer:
           setattr(self, parameter, value)
         return self
     
+    def get_params(self, deep=True):
+        return {"measure": self.measure}
+    
     
     
     
@@ -111,13 +110,17 @@ class DimensionDiagramScaler(gdr.DiagramScaler):
         for parameter, value in parameters.items():
           setattr(self, parameter, value)
         return self
-        
+    '''
+    def get_params(self, deep=True):
+        dic=super().get_params()
+        dic["dimensions"]=self.dimensions
+        return dic'''
         
 class DimensionLandScape:
-    def __init__(self,num_landscapes=2,resolution=100):##canviar
+    def __init__(self,num_landscapes=5,resolution=1000):##canviar
         self.L0=gdr.Landscape(num_landscapes, resolution)
         self.L1=gdr.Landscape(num_landscapes, resolution)
-
+    
     def fit(self,X,y=None):
         if type(X)==tuple:
             self.L0.fit(X[0],y)
@@ -139,12 +142,16 @@ class DimensionLandScape:
         for parameter, value in parameters.items():
           setattr(self, parameter, value)
         return self
+    
+    def get_params(self, deep=True):
+        return {"L0": self.L0,"L1": self.L1,}
         
 class DimensionSilhouette:
-    def __init__(self,resolut=100,p=1):##canviar
+    def __init__(self,resolut=1000,p=1):##canviar
         self.S0=gdr.Silhouette(resolution=resolut, weight=lambda x: np.power(x[1]-x[0],p))
         self.S1=gdr.Silhouette(resolution=resolut, weight=lambda x: np.power(x[1]-x[0],p))
 
+        
     def fit(self,X,y=None):
         if type(X)==tuple:
             self.S0.fit(X[0],y)
@@ -160,6 +167,8 @@ class DimensionSilhouette:
         else:
              return self.S0.transform(X)
 
+    def get_params(self, deep=True):
+        return {"S0": self.S0,"S1": self.S1,}
 
 class TopologicalDescriptors:
            
@@ -217,4 +226,6 @@ class TopologicalDescriptors:
                 entropy.append(-np.array(list(map(lambda d: (d/L)*np.log2(d/L) if L!=0 else -1,life))).sum())
             avg_life,std_life,avg_midlife,std_midlife,entropy=np.array(avg_life).reshape(-1,1),np.array(std_life).reshape(-1,1),np.array(avg_midlife).reshape(-1,1),np.array(std_midlife).reshape(-1,1),np.array(entropy).reshape(-1,1)
             return np.concatenate((avg_life,std_life,avg_midlife,std_midlife,entropy),axis=1)
-    
+
+    def get_params(self, deep=True):
+        return dict()    
