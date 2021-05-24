@@ -95,6 +95,14 @@ if __name__ == "__main__":
 
         n_vectors=len(feat_vect)
         
+        ##NOOOOU
+        N=ts_band.shape[-1]
+        PC=ts_band.mean(axis=0)
+        PC=PC.reshape((-1,N))
+        persistence_computer=PH_computer()
+        zero_dim,one_dim=percistence_computer.transform(PC)
+            
+        
         
         for i_measure in range(n_measure):
             print('plotting topological descriptors with ', measures[i_measure])
