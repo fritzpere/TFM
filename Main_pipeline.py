@@ -101,8 +101,6 @@ if __name__ == "__main__":
         PC=PC.reshape((-1,N))
         persistence_computer=PH_computer()
         zero_dim,one_dim=percistence_computer.transform(PC, True)
-            
-        
         
         for i_measure in range(n_measure):
             print('plotting topological descriptors with ', measures[i_measure])
@@ -291,8 +289,14 @@ if __name__ == "__main__":
                                     topo_pipe.fit(ts_band[ind_train,:], shuf_labels[ind_train])
                                     perf_shuf[i_band,i_measure,i_dim,i_vector,i_rep,i_classifier]= topo_pipe.score(ts_band[ind_test,:], shuf_labels[ind_test])
                             
+                                    ##NOUUU
+                                    from sktime.classification.distance_based import KNeighborsTimeSeriesClassifier
+
+                                    knn = KNeighborsTimeSeriesClassifier(n_neighbors=1, distance="dtw")
+                                    knn.fit(ind_trains[ind_train,i_band,:,:][ind_train,i_band,:,:], labels[ind_train])
+                                    knn.score(ts_band[ind_test,i_band,:,:], labels[ind_test]))
                                     
-                            
+                                   
 
     
     
@@ -363,8 +367,11 @@ if __name__ == "__main__":
         plt.savefig(subj_dir+space+'/confusion_matrix.png', format=fmt_grph)
         plt.close()
         
-        
-        
+       ##NOU
+        {"Scaler__use":         [False],
+             "TDA":                 [gd.representations.BottleneckDistance()], 
+             "TDA__epsilon":        [0.1], 
+             "Estimator":           [KNeighborsClassifier(metric="precomputed")]}
         
         '''
         parameters = {
