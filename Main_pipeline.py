@@ -100,7 +100,7 @@ if __name__ == "__main__":
         PC=ts_band.mean(axis=0)
         PC=PC.reshape((-1,N))
         persistence_computer=PH_computer()
-        zero_dim,one_dim=percistence_computer.transform(PC)
+        zero_dim,one_dim=percistence_computer.transform(PC, True)
             
         
         

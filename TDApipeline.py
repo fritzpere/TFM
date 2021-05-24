@@ -10,6 +10,7 @@ import gudhi as gd
 from sklearn.preprocessing   import MinMaxScaler
 from scipy.spatial.distance import cdist
 from tslearn.metrics import dtw
+from scipy import stats
 
 import gudhi.representations as gdr
 class Band_election:
@@ -58,9 +59,14 @@ class PH_computer:
                 matrix/= np.sqrt(np.outer(matrix.diagonal(),matrix.diagonal())) ##Nomes falta això 
                 matrix=np.arccos(matrix)
                 
-            else:
+            elif self.measure=='dtw':
+                fun=lambda x,y: dtw(x,y,global_constraint="sakoe_chiba", sakoe_chiba_radius=120)
                 band_tensor = np.abs(band_tensor[:,:])
-                matrix=cdist(band_tensor,band_tensor,dtw)
+                matrix=cdist(band_tensor,band_tensor,fun)
+            else:
+                fun=lambda x,y: stats.linregress(x,y)[2]**2 #quaf deter
+                band_tensor = np.abs(band_tensor[:,:])
+                matrix=cdist(band_tensor,band_tensor,fun)
                 
                 
             #max_edge=np.max(matrix)
@@ -70,7 +76,7 @@ class PH_computer:
             persistence.append(Rips_simplex_tree_sample.persistence())
             if plot:
                 gd.plot_persistence_diagram(persistence)
-                plt.savefig('Global_Persistence_diagram.png')##canviar
+                plt.savefig('Global_Persistence_diagram.png')##
             dim_list=np.array(list(map(lambda x: x[0], persistence[k])))
             point_list=np.array(list(map(lambda x: x[1], persistence[k])))
             zero_dim.append(point_list[np.logical_and(point_list[:,1]!=float('inf'),dim_list==0)])
@@ -182,52 +188,66 @@ class TopologicalDescriptors:
     def transform(self, X):
         
         if type(X)==tuple:
-            n=len(X[0])
-            vect=np.zeros((2,n,5))
-            for i in range(2):
-                avg_life,std_life,avg_midlife,std_midlife,entropy=[],[],[],[],[]
-                for k in range (n):
-                    life=np.array(list(map(lambda x: x[1]-x[0],X[i][k])))
-                    midlife=np.array(list(map(lambda x: (x[1]+x[0])/2,X[i][k])))
-                    L=life.sum()
-                    n_lifes=life.shape[0]
-                    if n_lifes!=0:
-                       avg_life.append(L/n_lifes)
-                       std_life.append(life.std())
-                       avg_midlife.append(midlife.mean())
-                       std_midlife.append(midlife.std())
-                    else:
-                        avg_life.append(-1)
-                        std_life.append(-1)
-                        avg_midlife.append(-1)
-                        std_midlife.append(-1)
-    
-                    entropy.append(-np.array(list(map(lambda d: (d/L)*np.log2(d/L) if L!=0 else -1,life))).sum())
-                avg_life,std_life,avg_midlife,std_midlife,entropy=np.array(avg_life).reshape(-1,1),np.array(std_life).reshape(-1,1),np.array(avg_midlife).reshape(-1,1),np.array(std_midlife).reshape(-1,1),np.array(entropy).reshape(-1,1)
-                vect[i]= np.concatenate((avg_life,std_life,avg_midlife,std_midlife,entropy),axis=1)
-            return np.concatenate((vect[0],vect[1]),axis=1)
-        else:
-            n=len(X)
-            avg_life,std_life,avg_midlife,std_midlife,entropy=[],[],[],[],[]
-            for k in range (n):
-                life=np.array(list(map(lambda x: x[1]-x[0],X[k])))
-                midlife=np.array(list(map(lambda x: (x[1]+x[0])/2,X[k])))
-                L=life.sum()
-                n_lifes=life.shape[0]
-                if n_lifes!=0:
-                   avg_life.append(L/n_lifes)
-                   std_life.append(life.std())
-                   avg_midlife.append(midlife.mean())
-                   std_midlife.append(midlife.std())
-                else:
-                    avg_life.append(-1)
-                    std_life.append(-1)
-                    avg_midlife.append(-1)
-                    std_midlife.append(-1)
 
-                entropy.append(-np.array(list(map(lambda d: (d/L)*np.log2(d/L) if L!=0 else -1,life))).sum())
-            avg_life,std_life,avg_midlife,std_midlife,entropy=np.array(avg_life).reshape(-1,1),np.array(std_life).reshape(-1,1),np.array(avg_midlife).reshape(-1,1),np.array(std_midlife).reshape(-1,1),np.array(entropy).reshape(-1,1)
-            return np.concatenate((avg_life,std_life,avg_midlife,std_midlife,entropy),axis=1)
+            vec0=get_feat_dim0(X[0])
+            vec1=get_feat_dim1(X[1])
+            return np.concatenate((vec0,vec1),axis=0)
+        elif X[:][:,0]==0:
+            return get_feat_dim0(X)
+        else:
+           return get_feat_dim1(X) 
+
 
     def get_params(self, deep=True):
         return dict()    
+
+
+def fet_feat_dim0(X):
+    avg_life,std_life,entropy=[],[],[]
+    for k in range (n):
+        life=np.array(list(map(lambda x: x[1]-x[0],X[k])))
+        L=life.sum()
+        n_lifes=life.shape[0]
+        if n_lifes!=0:
+           avg_life.append(L/n_lifes)
+           std_life.append(life.std())
+        else:
+            avg_life.append(-1)
+            std_life.append(-1)
+        entropy.append(-np.array(list(map(lambda d: (d/L)*np.log2(d/L) if L!=0 else -1,life))).sum())
+        avg_life,std_life,entropy=np.array(avg_life).reshape(-1,1),np.array(std_life).reshape(-1,1),np.array(entropy).reshape(-1,1)    
+    return np.concatenate(( avg_life,std_life,entropy),axis=1)
+        
+def fet_feat_dim1(X):
+    n=len(X)
+    avg_life,std_life,avg_midlife,std_midlife,avg_bith,std_birth,avg_death,std_death,entropy=[],[],[],[],[],[],[],[],[]
+    for k in range (n):
+        birth=X[k][:,0]
+        death=X[k][:,0]
+        life=np.array(list(map(lambda x: x[1]-x[0],X[k])))
+        midlife=np.array(list(map(lambda x: (x[1]+x[0])/2,X[k])))
+        L=life.sum()
+        n_lifes=life.shape[0]
+        if n_lifes!=0:
+           avg_life.append(L/n_lifes)
+           std_life.append(life.std())
+           avg_midlife.append(midlife.mean())
+           std_midlife.append(midlife.std())
+           avg_birth.append(birth.mean())
+           std_birth.append(birth.std())
+           avg_death.append(death.mean())
+           std_death.append(death.std())
+        else:
+            avg_life.append(-1)
+            std_life.append(-1)
+            avg_midlife.append(-1)
+            std_midlife.append(-1)
+            avg_birth.append(-1)
+            std_birth.append(-1)
+            avg_death.append(-1)
+            std_death.append(-1)
+    
+        entropy.append(-np.array(list(map(lambda d: (d/L)*np.log2(d/L) if L!=0 else -1,life))).sum())
+    avg_life,std_life,avg_midlife,std_midlife,entropy=np.array(avg_life).reshape(-1,1),np.array(std_life).reshape(-1,1),np.array(avg_midlife).reshape(-1,1),np.array(std_midlife).reshape(-1,1),np.array(entropy).reshape(-1,1)
+    avg_birth,std_birth,avg_death,std_death=np.array(avg_birth).reshape(-1,1),np.array(std_birth).reshape(-1,1),np.array(avg_death).reshape(-1,1),np.array(std_death).reshape(-1,1)
+    return np.concatenate(( avg_life,std_life,entropy,avg_midlife,std_midlife,avg_birth,std_birth,avg_death,std_deat),axis=1)
