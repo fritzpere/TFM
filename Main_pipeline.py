@@ -25,7 +25,7 @@ from shutil import rmtree
 from sklearn.utils.testing import ignore_warnings
 from sklearn.exceptions import ConvergenceWarning
 
-@ignore_warnings(category=ConvergenceWarning)
+
 
 def define_subject_dir(i_sub):
     """
@@ -50,7 +50,7 @@ def load_data(i_sub,space='both'):
     subj_dir = define_subject_dir(i_sub)
     raw_data = sio.loadmat('data/dataClean-ICA3-'+str(i_sub)+'-T1.mat')
     
-    if space=='electrode_space':
+    if space=='electrodeSpace':
         elec_space=raw_data['dataSorted'] # [N,T,n_trials,motiv] 
         return elec_space,subj_dir
     elif space=='font_space':
@@ -66,7 +66,7 @@ if __name__ == "__main__":
     debug=True    
     if debug: 
         subject=25
-        space='electrode_space'
+        space='electrodeSpace'
 
         elec_space,subj_dir=load_data(subject,space=space)
         
@@ -79,172 +79,237 @@ if __name__ == "__main__":
         filtered_ts_dic=elec_space_preprocessor.get_filtered_ts_dic()
         ts_band,labels=elec_space_preprocessor.get_trials_and_labels()
         
-        band_dic={-1: 'no_filter', 0:'alpha',1:'betta',2:'gamma'}
+        band_dic={-1: 'noFilter', 0:'alpha',1:'betta',2:'gamma'}
         
         
         
         
         bands=[-1,0,1,2]
+        #bands=[-1,2]
         n_band=len(bands)
-        measures=["intensities","correlation"]#,"dtw"]
-
+        measures=["intensities","correlation","quaf","dtw"]
+        #measures=["quaf","dtw"]
         n_measure=len(measures)
         dimensions=["zero","one"]
+        #dimensions=[]
         n_dim=len(dimensions)
         feat_vect=[DimensionLandScape(),DimensionSilhouette(),TopologicalDescriptors()]
 
         n_vectors=len(feat_vect)
         
         
+        ##NOOOOU
+        '''
+        N=ts_band.shape[-1]
+        for i_band in bands:
+            print('global picture of band',band_dic[i_band] )
+            PC=np.abs(ts_band[:,i_band,:,:]).mean(axis=1)
+            PC=PC.reshape((-1,N))##fer absolut abans de fer la mitja??
+        
+            matrix=cdist(PC,PC)
+            Rips_complex_sample = gd.RipsComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
+            #Rips_complex_sample = gd.AlphaComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
+            Rips_simplex_tree_sample = Rips_complex_sample.create_simplex_tree(max_dimension=2)
+            persistence=(Rips_simplex_tree_sample.persistence())
+        
+
+            gd.plot_persistence_diagram(persistence)
+            plt.savefig(subj_dir+space+'/'+band_dic[i_band]+'_Global_Persistence_diagram.png')'''
+
+        
+        resolut=1000
+        '''
         for i_measure in range(n_measure):
-            print('plotting topological descriptors with ', measures[i_measure])
-            fig, axes = plt.subplots(nrows=n_band*n_dim, ncols=5, figsize=(36, 36))
+            print('plotting topological descriptors with ', measures[i_measure])   
+            
+            fig, axes = plt.subplots(nrows=n_band, ncols=3, figsize=(90, 36))
+            fig4, axes4 = plt.subplots(nrows=n_band, ncols=9, figsize=(36, 36))
+            fig2, axes2 = plt.subplots(nrows=n_band*n_dim, ncols=3, figsize=(36, 36))
+            fig3, axes3 = plt.subplots(nrows=n_band*n_dim, ncols=3, figsize=(36, 36))
             j=0
-            for i_band in bands:
+            for i_band in bands: 
+                print('band',band_dic[i_band])
+                exploratory_pipe = skppl.Pipeline([("band_election", Band_election(bands[i_band])),("persistence", PH_computer(measure=measures[i_measure]))])
+                presistence=exploratory_pipe.fit_transform(ts_band)
                 for i_dim in range(n_dim):
-                
-                    exploratory_pipe = skppl.Pipeline([("band_election", Band_election(bands[i_band])),("persistence", PH_computer(measure=measures[i_measure])),("scaler",DimensionDiagramScaler(dimensions=dimensions[i_dim])),("TDA",TopologicalDescriptors())])
+                    dimension_scaler=DimensionDiagramScaler(dimensions=dimensions[i_dim])
+                    dim_vect=dimension_scaler.fit_transform(presistence)
+                 
+
                     
-                    vect=exploratory_pipe.fit_transform(ts_band)
+                    descriptors_computer=TopologicalDescriptors()
+                    descriptors_computer.fit(dim_vect)
+                    vect=descriptors_computer.transform(dim_vect)
                     vect=np.array(vect)
                     
                     vect0=vect[labels==0]
                     vect1=vect[labels==1]
                     vect2=vect[labels==2]
-
-                    axes[j][0].boxplot([vect0[:,0],vect1[:,0],vect2[:,0]],showfliers=False)
-
-                    axes[j][0].set_title('{0} average life of band {1} of dimension {2}'.format(space,band_dic[i_band],dimensions[i_dim]))
-
-                    axes[j][1].boxplot([vect0[:,1],vect1[:,1],vect2[:,1]],showfliers=False)
-
-                    axes[j][1].set_title('{0} std life of band {1} of dimension {2}'.format(space,band_dic[i_band],dimensions[i_dim]))
                     
-                    axes[j][2].boxplot([vect0[:,2],vect1[:,2],vect2[:,2]],showfliers=False)
-
-                    axes[j][2].set_title('{0} average midlife of band {1} of dimension {2}'.format(space,band_dic[i_band],dimensions[i_dim]))
-
-                    axes[j][3].boxplot([vect0[:,3],vect1[:,3],vect2[:,3]],showfliers=False)
-
-                    axes[j][3].set_title('{0} std midlife of band {1} of dimension {2}'.format(space,band_dic[i_band],dimensions[i_dim]))
+                    if i_dim==0:
                     
-                    axes[j][4].boxplot([vect0[:,4],vect1[:,4],vect2[:,4]],showfliers=False)
+                        axes[i_band][0].boxplot([vect0[:,0],vect1[:,0],vect2[:,0]],showfliers=False)
+    
+                        axes[i_band][0].set_title('{0} average life of band {1} of dimension {2}'.format(space,band_dic[i_band],dimensions[i_dim]))
+    
+                        axes[i_band][1].boxplot([vect0[:,1],vect1[:,1],vect2[:,1]],showfliers=False)
+    
+                        axes[i_band][1].set_title('{0} std life of band {1} of dimension {2}'.format(space,band_dic[i_band],dimensions[i_dim]))
+                        
+                        axes[i_band][2].boxplot([vect0[:,2],vect1[:,2],vect2[:,2]],showfliers=False)
+    
+                        axes[i_band][2].set_title('{0} persistent entropy of band {1} of dimension {2}'.format(space,band_dic[i_band],dimensions[i_dim]))
+                    
+                    else:
+                        
+                        axes4[i_band][0].boxplot([vect0[:,0],vect1[:,0],vect2[:,0]],showfliers=False)
 
-                    axes[j][4].set_title('{0} persistent entropy of band {1} of dimension {2}'.format(space,band_dic[i_band],dimensions[i_dim]))
+                        axes4[i_band][0].set_title('{0} average life of band {1} of dimension {2}'.format(space,band_dic[i_band],dimensions[i_dim]))
+    
+                        axes4[i_band][1].boxplot([vect0[:,1],vect1[:,1],vect2[:,1]],showfliers=False)
+    
+                        axes4[i_band][1].set_title('{0} std life of band {1} of dimension {2}'.format(space,band_dic[i_band],dimensions[i_dim]))
+                        
+                        axes4[i_band][2].boxplot([vect0[:,2],vect1[:,2],vect2[:,2]],showfliers=False)
+    
+                        axes4[i_band][2].set_title('{0} persistent entropy of band {1} of dimension {2}'.format(space,band_dic[i_band],dimensions[i_dim]))
                     
-                    j=j+1
-            fig.suptitle('Topological descriptors of the {0} for\n different frequency bands and motivational state of {1}'.format(space,measures[i_measure]),fontsize=24)
-            fig.tight_layout(pad=0.5)
-            fig.subplots_adjust(top=0.8)
-            plt.savefig(subj_dir+space+'/'+measures[i_measure]+'_topological descriptors.png')
-            plt.close()
-                
-        
-        
-        resolut=1000
-        
-        for i_measure in range(n_measure):
-            print('plotting silhouettes with ', measures[i_measure])
-            fig, axes = plt.subplots(nrows=n_band*n_dim, ncols=3, figsize=(36, 36))
-            j=0
-            for i_band in bands:
-                for i_dim in range(n_dim):
-                
-                    exploratory_pipe = skppl.Pipeline([("band_election", Band_election(bands[i_band])),("persistence", PH_computer(measure=measures[i_measure])),("scaler",DimensionDiagramScaler(dimensions=dimensions[i_dim])),("TDA",DimensionSilhouette())])
-                    
-                    vect=exploratory_pipe.fit_transform(ts_band)
+                        axes4[i_band][3].boxplot([vect0[:,3],vect1[:,3],vect2[:,3]],showfliers=False)
+    
+                        axes4[i_band][3].set_title('{0} average midlife of band {1} of dimension {2}'.format(space,band_dic[i_band],dimensions[i_dim]))
+                        
+                        axes4[i_band][4].boxplot([vect0[:,4],vect1[:,4],vect2[:,4]],showfliers=False)
+    
+                        axes4[i_band][4].set_title('{0} std midlife of band {1} of dimension {2}'.format(space,band_dic[i_band],dimensions[i_dim]))
+                        
+                        axes4[i_band][5].boxplot([vect0[:,5],vect1[:,5],vect2[:,5]],showfliers=False)
+    
+                        axes4[i_band][5].set_title('{0} average birth of band {1} of dimension {2}'.format(space,band_dic[i_band],dimensions[i_dim]))
+                        
+                        axes4[i_band][6].boxplot([vect0[:,6],vect1[:,6],vect2[:,6]],showfliers=False)
+    
+                        axes4[i_band][6].set_title('{0} std birth of band {1} of dimension {2}'.format(space,band_dic[i_band],dimensions[i_dim]))
+                        
+                        axes4[i_band][7].boxplot([vect0[:,7],vect1[:,7],vect2[:,7]],showfliers=False)
+    
+                        axes4[i_band][7].set_title('{0} average death of band {1} of dimension {2}'.format(space,band_dic[i_band],dimensions[i_dim]))
+                        
+                        axes4[i_band][8].boxplot([vect0[:,8],vect1[:,8],vect2[:,8]],showfliers=False)
+    
+                        axes4[i_band][8].set_title('{0} std death of band {1} of dimension {2}'.format(space,band_dic[i_band],dimensions[i_dim]))
+                        
+                        
+                    silhouette_computer=DimensionSilhouette()
+                    silhouette_computer.fit(dim_vect)
+                    vect=silhouette_computer.transform(dim_vect)
                     vect=np.array(vect)
                     mean0=vect[labels==0].mean(axis=0)
                     mean1=vect[labels==1].mean(axis=0)
                     mean2=vect[labels==2].mean(axis=0)
                     y_max=np.max([mean0,mean1,mean2])
-                    axes[j][0].plot(mean0[:resolut])
+                    axes2[j][0].plot(mean0[:resolut])
 
                     
-                    axes[j][0].set_title('{0} persistence Silhouette of \n motivational state 0 and band {1} of dimension {2}'.format(space,band_dic[i_band],dimensions[i_dim]))
-                    axes[j][0].set_xlim(-2,resolut)
-                    axes[j][0].set_ylim(0,y_max*1.1)
+                    axes2[j][0].set_title('{0} persistence Silhouette of \n motivational state 0 and band {1} of dimension {2}'.format(space,band_dic[i_band],dimensions[i_dim]))
+                    axes2[j][0].set_xlim(-2,resolut)
+                    axes2[j][0].set_ylim(0,y_max*1.1)
                     
                     
-                    axes[j][1].plot(mean1[:resolut])
+                    axes2[j][1].plot(mean1[:resolut])
 
                     
-                    axes[j][1].set_title('{0} persistence Silhouette of \n motivational state 1 and band {1} of dimension {2}'.format(space,band_dic[i_band],dimensions[i_dim]))
-                    axes[j][1].set_xlim(-2,resolut)
-                    axes[j][1].set_ylim(0,y_max*1.1)
+                    axes2[j][1].set_title('{0} persistence Silhouette of \n motivational state 1 and band {1} of dimension {2}'.format(space,band_dic[i_band],dimensions[i_dim]))
+                    axes2[j][1].set_xlim(-2,resolut)
+                    axes2[j][1].set_ylim(0,y_max*1.1)
                     
-                    axes[j][2].plot(mean2[:resolut])
+                    axes2[j][2].plot(mean2[:resolut])
 
                     
-                    axes[j][2].set_title('{0} persistence Silhouette of \n motivational state 2 and band {1} of dimension {2}'.format(space,band_dic[i_band],dimensions[i_dim]))
-                    axes[j][2].set_xlim(-2,resolut)
-                    axes[j][2].set_ylim(0,y_max*1.1)
+                    axes2[j][2].set_title('{0} persistence Silhouette of \n motivational state 2 and band {1} of dimension {2}'.format(space,band_dic[i_band],dimensions[i_dim]))
+                    axes2[j][2].set_xlim(-2,resolut)
+                    axes2[j][2].set_ylim(0,y_max*1.1)
                     
                     
-                    j=j+1
-            fig.suptitle('Persistence Silhouette of the {0} for\n different frequency bands and motivational state of {1}'.format(space,measures[i_measure]),fontsize=24)
-            fig.tight_layout(pad=0.5)
-            fig.subplots_adjust(top=0.8)
-            plt.savefig(subj_dir+space+'/'+measures[i_measure]+'Silhouette.png')
-            plt.close()
-        
-        
-        for i_measure in range(n_measure):
-            print('plotting landscapes with ', measures[i_measure])
-            fig, axes = plt.subplots(nrows=n_band*n_dim, ncols=3, figsize=(36, 36))
-            j=0
-            for i_band in bands:
-                for i_dim in range(n_dim):
-                
-                    exploratory_pipe = skppl.Pipeline([("band_election", Band_election(bands[i_band])),("persistence", PH_computer(measure=measures[i_measure])),("scaler",DimensionDiagramScaler(dimensions=dimensions[i_dim])),("TDA",DimensionLandScape())])
                     
-                    vect=exploratory_pipe.fit_transform(ts_band)
+                    landscape_computer=DimensionLandScape()
+                    landscape_computer.fit(dim_vect)
+                    vect=landscape_computer.transform(dim_vect)
                     vect=np.array(vect)
                     mean0=vect[labels==0].mean(axis=0)
                     mean1=vect[labels==1].mean(axis=0)
                     mean2=vect[labels==2].mean(axis=0)
                     y_max=np.max([mean0,mean1,mean2])
-                    axes[j][0].plot(mean0[:resolut])
-                    axes[j][0].plot(mean0[resolut:2*resolut])
-                    axes[j][0].plot(mean0[2*resolut:3*resolut])
-                    axes[j][0].plot(mean0[3*resolut:4*resolut])
-                    axes[j][0].plot(mean0[4*resolut:5*resolut])
+                    axes3[j][0].plot(mean0[:resolut])
+                    axes3[j][0].plot(mean0[resolut:2*resolut])
+                    axes3[j][0].plot(mean0[2*resolut:3*resolut])
+                    axes3[j][0].plot(mean0[3*resolut:4*resolut])
+                    axes3[j][0].plot(mean0[4*resolut:5*resolut])
                     
-                    axes[j][0].set_title('{0} persistence Landscapes of \n motivational state 0 and band {1} of dimension {2}'.format(space,band_dic[i_band],dimensions[i_dim]))
-                    axes[j][0].set_xlim(-2,resolut)
-                    axes[j][0].set_ylim(0,y_max*1.1)
+                    axes3[j][0].set_title('{0} persistence Landscapes of \n motivational state 0 and band {1} of dimension {2}'.format(space,band_dic[i_band],dimensions[i_dim]))
+                    axes3[j][0].set_xlim(-2,resolut)
+                    axes3[j][0].set_ylim(0,y_max*1.1)
                     
                     
-                    axes[j][1].plot(mean1[:resolut])
-                    axes[j][1].plot(mean1[resolut:2*resolut])
-                    axes[j][1].plot(mean1[2*resolut:3*resolut])
-                    axes[j][1].plot(mean1[3*resolut:4*resolut])
-                    axes[j][1].plot(mean1[4*resolut:5*resolut])
+                    axes3[j][1].plot(mean1[:resolut])
+                    axes3[j][1].plot(mean1[resolut:2*resolut])
+                    axes3[j][1].plot(mean1[2*resolut:3*resolut])
+                    axes3[j][1].plot(mean1[3*resolut:4*resolut])
+                    axes3[j][1].plot(mean1[4*resolut:5*resolut])
                     
-                    axes[j][1].set_title('{0} persistence Landscapes of \n motivational state 1 and band {1} of dimension {2}'.format(space,band_dic[i_band],dimensions[i_dim]))
-                    axes[j][1].set_xlim(-2,resolut)
-                    axes[j][1].set_ylim(0,y_max*1.1)
+                    axes3[j][1].set_title('{0} persistence Landscapes of \n motivational state 1 and band {1} of dimension {2}'.format(space,band_dic[i_band],dimensions[i_dim]))
+                    axes3[j][1].set_xlim(-2,resolut)
+                    axes3[j][1].set_ylim(0,y_max*1.1)
                     
-                    axes[j][2].plot(mean2[:resolut])
-                    axes[j][2].plot(mean2[resolut:2*resolut])
-                    axes[j][2].plot(mean2[2*resolut:3*resolut])
-                    axes[j][2].plot(mean2[3*resolut:4*resolut])
-                    axes[j][2].plot(mean2[4*resolut:5*resolut])
+                    axes3[j][2].plot(mean2[:resolut])
+                    axes3[j][2].plot(mean2[resolut:2*resolut])
+                    axes3[j][2].plot(mean2[2*resolut:3*resolut])
+                    axes3[j][2].plot(mean2[3*resolut:4*resolut])
+                    axes3[j][2].plot(mean2[4*resolut:5*resolut])
                     
-                    axes[j][2].set_title('{0} persistence Landscapes of \n motivational state 2 and band {1} of dimension {2}'.format(space,band_dic[i_band],dimensions[i_dim]))
-                    axes[j][2].set_xlim(-2,resolut)
-                    axes[j][2].set_ylim(0,y_max*1.1)
+                    axes3[j][2].set_title('{0} persistence Landscapes of \n motivational state 2 and band {1} of dimension {2}'.format(space,band_dic[i_band],dimensions[i_dim]))
+                    axes3[j][2].set_xlim(-2,resolut)
+                    axes3[j][2].set_ylim(0,y_max*1.1)
                     
                     
                     j=j+1
-            fig.suptitle('Persistence Landscapes of the {0} for\n different frequency bands and motivational state of {1}'.format(space,measures[i_measure]),fontsize=24)
-            fig.tight_layout(pad=0.5)
-            fig.subplots_adjust(top=0.8)
+
+            
+            fig3.suptitle('Persistence Landscapes of the {0} for\n different frequency bands and motivational state of {1}'.format(space,measures[i_measure]),fontsize=24)
+            fig3.tight_layout(pad=0.5)
+            fig3.subplots_adjust(top=0.8)
             plt.savefig(subj_dir+space+'/'+measures[i_measure]+'Landscapes.png')
             plt.close()
             
+            fig2.suptitle('Persistence Silhouette of the {0} for\n different frequency bands and motivational state of {1}'.format(space,measures[i_measure]),fontsize=24)
+            fig2.tight_layout(pad=0.5)
+            fig2.subplots_adjust(top=0.8)
+            plt.savefig(subj_dir+space+'/'+measures[i_measure]+'Silhouette.png')
+            plt.close()
+                    
+                    
+
+            fig4.suptitle('Topological descriptors of the {0} for\n different frequency bands and motivational state of {1} dimension {2}'.format(space,measures[i_measure],dimensions[i_dim]),fontsize=24)
+            fig4.tight_layout(pad=0.5)
+            fig4.subplots_adjust(top=0.8)
+            plt.savefig(subj_dir+space+'/'+measures[i_measure]+'one_topological_descriptors.png')
+            plt.close()
+                
+        
+            fig.suptitle('Topological descriptors of the {0} for\n different frequency bands and motivational state of {1} dimension 0'.format(space,measures[i_measure]),fontsize=24)
+            fig.tight_layout(pad=0.5)
+            fig.subplots_adjust(top=0.8)
+            plt.savefig(subj_dir+space+'/'+measures[i_measure]+'zero_topological_descriptors.png')
+            plt.close()'''
+        
+        
+#descomentar lo d-adalt
+        
+        
+    
             
 
+
+        
         
         dimensions.append('both')
         n_dim+=1
@@ -260,33 +325,56 @@ if __name__ == "__main__":
         conf_matrix = np.zeros([n_band,n_measure,n_dim,n_vectors,n_rep,n_classifiers,3,3]) # (fourthindex: MLR/1NN)
         
         
-
-
+        pooling_list=[]
         for i_band in range(n_band):
+            band_selector=Band_election(bands[i_band])
+            band_selector.fit(ts_band)
+            band_data=band_selector.transform(ts_band)
             for i_measure in range(n_measure):
+                ph_computer=PH_computer(measure=measures[i_measure])
+                ph_computer.fit(band_data)
+                persistence=ph_computer.transform(band_data)
                 for i_dim in range(n_dim):
+                    dimensionscaler=DimensionDiagramScaler(dimensions=dimensions[i_dim])
+                    dimensionscaler.fit(persistence)
+                    dimensional_persistence=dimensionscaler.transform(persistence)
                     for i_vector in range(n_vectors):
+                        tda_compt=feat_vect[i_vector]
+                        tda_compt.fit(dimensional_persistence)
+                        tda_vect=tda_compt.transform(dimensional_persistence)
                         for i_classifier in range(n_classifiers):
-                            topo_pipe= skppl.Pipeline([("band_election", Band_election(bands[i_band])),("persistence", PH_computer(measure=measures[i_measure])),("scaler",DimensionDiagramScaler(dimensions=dimensions[i_dim])),("TDA",feat_vect[i_vector]),('clf',classifiers[i_classifier])])
+                            clf=classifiers[i_classifier]
                             for i_rep in range(n_rep):
                                 for ind_train, ind_test in cv_schem.split(ts_band,labels): # false loop, just 1 
                                     print('band',bands[i_band],'measure',measures[i_measure],'dim',dimensions[i_dim],'vector',i_vector,'classifier',i_classifier,'repetition:',i_rep)
 
-                                    topo_pipe.fit(ts_band[ind_train,:], labels[ind_train])
+                                    clf.fit(tda_vect[ind_train,:], labels[ind_train])
                                 
-                                    perf[i_band,i_measure,i_dim,i_vector,i_rep,i_classifier] = topo_pipe.score(ts_band[ind_test,:], labels[ind_test])
-                                    conf_matrix[i_band,i_measure,i_dim,i_vector,i_rep,i_classifier,:,:] += skm.confusion_matrix(y_true=labels[ind_test], y_pred=topo_pipe.predict(ts_band[ind_test,:]))  
+                                    perf[i_band,i_measure,i_dim,i_vector,i_rep,i_classifier] = clf.score(tda_vect[ind_test,:], labels[ind_test])
+                                    conf_matrix[i_band,i_measure,i_dim,i_vector,i_rep,i_classifier,:,:] += skm.confusion_matrix(y_true=labels[ind_test], y_pred=clf.predict(tda_vect[ind_test,:]))  
                                     
                                     
                                     shuf_labels = np.random.permutation(labels)
             
-                                    topo_pipe.fit(ts_band[ind_train,:], shuf_labels[ind_train])
-                                    perf_shuf[i_band,i_measure,i_dim,i_vector,i_rep,i_classifier]= topo_pipe.score(ts_band[ind_test,:], shuf_labels[ind_test])
+                                    clf.fit(tda_vect[ind_train,:], shuf_labels[ind_train])
+                                    perf_shuf[i_band,i_measure,i_dim,i_vector,i_rep,i_classifier]= clf.score(tda_vect[ind_test,:], shuf_labels[ind_test])
+                            
+                                    ##NOUUU
+                                    '''
+                                    from sktime.classification.distance_based import KNeighborsTimeSeriesClassifier
+
+                                    knn = KNeighborsTimeSeriesClassifier(n_neighbors=1, distance="dtw")
+                                    knn.fit(ts_band[ind_train,i_band,:,:][ind_train,i_band,:,:], labels[ind_train])
+                                    knn.score(ts_band[ind_test,i_band,:,:], labels[ind_test]))
+                                    
+                                    {"Scaler__use":         [False],
+                                         "TDA":                 [gd.representations.BottleneckDistance()], 
+                                         "TDA__epsilon":        [0.1], 
+                                         "Estimator":           [KNeighborsClassifier(metric="precomputed")]}'''
+                                                                
                             
                                     
-                            
 
-    
     
         # save results       
         np.save(subj_dir+space+'/perf.npy',perf)
@@ -337,11 +425,7 @@ if __name__ == "__main__":
             for i_measure in range(n_measure):
                 for i_vector in range(n_vectors):
                     for i_dim in range(n_dim):
-                        '''
-                        measure_label=feat_vectors[i_vector]
-                
-                        # the chance level is defined as the trivial classifier that predicts the label with more occurrences 
-                        chance_level = np.max(np.unique(labels, return_counts=True)[1]) / labels.size'''
+                        
                         
                         # plot performance and surrogate
                         #axes[i_band][i_vector].axes([0.2,0.2,0.7,0.7])
@@ -354,31 +438,37 @@ if __name__ == "__main__":
         fig.tight_layout(pad=0.5)
         plt.savefig(subj_dir+space+'/confusion_matrix.png', format=fmt_grph)
         plt.close()
-        
-        
-        
-        
         '''
-        parameters = {
-            'band_election__band': (-1,0,1,2),
-            'persistence__measure': ("intensities","correlation"), 
-            'scaler__use': (True,False),
-            'scaler__dimension': ("both","zero","one"),
-            'TDA__num_landscapes': (2,3,5),
-            'TDA__resolution': (100,1000),}
+        from joblib import Memory
+        from shutil import rmtree
         
-        grid_search = skms.GridSearchCV(pipe, parameters, n_jobs=8, verbose=1)
+        location = 'cachedir'
+        memory = Memory(location=location, verbose=10)
+        topo_pipe= skppl.Pipeline([("band_election", Band_election()),("persistence", PH_computer()),("scaler",DimensionDiagramScaler()),("TDA",DimensionLandScape()),('clf',skppl.Pipeline([('Std_scal',skprp.StandardScaler()),('Clf',skllm.LogisticRegression(C=10, penalty='l2', multi_class='multinomial', solver='lbfgs', max_iter=1000))]))],memory=memory)
+        
+        parameters = {
+            'band_election__band': [-1,0,1,2],
+            'persistence__measure': ["dtw"],
+            'scaler__dimension': ["zero","one",'both'],
+            'TDA': [DimensionLandScape(),DimensionSilhouette(),TopologicalDescriptors()],
+            'clf':[skppl.Pipeline([('Std_scal',skprp.StandardScaler()),('Clf',skllm.LogisticRegression(C=10, penalty='l2', multi_class='multinomial', solver='lbfgs', max_iter=1000))]),sklnn.KNeighborsClassifier(n_neighbors=1, algorithm='brute', metric='correlation') ],
+            }
+        
+        grid_search = skms.GridSearchCV(topo_pipe, parameters, n_jobs=22, verbose=1)
         print('got it')
         t=time.time()
+        
         grid_search.fit(ts_band, labels)
         print((time.time()-t)/60, "on the gridsearch")
         print("Best score: %0.3f" % grid_search.best_score_)
+        
         for param_name in sorted(parameters.keys()):
             print("\t%s: %r" % (param_name, best_parameters[param_name]))
             
-        pd.DataFrame(grid_search.cv_results_).to_csv('prova.png')'''
-
-
+        pd.DataFrame(grid_search.cv_results_).to_csv('prova.csv')
+        
+        memory.clear(warn=False)
+        rmtree(location)'''
 
     
     else: 
@@ -386,30 +476,30 @@ if __name__ == "__main__":
         for subject in subjects:
             t=time.time()
             
-            #elec_space,subj_dir=load_data(subject,space='electrode_space')
+            #elec_space,subj_dir=load_data(subject,space='electrodeSpace')
             elec_space,font_space,subj_dir=load_data(subject)
             
             print('computing persistence of electrode space of subject',subject)
-            elec_space_pers=compute_persistence_from_EEG(elec_space,measure='intensities',subj_dir=subj_dir,space='electrode_space',save=True) #pointcloud shape (432, 50)
+            elec_space_pers=compute_persistence_from_EEG(elec_space,measure='intensities',subj_dir=subj_dir,space='electrodeSpace',save=True) #pointcloud shape (432, 50)
             
             print('computing persistence of electrode space (with correlations) of subject',subject)
-            elec_space_pers_corr=compute_persistence_from_EEG(elec_space,measure='correlation',subj_dir=subj_dir,space='electrode_space',save=True) #pointcloud shape (432, 50)
+            elec_space_pers_corr=compute_persistence_from_EEG(elec_space,measure='correlation',subj_dir=subj_dir,space='electrodeSpace',save=True) #pointcloud shape (432, 50)
             print('computing persistence of font space of subject',subject)
             font_space_pers=compute_persistence_from_EEG(font_space,measure='intensities',subj_dir=subj_dir,space='font_space',save=True)
             print('computing persistence of font space (with correlations) of subject',subject)
             font_space_pers_corr=compute_persistence_from_EEG(font_space,measure='correlation',subj_dir=subj_dir,space='font_space',save=True)
             
             print('plotting and saving data of subject',subject)
-            elec_space_descriptor_vector_dic,labels=compute_topological_descriptors(elec_space_pers,subj_dir,space='electrode_space',measure='intensities')
+            elec_space_descriptor_vector_dic,labels=compute_topological_descriptors(elec_space_pers,subj_dir,space='electrodeSpace',measure='intensities')
             
             font_space_descriptor_vector_dic,labels=compute_topological_descriptors(font_space_pers,subj_dir,space='font_space',measure='intensities')
-            elec_space_descriptor_vector_dic_corr,labels=compute_topological_descriptors(elec_space_pers_corr,subj_dir,space='electrode_space',measure='correlation')
+            elec_space_descriptor_vector_dic_corr,labels=compute_topological_descriptors(elec_space_pers_corr,subj_dir,space='electrodeSpace',measure='correlation')
             font_space_descriptor_vector_dic_corr,labels=compute_topological_descriptors(font_space_pers_corr,subj_dir,space='font_space',measure='correlation')
             
-            get_accuracies_per_band(elec_space_descriptor_vector_dic,labels,subj_dir=subj_dir,space='electrode_space',measure='intensities')
+            get_accuracies_per_band(elec_space_descriptor_vector_dic,labels,subj_dir=subj_dir,space='electrodeSpace',measure='intensities')
             
             get_accuracies_per_band(font_space_descriptor_vector_dic,labels,subj_dir=subj_dir,space='font_space',measure='intensities')
-            get_accuracies_per_band(elec_space_descriptor_vector_dic_corr,labels,subj_dir=subj_dir,space='electrode_space',measure='correlation')
+            get_accuracies_per_band(elec_space_descriptor_vector_dic_corr,labels,subj_dir=subj_dir,space='electrodeSpace',measure='correlation')
             get_accuracies_per_band(font_space_descriptor_vector_dic_corr,labels,subj_dir=subj_dir,space='font_space',measure='correlation')
         
                
