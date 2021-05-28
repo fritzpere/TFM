@@ -85,8 +85,9 @@ class PH_computer:
                 n_coor = band_tensor.shape[0]
                 matrix = np.ones((n_coor, n_coor))
                 row,col = np.triu_indices(n_coor,1)
-                matrix[row,col] = pdist(band_tensor,fun)
-                matrix[col,row] = pdist(band_tensor,fun)
+                distancies=pdist(band_tensor,fun)
+                matrix[row,col] = distancies
+                matrix[col,row] = distancies
                 matrix=1-matrix
                 
                 
