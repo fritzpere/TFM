@@ -65,7 +65,7 @@ def load_data(i_sub,space='both'):
 if __name__ == "__main__":
     debug= True
     if debug:
-        subjects=[25]
+        subjects=[25,26]
     space='both'
     
     
@@ -101,10 +101,10 @@ if __name__ == "__main__":
             filtered_ts_dic=preprocessor.get_filtered_ts_dic()
             ts_band,labels=preprocessor.get_trials_and_labels()
                 
-            
+            '''
             if debug:
                 ts_band=np.concatenate((ts_band[:5,:],ts_band[432:437,:],ts_band[-5:,:]),axis=0)
-                labels=np.concatenate((np.zeros(5),np.ones(5),np.ones(5)*2))
+                labels=np.concatenate((np.zeros(5),np.ones(5),np.ones(5)*2))'''
                 
             
             band_dic={-1: 'noFilter', 0:'alpha',1:'betta',2:'gamma'}
@@ -128,7 +128,7 @@ if __name__ == "__main__":
         
                     gd.plot_persistence_diagram(persistence)
                     plt.savefig(subj_dir+space+'/global_picture/'+band_dic[i_band]+'_Global_Persistence_diagram.png')
-        
+                    plt.close()
                 
                 resolut=1000
         
@@ -328,7 +328,7 @@ if __name__ == "__main__":
             
             
             cv_schem = skms.StratifiedShuffleSplit(n_splits=1, test_size=0.2)
-            n_rep = 3 # number of repetitions
+            n_rep = 10 # number of repetitions
             
             if classification:
     
@@ -459,9 +459,10 @@ if __name__ == "__main__":
                     for i_classifier in range(3):
                         clf=classifiers[i_classifier]
                         t_nn=time.time()
+                        print('band',band_dic[i_band],'classifier',i_classifier)
                         for i_rep in range(n_rep):
                             for ind_train, ind_test in cv_schem.split(ts_band,labels): 
-                                print('band',band_dic[i_band],'classifier',i_classifier,'repetition',i_rep)
+                                #print('band',band_dic[i_band],'classifier',i_classifier,'repetition',i_rep)
                                 clf.fit(ts_band[ind_train,i_band,:,:], labels[ind_train])
                                 pred=clf.predict(ts_band[ind_test,i_band,:,:])
                                 perf[i_band,i_classifier,i_rep] = skm.accuracy_score(pred, labels[ind_test])
