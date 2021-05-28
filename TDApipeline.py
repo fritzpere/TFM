@@ -229,7 +229,7 @@ class TopologicalDescriptors:
 
             vec0=get_feat_dim0(X[0])
             vec1=get_feat_dim1(X[1])
-            return np.concatenate((vec0,vec1),axis=0)
+            return np.concatenate((vec0,vec1),axis=1)
         elif all(X[0][:,0]==0):
             return get_feat_dim0(X)
         else:

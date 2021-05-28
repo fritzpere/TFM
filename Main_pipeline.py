@@ -85,11 +85,13 @@ if __name__ == "__main__":
         
         
         bands=[-1,0,1,2]
+        #bands=[-1,2]
         n_band=len(bands)
-        #measures=["intensities","correlation","quaf","dtw"]
-        measures=["dtw"]
+        measures=["intensities","correlation","quaf","dtw"]
+        #measures=["quaf","dtw"]
         n_measure=len(measures)
         dimensions=["zero","one"]
+        #dimensions=[]
         n_dim=len(dimensions)
         feat_vect=[DimensionLandScape(),DimensionSilhouette(),TopologicalDescriptors()]
 
@@ -308,7 +310,7 @@ if __name__ == "__main__":
 
 
         
-        '''
+        
         dimensions.append('both')
         n_dim+=1
         classifiers=[skppl.Pipeline([('Std_scal',skprp.StandardScaler()),('Clf',skllm.LogisticRegression(C=10, penalty='l2', multi_class='multinomial', solver='lbfgs', max_iter=1000))]),sklnn.KNeighborsClassifier(n_neighbors=1, algorithm='brute', metric='correlation')  ]
@@ -325,33 +327,53 @@ if __name__ == "__main__":
         
         pooling_list=[]
         for i_band in range(n_band):
+            band_selector=Band_election(bands[i_band])
+            band_selector.fit(ts_band)
+            band_data=band_selector.transform(ts_band)
             for i_measure in range(n_measure):
+                ph_computer=PH_computer(measure=measures[i_measure])
+                ph_computer.fit(band_data)
+                persistence=ph_computer.transform(band_data)
                 for i_dim in range(n_dim):
+                    dimensionscaler=DimensionDiagramScaler(dimensions=dimensions[i_dim])
+                    dimensionscaler.fit(persistence)
+                    dimensional_persistence=dimensionscaler.transform(persistence)
                     for i_vector in range(n_vectors):
+                        tda_compt=feat_vect[i_vector]
+                        tda_compt.fit(dimensional_persistence)
+                        tda_vect=tda_compt.transform(dimensional_persistence)
                         for i_classifier in range(n_classifiers):
-                            topo_pipe= skppl.Pipeline([("band_election", Band_election(bands[i_band])),("persistence", PH_computer(measure=measures[i_measure])),("scaler",DimensionDiagramScaler(dimensions=dimensions[i_dim])),("TDA",feat_vect[i_vector]),('clf',classifiers[i_classifier])])
+                            clf=classifiers[i_classifier]
                             for i_rep in range(n_rep):
-                                ind_tr ,ind_te=cv_schem.split(ts_band,labels)
-                                pooling_list.append((ind_tr,ind_te,i_rep))
-                            pool.map(evaluate, pooling_list)
+                                for ind_train, ind_test in cv_schem.split(ts_band,labels): # false loop, just 1 
+                                    print('band',bands[i_band],'measure',measures[i_measure],'dim',dimensions[i_dim],'vector',i_vector,'classifier',i_classifier,'repetition:',i_rep)
+
+                                    clf.fit(tda_vect[ind_train,:], labels[ind_train])
+                                
+                                    perf[i_band,i_measure,i_dim,i_vector,i_rep,i_classifier] = clf.score(tda_vect[ind_test,:], labels[ind_test])
+                                    conf_matrix[i_band,i_measure,i_dim,i_vector,i_rep,i_classifier,:,:] += skm.confusion_matrix(y_true=labels[ind_test], y_pred=clf.predict(tda_vect[ind_test,:]))  
+                                    
+                                    
+                                    shuf_labels = np.random.permutation(labels)
+            
+                                    clf.fit(tda_vect[ind_train,:], shuf_labels[ind_train])
+                                    perf_shuf[i_band,i_measure,i_dim,i_vector,i_rep,i_classifier]= clf.score(tda_vect[ind_test,:], shuf_labels[ind_test])
+                            
+                                    ##NOUUU
+                                    '''
+                                    from sktime.classification.distance_based import KNeighborsTimeSeriesClassifier
+
+                                    knn = KNeighborsTimeSeriesClassifier(n_neighbors=1, distance="dtw")
+                                    knn.fit(ts_band[ind_train,i_band,:,:][ind_train,i_band,:,:], labels[ind_train])
+                                    knn.score(ts_band[ind_test,i_band,:,:], labels[ind_test]))
+                                    
+                                    {"Scaler__use":         [False],
+                                         "TDA":                 [gd.representations.BottleneckDistance()], 
+                                         "TDA__epsilon":        [0.1], 
+                                         "Estimator":           [KNeighborsClassifier(metric="precomputed")]}'''
+                                                                
                             
                                     
-                            
-                                    
-        from multiprocessing import Pool                           
-        def evaluate(inpu):
-            ind_train,ind_test,i_rep=inpu
-            print('band',bands[i_band],'measure',measures[i_measure],'dim',dimensions[i_dim],'vector',i_vector,'classifier',i_classifier,'repetition:',i_rep)
-            
-            topo_pipe.fit(ts_band[ind_train,:], labels[ind_train])
-            perf[i_band,i_measure,i_dim,i_vector,i_rep,i_classifier] = topo_pipe.score(ts_band[ind_test,:], labels[ind_test])
-            conf_matrix[i_band,i_measure,i_dim,i_vector,i_rep,i_classifier,:,:] += skm.confusion_matrix(y_true=labels[ind_test], y_pred=topo_pipe.predict(ts_band[ind_test,:]))  
-            
-            
-            shuf_labels = np.random.permutation(labels)
-        
-            topo_pipe.fit(ts_band[ind_train,:], shuf_labels[ind_train])
-            perf_shuf[i_band,i_measure,i_dim,i_vector,i_rep,i_classifier]= topo_pipe.score(ts_band[ind_test,:], shuf_labels[ind_test])
 
     
         # save results       
@@ -444,7 +466,7 @@ if __name__ == "__main__":
             print("\t%s: %r" % (param_name, best_parameters[param_name]))
             
         pd.DataFrame(grid_search.cv_results_).to_csv('prova.csv')
-        '''
+        
         memory.clear(warn=False)
         rmtree(location)'''
 
