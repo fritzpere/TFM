@@ -162,7 +162,7 @@ class DimensionLandScape:
             self.L0.fit(X[0],y)
             self.L1.fit(X[1],y)
         else:
-            self.L0.fit(X)
+            self.L0.fit(X,y)
         return self
     
     def transform(self, X):
