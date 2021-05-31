@@ -97,8 +97,6 @@ class PH_computer:
             #Rips_complex_sample = gd.AlphaComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
             Rips_simplex_tree_sample = Rips_complex_sample.create_simplex_tree(max_dimension=2)
             persistence.append(Rips_simplex_tree_sample.persistence())
-    
-            
             dim_list=np.array(list(map(lambda x: x[0], persistence[k])))
             point_list=np.array(list(map(lambda x: x[1], persistence[k])))
             zero_dim.append(point_list[np.logical_and(point_list[:,1]!=float('inf'),dim_list==0)])
@@ -164,7 +162,7 @@ class DimensionLandScape:
             self.L0.fit(X[0],y)
             self.L1.fit(X[1],y)
         else:
-            self.L0.fit(X)
+            self.L0.fit(X,y)
         return self
     
     def transform(self, X):

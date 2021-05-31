@@ -10,6 +10,7 @@ import os
 #from EEGs_persistence import *
 from preprocess_data import *
 from TDApipeline import *
+from intensities_pipe import *
 import time  
 import sklearn.pipeline as skppl
 import sklearn.linear_model as skllm
@@ -19,9 +20,10 @@ import matplotlib.pyplot as plt
 import sklearn.preprocessing as skprp
 import pandas as pd
 import sklearn.neighbors as sklnn
+'''
 from joblib import Memory
 from shutil import rmtree
-'''
+
 from sklearn.utils.testing import ignore_warnings
 from sklearn.exceptions import ConvergenceWarning
 '''
@@ -101,11 +103,11 @@ if __name__ == "__main__":
             filtered_ts_dic=preprocessor.get_filtered_ts_dic()
             ts_band,labels=preprocessor.get_trials_and_labels()
                 
-            '''
+            
             if debug:
-                ts_band=np.concatenate((ts_band[:5,:],ts_band[432:437,:],ts_band[-5:,:]),axis=0)
-                labels=np.concatenate((np.zeros(5),np.ones(5),np.ones(5)*2))'''
-                
+                ts_band=np.concatenate((ts_band[:30,:],ts_band[432:462,:],ts_band[-30:,:]),axis=0)
+                labels=np.concatenate((np.zeros(30),np.ones(30),np.ones(30)*2))
+                intensity(ts_band,labels,2)
             
             band_dic={-1: 'noFilter', 0:'alpha',1:'betta',2:'gamma'}
             if exploratory: 
@@ -470,7 +472,7 @@ if __name__ == "__main__":
                                 
                                 
                                 shuf_labels = np.random.permutation(labels)
-            
+                                clf.fit(ts_band[ind_train,i_band,:,:], shuf_labels[ind_train])
                                 pred=clf.predict(ts_band[ind_test,i_band,:,:])
                                 perf_shuf[i_band,i_classifier,i_rep] = skm.accuracy_score(pred, shuf_labels[ind_test])
                         print((time.time()-t_nn)/60, 'minuts for classifier', i_classifier)         
