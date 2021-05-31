@@ -102,7 +102,7 @@ class PH_computer:
             zero_dim.append(point_list[np.logical_and(point_list[:,1]!=float('inf'),dim_list==0)])
             one_dim.append(point_list[np.logical_and(point_list[:,1]!=float('inf'),dim_list==1)])
         
-        return zero_dim,one_dim
+        return (zero_dim,one_dim)
 
 
     def set_params(self, **parameters):
@@ -229,7 +229,7 @@ class TopologicalDescriptors:
             vec0=get_feat_dim0(X[0])
             vec1=get_feat_dim1(X[1])
             return np.concatenate((vec0,vec1),axis=1)
-        elif all(X[0][:,0]==0):
+        elif all([all(X[i][:,0]==0) for i in range(len(X))]):
             return get_feat_dim0(X)
         else:
            return get_feat_dim1(X) 

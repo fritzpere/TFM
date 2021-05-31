@@ -67,8 +67,8 @@ def load_data(i_sub,space='both'):
 if __name__ == "__main__":
     debug= True
     if debug:
-        subjects=[25,26]
-    space='both'
+        subjects=[25]
+
     
     
     exploratory=True
@@ -90,24 +90,26 @@ if __name__ == "__main__":
     
     n_vectors=len(feat_vect)
     for subject in subjects:
+        space='both'
         data_space,subj_dir=load_data(subject,space=space)
+
         spaces=['electrodeSpace','fontSpace']
-        for i in range(2):
+        for sp in range(2):
             t=time.time()
-            space=spaces[i]
+            space=spaces[sp]
             if not os.path.exists(subj_dir+space):
                 print("create directory(plot):",subj_dir+space)
                 os.makedirs(subj_dir+'/'+space)
-            print('cleaning and filtering data of electrode space of subject',subject)
-            preprocessor=Preprocessor(data_space[i])
+            print('cleaning and filtering data of',space,'of subject',subject)
+            preprocessor=Preprocessor(data_space[sp])
             filtered_ts_dic=preprocessor.get_filtered_ts_dic()
             ts_band,labels=preprocessor.get_trials_and_labels()
                 
-            
+            '''
             if debug:
-                ts_band=np.concatenate((ts_band[:30,:],ts_band[432:462,:],ts_band[-30:,:]),axis=0)
-                labels=np.concatenate((np.zeros(30),np.ones(30),np.ones(30)*2))
-                intensity(ts_band,labels,2)
+                ts_band=np.concatenate((ts_band[:10,:],ts_band[432:442,:],ts_band[-10:,:]),axis=0)
+                labels=np.concatenate((np.zeros(10),np.ones(10),np.ones(10)*2))
+                #intensity(ts_band,labels,2)'''
             
             band_dic={-1: 'noFilter', 0:'alpha',1:'betta',2:'gamma'}
             if exploratory: 
@@ -122,7 +124,7 @@ if __name__ == "__main__":
                     Rips_complex_sample = gd.RipsComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
                     #Rips_complex_sample = gd.AlphaComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
                     Rips_simplex_tree_sample = Rips_complex_sample.create_simplex_tree(max_dimension=2)
-                    persistence=(Rips_simplex_tree_sample.persistence())
+                    persistence=Rips_simplex_tree_sample.persistence()
                     
                     if not os.path.exists(subj_dir+space+'/global_picture'):
                         print("create directory(plot):",subj_dir+space+'/global_picture')
@@ -145,13 +147,12 @@ if __name__ == "__main__":
                     for i_band in bands: 
                         print('band',band_dic[i_band])
                         exploratory_pipe = skppl.Pipeline([("band_election", Band_election(i_band)),("persistence", PH_computer(measure=measures[i_measure]))])
-                        presistence=exploratory_pipe.fit_transform(ts_band)
+                        persistence=exploratory_pipe.fit_transform(ts_band)
                         for i_dim in range(n_dim):
                             dimension_scaler=DimensionDiagramScaler(dimensions=dimensions[i_dim])
-                            dim_vect=dimension_scaler.fit_transform(presistence)
-                         
-        
-                            
+                            dimension_scaler.fit(persistence)
+                            dim_vect=dimension_scaler.transform(persistence)
+      
                             descriptors_computer=TopologicalDescriptors()
                             descriptors_computer.fit(dim_vect)
                             vect=descriptors_computer.transform(dim_vect)
@@ -449,7 +450,7 @@ if __name__ == "__main__":
             if last:
                 t_last=time.time()
                 from sktime.classification.distance_based import KNeighborsTimeSeriesClassifier
-                classifiers = [KNeighborsTimeSeriesClassifier(n_neighbors=1, distance="dtw"),skppl.Pipeline([("persistence", PH_computer()),("scaler",DimensionDiagramScaler("zero")),("TDA",gd.representations.BottleneckDistance(epsilon=0.1)),("Estimator",sklnn.KNeighborsClassifier(metric="precomputed"))]),skppl.Pipeline([("persistence", PH_computer()),("scaler",DimensionDiagramScaler("one")),("TDA",gd.representations.BottleneckDistance(epsilon=0.1)),("Estimator",sklnn.KNeighborsClassifier(metric="precomputed"))]) ] 
+                classifiers = [skppl.Pipeline([("persistence", PH_computer()),("scaler",DimensionDiagramScaler("zero")),("TDA",gd.representations.BottleneckDistance(epsilon=0.1)),("Estimator",sklnn.KNeighborsClassifier(metric="precomputed"))]),skppl.Pipeline([("persistence", PH_computer()),("scaler",DimensionDiagramScaler("one")),("TDA",gd.representations.BottleneckDistance(epsilon=0.1)),("Estimator",sklnn.KNeighborsClassifier(metric="precomputed"))]) ] 
                 
                 
                 perf = np.zeros([n_band,3,n_rep]) # (last index: MLR/1NN)
@@ -458,7 +459,7 @@ if __name__ == "__main__":
                 
         
                 for i_band in bands:
-                    for i_classifier in range(3):
+                    for i_classifier in range(2):
                         clf=classifiers[i_classifier]
                         t_nn=time.time()
                         print('band',band_dic[i_band],'classifier',i_classifier)
@@ -496,11 +497,11 @@ if __name__ == "__main__":
                     #axes[i_band][i_vector].axes([0.2,0.2,0.7,0.7])
                     axes[i_band].violinplot(perf[i_band,0,:],positions=[-0.2],widths=[0.3])
                     axes[i_band].violinplot(perf[i_band,1,:],positions=[0.2],widths=[0.3])
-                    axes[i_band].violinplot(perf[i_band,2,:],positions=[0.6],widths=[0.3])
+                    #axes[i_band].violinplot(perf[i_band,2,:],positions=[0.6],widths=[0.3])
         
                     axes[i_band].violinplot(perf_shuf[i_band,0,:],positions=[1.2],widths=[0.3])
                     axes[i_band].violinplot(perf_shuf[i_band,1,:],positions=[1.6],widths=[0.3])
-                    axes[i_band].violinplot(perf_shuf[i_band,2,:],positions=[2],widths=[0.3])
+                    #axes[i_band].violinplot(perf_shuf[i_band,2,:],positions=[2],widths=[0.3])
                     
                     axes[i_band].plot([-1,2],[chance_level]*2,'--k')
                     axes[i_band].axis(xmin=-0.6,xmax=2.4,ymin=0,ymax=1.05)
@@ -532,4 +533,4 @@ if __name__ == "__main__":
                 print((time.time()-t_last)/60, 'minuts for last')                    
             print('======TIME======')
             print('======TIME======')
-            print((time.time()-t)/60, 'minuts for space', space,exploratory,classification,last)  
+            print((time.time()-t)/60, 'minuts for', space,exploratory,classification,last)  

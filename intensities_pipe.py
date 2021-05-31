@@ -92,7 +92,7 @@ def intensity(ts_band,labels,band):
                     dimensional_persistence=np.array(dimensionscaler.transform(persistence))
                     for i_vector in range(n_vectors):
                         tda_compt=feat_vect[i_vector]
-                        tda_compt.fit([dimensional_persistence])#Em epta aquí!!
+                        tda_compt.fit([dimensional_persistence])
                         
                         pred_array[i,i_vector,i_dim,i_motiv]=np.linalg.norm(tda_compt.transform([dimensional_persistence])-tda_vect[i_vector][i_dim])
             i=i+1
@@ -103,6 +103,15 @@ def intensity(ts_band,labels,band):
                 pred=np.argmin(np.array(pred_array[:,i_vector,i_dim,:]),axis=1)
                 perf[i_dim,i_vector+1,i_rep] = skm.accuracy_score(pred, labels[ind_test])
                 conf_matrix[i_dim,i_vector+1,i_rep,:,:] += skm.confusion_matrix(y_true=labels[ind_test], y_pred=pred) 
-                                
+    
+        '''
+        pred=##bottleneck 1nn
+        perf[i_dim,i_vector+1,i_rep] = #bottleneck 1nn
+        conf_matrix[i_dim,i_vector+1,i_rep,:,:] += #bottleneck 1nn'''
+        
+        # save results       
+        np.save(subj_dir+space+'/perf.npy',perf)
+        np.save(subj_dir+space+'/conf_matrix.npy',conf_matrix)                     
+                
                                 
     
