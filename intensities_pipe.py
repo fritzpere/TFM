@@ -38,10 +38,11 @@ def intensity(subj_dir,space,ts_band,labels,i_band):
 
     for i_rep in range(n_rep):
         for ind_train, ind_test in cv_schem.split(ts_intens,labels):
+            
             X_train=ts_intens[ind_train]
             y_train=labels[ind_train]
             pred=np.zeros(len(ind_train))
-            pred_array=np.zeros((len(ind_test),3,2,3))
+            pred_array=np.zeros((len(ind_test),n_vectors+1,n_dim,3))
             for i_motiv  in range(3):
                 X_motiv.append(X_train[y_train==i_motiv])
                 n_coor=X_motiv[i_motiv].shape[0]
@@ -68,6 +69,7 @@ def intensity(subj_dir,space,ts_band,labels,i_band):
                         tda_compt=feat_vect[i_vector]
                         tda_compt.fit([dim_persistence])
                         tda_vect[i_vector][i_dim]=tda_compt.transform([dim_persistence])
+                    tda_vect[n_vectors][i_dim]=dim_persistence
             i=0
             for index in ind_test:
                 for i_motiv  in range(3):
@@ -97,20 +99,17 @@ def intensity(subj_dir,space,ts_band,labels,i_band):
                             tda_compt.fit([dimensional_persistence])
                             
                             pred_array[i,i_vector,i_dim,i_motiv]=np.linalg.norm(tda_compt.transform([dimensional_persistence])-tda_vect[i_vector][i_dim])
+                        pred_array[i,n_vectors,i_dim,i_motiv]=gd.bottleneck_distance(dimensional_persistence,tda_vect[n_vectors][i_dim],0.01)
                 i=i+1
         
     
-            for i_vector in range(n_vectors):
+            for i_vector in range(n_vectors+1):
                 for i_dim in range(n_dim):
                     pred=np.argmin(np.array(pred_array[:,i_vector,i_dim,:]),axis=1)
                     
-                    perf[i_dim,i_vector+1,i_rep] = skm.accuracy_score(pred, labels[ind_test])
-                    conf_matrix[i_dim,i_vector+1,i_rep,:,:] += skm.confusion_matrix(y_true=labels[ind_test], y_pred=pred) 
+                    perf[i_dim,i_vector,i_rep] = skm.accuracy_score(pred, labels[ind_test])
+                    conf_matrix[i_dim,i_vector,i_rep,:,:] += skm.confusion_matrix(y_true=labels[ind_test], y_pred=pred) 
         
-            '''
-            pred=##bottleneck 1nn
-            perf[i_dim,i_vector+1,i_rep] = #bottleneck 1nn
-            conf_matrix[i_dim,i_vector+1,i_rep,:,:] += #bottleneck 1nn'''
         
         # save results       
     np.save(subj_dir+space+'/perf_intensity.npy',perf)
@@ -135,12 +134,13 @@ def intensity(subj_dir,space,ts_band,labels,i_band):
         axes[i_dim].violinplot(perf[i_dim,0,:],positions=[-0.2],widths=[0.3])
         axes[i_dim].violinplot(perf[i_dim,1,:],positions=[0.2],widths=[0.3])
         axes[i_dim].violinplot(perf[i_dim,2,:],positions=[0.6],widths=[0.3])
+        axes[i_dim].violinplot(perf[i_dim,3,:],positions=[1],widths=[0.3])
         #axes[i_dim].violinplot(perf[i_dim,3,:],positions=[1],widths=[0.3])
 
 
         
         axes[i_dim].plot([-1,2],[chance_level]*2,'--k')
-        axes[i_dim].axis(xmin=-0.6,xmax=2.4,ymin=0,ymax=1.05)
+        axes[i_dim].axis(xmin=-0.6,xmax=1.4,ymin=0,ymax=1.05)
 
         axes[i_dim].set_ylabel('accuracy '+band,fontsize=8)
         axes[i_dim].set_title(band+dimensions[i_dim])
