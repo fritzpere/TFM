@@ -70,10 +70,10 @@ if __name__ == "__main__":
         subjects=[25]
 
     
-    
-    exploratory=True
-    classification=True
-    last=True
+    intensities=True
+    exploratory=False
+    classification=False
+    last=False
     
     
     
@@ -105,11 +105,12 @@ if __name__ == "__main__":
             filtered_ts_dic=preprocessor.get_filtered_ts_dic()
             ts_band,labels=preprocessor.get_trials_and_labels()
                 
-            '''
-            if debug:
-                ts_band=np.concatenate((ts_band[:10,:],ts_band[432:442,:],ts_band[-10:,:]),axis=0)
-                labels=np.concatenate((np.zeros(10),np.ones(10),np.ones(10)*2))
-                #intensity(ts_band,labels,2)'''
+            
+            if intensities:
+                ts_band=np.concatenate((ts_band[:50,:],ts_band[432:482,:],ts_band[-50:,:]),axis=0)
+                labels=np.concatenate((np.zeros(50),np.ones(50),np.ones(50)*2))
+                intensity(subj_dir,space,ts_band,labels,2)
+
             
             band_dic={-1: 'noFilter', 0:'alpha',1:'betta',2:'gamma'}
             if exploratory: 

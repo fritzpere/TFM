@@ -259,7 +259,7 @@ def get_feat_dim0(X):
 def get_feat_dim1(X):
     n=len(X)
     avg_life,std_life,avg_midlife,std_midlife,avg_birth,std_birth,avg_death,std_death,entropy=[],[],[],[],[],[],[],[],[]
-    for k in range (n):
+    for k in range(n):
         birth=X[k][:,0]
         death=X[k][:,0]
         life=np.array(list(map(lambda x: x[1]-x[0],X[k])))
