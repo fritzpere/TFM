@@ -12,6 +12,7 @@ from collections import defaultdict
 import sklearn.metrics as skm
 import matplotlib.pyplot as plt
 import time
+import os
 
 
 
@@ -33,7 +34,12 @@ def intensity(subj_dir,space,ts_band,labels,i_band):
     perf_shuf = np.zeros([n_dim+1,n_vectors+1,n_rep])
     conf_matrix = np.zeros([n_dim+1,n_vectors+1,n_rep,3,3])
     
+    if not os.path.exists(subj_dir+space+'/intensities'):
+                print("create directory(plot):",subj_dir+space+'/intensities')
+                os.makedirs(subj_dir+space+'/intensities')
+    
     t_int=time.time()
+    
     
 
     for i_rep in range(n_rep):
@@ -113,8 +119,8 @@ def intensity(subj_dir,space,ts_band,labels,i_band):
             print((time.time()-t_rep)/60, 'minuts for classification for repetition',i_rep)
         
         # save results       
-    np.save(subj_dir+space+'/perf_intensity.npy',perf)
-    np.save(subj_dir+space+'/conf_matrix_intensity.npy',conf_matrix)                     
+    np.save(subj_dir+space+'/intensities/perf_intensity.npy',perf)
+    np.save(subj_dir+space+'/intensities/conf_matrix_intensity.npy',conf_matrix)                     
             
       
     fmt_grph = 'png'
@@ -145,7 +151,7 @@ def intensity(subj_dir,space,ts_band,labels,i_band):
 
         axes[i_dim].set_ylabel('accuracy '+band,fontsize=8)
         axes[i_dim].set_title(band+dimensions[i_dim])
-    plt.savefig(subj_dir+space+'/accuracies_intensity_'+band+'.png', format=fmt_grph)
+    plt.savefig(subj_dir+space+'/intensities/accuracies_intensity_'+band+'.png', format=fmt_grph)
     plt.close()
 
 
@@ -162,11 +168,11 @@ def intensity(subj_dir,space,ts_band,labels,i_band):
             axes2[i].set_title(band+dimensions[i_dim]+str(i_vector))
             i+=1
     fig.tight_layout(pad=0.5)
-    plt.savefig(subj_dir+space+'/confusion_matrix_intensities_'+band+'.png', format=fmt_grph)
+    plt.savefig(subj_dir+space+'/intensities/confusion_matrix_intensities_'+band+'.png', format=fmt_grph)
     plt.close()
     
     
     print('======TIME======') 
-    print((time.time()-t_int)/60, 'minuts for classification for band',band)
+    print((time.time()-t_int)/60, 'minuts for classification w intensities for band',band)
 
     return                  

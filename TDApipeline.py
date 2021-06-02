@@ -48,7 +48,7 @@ class PH_computer:
             #print('nans?',np.isnan(band_tensor[i]).any())
             #print('cloud shape:',band_tensor.shape)
             
-            if self.measure=='intensities':
+            if self.measure=='euclidean':
                 band_tensor = np.abs(band_tensor[:,:])
                 matrix=cdist(band_tensor,band_tensor)
                 '''

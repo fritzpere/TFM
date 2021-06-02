@@ -65,22 +65,24 @@ def load_data(i_sub,space='both'):
     
 
 if __name__ == "__main__":
-    debug= True
+    debug= False
     if debug:
         subjects=[25]
+    else:
+        subjects=[25,26]
 
     
     intensities=True
-    exploratory=False
-    classification=False
-    last=False
+    exploratory=True
+    classification=True
+    last=True
     
     
     
     bands=[-1,0,1,2]  
     #bands=[-1,2]
     n_band=len(bands)
-    measures=["intensities","correlation","quaf","dtw"]
+    measures=["euclidean","correlation","quaf","dtw"]
     #measures=["quaf","dtw"]
     n_measure=len(measures)
     dimensions=["zero","one"]
@@ -105,11 +107,13 @@ if __name__ == "__main__":
             filtered_ts_dic=preprocessor.get_filtered_ts_dic()
             ts_band,labels=preprocessor.get_trials_and_labels()
                 
+            if debug:
+                ts_band=np.concatenate((ts_band[:30,:],ts_band[432:462,:],ts_band[-30:,:]),axis=0)
+                labels=np.concatenate((np.zeros(30),np.ones(30),np.ones(30)*2))
             
             if intensities:
-                #ts_band=np.concatenate((ts_band[:50,:],ts_band[432:482,:],ts_band[-50:,:]),axis=0)
-                #labels=np.concatenate((np.zeros(50),np.ones(50),np.ones(50)*2))
                 for i_band in bands:
+                    print('intensities for band ', i_band)
                     intensity(subj_dir,space,ts_band,labels,i_band)
 
             
@@ -290,21 +294,21 @@ if __name__ == "__main__":
                             
                             
                             j=j+1
-        
-                    if not os.path.exists(subj_dir+space+'/'+measures[i_measure]):
-                        print("create directory(plot):",subj_dir+space+'/'+measures[i_measure])
-                        os.makedirs(subj_dir+space+'/'+measures[i_measure])        
+                    expl_path=subj_dir+space+'/exploratory/'+measures[i_measure]
+                    if not os.path.exists(expl_path):
+                        print("create directory(plot):",expl_path)
+                        os.makedirs(expl_path)        
         
                     fig3.suptitle('Persistence Landscapes of the {0} for\n different frequency bands and motivational state of {1}'.format(space,measures[i_measure]),fontsize=24)
                     fig3.tight_layout(pad=0.5)
                     fig3.subplots_adjust(top=0.8)
-                    plt.savefig(subj_dir+space+'/'+measures[i_measure]+'/Landscapes.png')
+                    plt.savefig(expl_path+'/Landscapes.png')
                     plt.close()
                     
                     fig2.suptitle('Persistence Silhouette of the {0} for\n different frequency bands and motivational state of {1}'.format(space,measures[i_measure]),fontsize=24)
                     fig2.tight_layout(pad=0.5)
                     fig2.subplots_adjust(top=0.8)
-                    plt.savefig(subj_dir+space+'/'+measures[i_measure]+'/Silhouette.png')
+                    plt.savefig(expl_path+'/Silhouette.png')
                     plt.close()
                             
                             
@@ -312,14 +316,14 @@ if __name__ == "__main__":
                     fig4.suptitle('Topological descriptors of the {0} for\n different frequency bands and motivational state of {1} dimension {2}'.format(space,measures[i_measure],dimensions[i_dim]),fontsize=24)
                     fig4.tight_layout(pad=0.5)
                     fig4.subplots_adjust(top=0.8)
-                    plt.savefig(subj_dir+space+'/'+measures[i_measure]+'/one_topological_descriptors.png')
+                    plt.savefig(expl_path+'/one_topological_descriptors.png')
                     plt.close()
                         
                 
                     fig.suptitle('Topological descriptors of the {0} for\n different frequency bands and motivational state of {1} dimension 0'.format(space,measures[i_measure]),fontsize=24)
                     fig.tight_layout(pad=0.5)
                     fig.subplots_adjust(top=0.8)
-                    plt.savefig(subj_dir+space+'/'+measures[i_measure]+'/zero_topological_descriptors.png')
+                    plt.savefig(expl_path+'/zero_topological_descriptors.png')
                     plt.close()
             
             
@@ -515,11 +519,11 @@ if __name__ == "__main__":
                     
             
                     
-                fig2, axes2 = plt.subplots(nrows=n_band, ncols=3, figsize=(24, 24))
+                fig2, axes2 = plt.subplots(nrows=n_band, ncols=2, figsize=(24, 24))
             
                 for i_band in bands:
                     band = band_dic[i_band]
-                    for i_clf in range (3):
+                    for i_clf in range (2):
                         # plot performance and surrogate
                         #axes[i_band][i_vector].axes([0.2,0.2,0.7,0.7])
                         axes2[i_band][i_clf].imshow(conf_matrix[i_band,i_clf,:,:,:].mean(0), vmin=0, cmap=cmapcolours[i_band])
