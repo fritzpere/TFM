@@ -107,9 +107,10 @@ if __name__ == "__main__":
                 
             
             if intensities:
-                ts_band=np.concatenate((ts_band[:50,:],ts_band[432:482,:],ts_band[-50:,:]),axis=0)
-                labels=np.concatenate((np.zeros(50),np.ones(50),np.ones(50)*2))
-                intensity(subj_dir,space,ts_band,labels,2)
+                #ts_band=np.concatenate((ts_band[:50,:],ts_band[432:482,:],ts_band[-50:,:]),axis=0)
+                #labels=np.concatenate((np.zeros(50),np.ones(50),np.ones(50)*2))
+                for i_band in bands:
+                    intensity(subj_dir,space,ts_band,labels,i_band)
 
             
             band_dic={-1: 'noFilter', 0:'alpha',1:'betta',2:'gamma'}

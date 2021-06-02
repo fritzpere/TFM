@@ -27,7 +27,7 @@ def intensity(subj_dir,space,ts_band,labels,i_band):
     X_motiv=[]
     tda_vect=defaultdict(lambda: defaultdict(lambda: []))
     
-    n_rep=5
+    n_rep=10
     
     perf = np.zeros([n_dim+1,n_vectors+1,n_rep])
     perf_shuf = np.zeros([n_dim+1,n_vectors+1,n_rep])
@@ -37,6 +37,7 @@ def intensity(subj_dir,space,ts_band,labels,i_band):
     
 
     for i_rep in range(n_rep):
+        t_rep=time.time()
         for ind_train, ind_test in cv_schem.split(ts_intens,labels):
             
             X_train=ts_intens[ind_train]
@@ -109,7 +110,7 @@ def intensity(subj_dir,space,ts_band,labels,i_band):
                     
                     perf[i_dim,i_vector,i_rep] = skm.accuracy_score(pred, labels[ind_test])
                     conf_matrix[i_dim,i_vector,i_rep,:,:] += skm.confusion_matrix(y_true=labels[ind_test], y_pred=pred) 
-        
+            print((time.time()-t_rep)/60, 'minuts for classification for repetition',i_rep)
         
         # save results       
     np.save(subj_dir+space+'/perf_intensity.npy',perf)
@@ -144,7 +145,7 @@ def intensity(subj_dir,space,ts_band,labels,i_band):
 
         axes[i_dim].set_ylabel('accuracy '+band,fontsize=8)
         axes[i_dim].set_title(band+dimensions[i_dim])
-    plt.savefig(subj_dir+space+'/accuracies_intensity.png', format=fmt_grph)
+    plt.savefig(subj_dir+space+'/accuracies_intensity_'+band+'.png', format=fmt_grph)
     plt.close()
 
 
@@ -161,9 +162,11 @@ def intensity(subj_dir,space,ts_band,labels,i_band):
             axes2[i].set_title(band+dimensions[i_dim]+str(i_vector))
             i+=1
     fig.tight_layout(pad=0.5)
-    plt.savefig(subj_dir+space+'/confusion_matrix_intensities.png', format=fmt_grph)
+    plt.savefig(subj_dir+space+'/confusion_matrix_intensities_'+band+'.png', format=fmt_grph)
     plt.close()
     
     
     print('======TIME======') 
-    print((time.time()-t_int)/60, 'minuts for classification')                  
+    print((time.time()-t_int)/60, 'minuts for classification for band',band)
+
+    return                  
