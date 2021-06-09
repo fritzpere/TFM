@@ -116,7 +116,7 @@ def intensity(subj_dir,space,ts_band,labels,i_band):
                     
                     perf[i_dim,i_vector,i_rep] = skm.accuracy_score(pred, labels[ind_test])
                     conf_matrix[i_dim,i_vector,i_rep,:,:] += skm.confusion_matrix(y_true=labels[ind_test], y_pred=pred) 
-            print((time.time()-t_rep)/60, 'minuts for classification for repetition',i_rep)
+            #print((time.time()-t_rep)/60, 'minuts for classification for repetition',i_rep)
         
         # save results       
     np.save(subj_dir+space+'/intensities/perf_intensity.npy',perf)
@@ -174,5 +174,6 @@ def intensity(subj_dir,space,ts_band,labels,i_band):
     
     print('======TIME======') 
     print((time.time()-t_int)/60, 'minuts for classification w intensities for band',band)
-
+    with open('control.txt', 'w') as f:
+        print((time.time()-t_int)/60, 'minuts for classification w intensities for band',band, file=f)
     return                  

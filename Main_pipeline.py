@@ -103,13 +103,15 @@ if __name__ == "__main__":
                 print("create directory(plot):",subj_dir+space)
                 os.makedirs(subj_dir+'/'+space)
             print('cleaning and filtering data of',space,'of subject',subject)
+            with open('control.txt', 'w') as f:
+                    print('subject', subject, 'space', space, file=f)
             preprocessor=Preprocessor(data_space[sp])
             filtered_ts_dic=preprocessor.get_filtered_ts_dic()
             ts_band,labels=preprocessor.get_trials_and_labels()
                 
             if debug:
-                ts_band=np.concatenate((ts_band[:30,:],ts_band[432:462,:],ts_band[-30:,:]),axis=0)
-                labels=np.concatenate((np.zeros(30),np.ones(30),np.ones(30)*2))
+                ts_band=np.concatenate((ts_band[:2,:],ts_band[432:434,:],ts_band[-2:,:]),axis=0)
+                labels=np.concatenate((np.zeros(2),np.ones(2),np.ones(2)*2))
             
             if intensities:
                 for i_band in bands:
@@ -330,6 +332,8 @@ if __name__ == "__main__":
         
                 print('======TIME======')    
                 print((time.time()-t_expl)/60, 'minuts for exploration')
+                with open('control.txt', 'w') as f:
+                    print((time.time()-t_expl)/60, 'minuts for exploration', file=f)
             dimensions.append('both')
             n_dim+=1
             classifiers=[skppl.Pipeline([('Std_scal',skprp.StandardScaler()),('Clf',skllm.LogisticRegression(C=10, penalty='l2', multi_class='multinomial', solver='lbfgs', max_iter=5000))]),sklnn.KNeighborsClassifier(n_neighbors=1, algorithm='brute', metric='correlation')  ]
@@ -453,6 +457,8 @@ if __name__ == "__main__":
                 plt.close()
                 print('======TIME======') 
                 print((time.time()-t_clf)/60, 'minuts for classification')
+                with open('control.txt', 'w') as f:
+                    print((time.time()-t_clf)/60, 'minuts for classification', file=f)
             if last:
                 t_last=time.time()
                 from sktime.classification.distance_based import KNeighborsTimeSeriesClassifier
@@ -536,7 +542,13 @@ if __name__ == "__main__":
                 plt.savefig(subj_dir+space+'/confusion_matrix2.png', format=fmt_grph)
                 plt.close()
                 print('======TIME======') 
-                print((time.time()-t_last)/60, 'minuts for last')                    
+                print((time.time()-t_last)/60, 'minuts for last') 
+                with open('control.txt', 'w') as f:
+                    print((time.time()-t_last)/60, 'minuts for last', file=f)
+                                   
             print('======TIME======')
             print('======TIME======')
-            print((time.time()-t)/60, 'minuts for', space,exploratory,classification,last)  
+            print((time.time()-t)/60, 'minuts for', intensities,space,exploratory,classification,last) 
+            with open('control.txt', 'w') as f:
+                print((time.time()-t)/60, 'minuts for', intensities,space,exploratory,classification,last, file=f)
+                                   
