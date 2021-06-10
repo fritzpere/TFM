@@ -64,7 +64,7 @@ class PH_computer:
                 matrix= np.tensordot(ts_tmp,ts_tmp,axes=(1,1)) / float(T-1)
                 
                 matrix/= np.sqrt(np.outer(matrix.diagonal(),matrix.diagonal())) ##Nomes falta això 
-                matrix=1 - np.abs(matrix)
+                matrix=np.arccos(matrix)
                 
             elif self.measure=='dtw':
                 fun=lambda x,y: dtw(x,y,global_constraint="sakoe_chiba", sakoe_chiba_radius=100)#motius biologics
@@ -261,7 +261,7 @@ def get_feat_dim1(X):
     avg_life,std_life,avg_midlife,std_midlife,avg_birth,std_birth,avg_death,std_death,entropy=[],[],[],[],[],[],[],[],[]
     for k in range(n):
         birth=X[k][:,0]
-        death=X[k][:,0]
+        death=X[k][:,1]
         life=np.array(list(map(lambda x: x[1]-x[0],X[k])))
         midlife=np.array(list(map(lambda x: (x[1]+x[0])/2,X[k])))
         L=life.sum()

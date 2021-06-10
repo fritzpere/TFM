@@ -24,15 +24,12 @@ def intensity(subj_dir,space,ts_band,labels,i_band):
     cv_schem = skms.StratifiedShuffleSplit(n_splits=1, test_size=0.1)
     ts=np.abs(ts_band[:,i_band,:,:])
     ts_intens=ts.mean(axis=1)
-    dim_persistence=[]
-    X_motiv=[]
-    tda_vect=defaultdict(lambda: defaultdict(lambda: []))
     
     n_rep=10
     
-    perf = np.zeros([n_dim+1,n_vectors+1,n_rep])
-    perf_shuf = np.zeros([n_dim+1,n_vectors+1,n_rep])
-    conf_matrix = np.zeros([n_dim+1,n_vectors+1,n_rep,3,3])
+    perf = np.zeros([n_dim,n_vectors+1,n_rep])
+    perf_shuf = np.zeros([n_dim,n_vectors+1,n_rep])
+    conf_matrix = np.zeros([n_dim,n_vectors+1,n_rep,3,3])
     
     if not os.path.exists(subj_dir+space+'/intensities'):
                 print("create directory(plot):",subj_dir+space+'/intensities')
@@ -44,6 +41,10 @@ def intensity(subj_dir,space,ts_band,labels,i_band):
 
     for i_rep in range(n_rep):
         t_rep=time.time()
+
+
+        X_motiv=[]
+        tda_vect={0:defaultdict(lambda: defaultdict(lambda: [])),1:defaultdict(lambda: defaultdict(lambda: [])),2:defaultdict(lambda: defaultdict(lambda: []))}
         for ind_train, ind_test in cv_schem.split(ts_intens,labels):
             
             X_train=ts_intens[ind_train]
@@ -75,8 +76,8 @@ def intensity(subj_dir,space,ts_band,labels,i_band):
                     for i_vector in range(n_vectors):
                         tda_compt=feat_vect[i_vector]
                         tda_compt.fit([dim_persistence])
-                        tda_vect[i_vector][i_dim]=tda_compt.transform([dim_persistence])
-                    tda_vect[n_vectors][i_dim]=dim_persistence
+                        tda_vect[i_motiv][i_vector][i_dim]=tda_compt.transform([dim_persistence])
+                    tda_vect[i_motiv][n_vectors][i_dim]=dim_persistence
             i=0
             for index in ind_test:
                 for i_motiv  in range(3):
@@ -105,8 +106,8 @@ def intensity(subj_dir,space,ts_band,labels,i_band):
                             tda_compt=feat_vect[i_vector]
                             tda_compt.fit([dimensional_persistence])
                             
-                            pred_array[i,i_vector,i_dim,i_motiv]=np.linalg.norm(tda_compt.transform([dimensional_persistence])-tda_vect[i_vector][i_dim])
-                        pred_array[i,n_vectors,i_dim,i_motiv]=gd.bottleneck_distance(dimensional_persistence,tda_vect[n_vectors][i_dim],0.01)
+                            pred_array[i,i_vector,i_dim,i_motiv]=np.linalg.norm(tda_compt.transform([dimensional_persistence])-tda_vect[i_motiv][i_vector][i_dim])
+                        pred_array[i,n_vectors,i_dim,i_motiv]=gd.bottleneck_distance(dimensional_persistence,tda_vect[i_motiv][n_vectors][i_dim],0.01)
                 i=i+1
         
     
@@ -156,17 +157,16 @@ def intensity(subj_dir,space,ts_band,labels,i_band):
 
 
     
-    fig2, axes2 = plt.subplots(nrows=1, ncols=n_vectors*n_dim, figsize=(96, 24))
-    i=0
-    for i_vector in range(n_vectors):
+    fig2, axes2 = plt.subplots(nrows=n_dim, ncols=n_vectors+1, figsize=(96, 24))
+
+    for i_vector in range(n_vectors+1):
         for i_dim in range(n_dim):
        
-            axes2[i].imshow(conf_matrix[i_dim,i_vector,:,:,:].mean(0), vmin=0, cmap=cmapcolours[i_band])
+            axes2[i_dim][i_vector].imshow(conf_matrix[i_dim,i_vector,:,:,:].mean(0), vmin=0, cmap=cmapcolours[i_band])
             #plt.colorbar()
-            axes2[i].set_xlabel('true label',fontsize=8)
-            axes2[i].set_ylabel('predicted label',fontsize=8)
-            axes2[i].set_title(band+dimensions[i_dim]+str(i_vector))
-            i+=1
+            axes2[i_dim][i_vector].set_xlabel('true label',fontsize=8)
+            axes2[i_dim][i_vector].set_ylabel('predicted label',fontsize=8)
+            axes2[i_dim][i_vector].set_title(band+dimensions[i_dim]+str(i_vector))
     fig.tight_layout(pad=0.5)
     plt.savefig(subj_dir+space+'/intensities/confusion_matrix_intensities_'+band+'.png', format=fmt_grph)
     plt.close()
@@ -174,6 +174,4 @@ def intensity(subj_dir,space,ts_band,labels,i_band):
     
     print('======TIME======') 
     print((time.time()-t_int)/60, 'minuts for classification w intensities for band',band)
-    with open('control.txt', 'w') as f:
-        print((time.time()-t_int)/60, 'minuts for classification w intensities for band',band, file=f)
     return                  

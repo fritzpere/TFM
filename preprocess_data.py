@@ -60,7 +60,7 @@ class Preprocessor:
             i=self.n_trials*i
             j=i_block//6
             j=2*self.n_trials*j
-            i_motiv=i_block//2%3
+            i_motiv=(i_block//2)%3
             for i_trial in range(self.n_trials):
                 # swap axes for time and channelsi
                 ts[i_motiv,i_trial+i+j,:,:] = self.data[:,:,i_trial,i_block].T 
