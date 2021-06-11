@@ -145,7 +145,7 @@ class DimensionDiagramScaler(gdr.DiagramScaler):
         return dic'''
         
 class DimensionLandScape:
-    def __init__(self,num_landscapes=5,resolution=1000,L0=None,L1=None):##canviar
+    def __init__(self,num_landscapes=5,resolution=100,L0=None,L1=None):##canviar
         self.n=num_landscapes
         self.resol=resolution
         if L0:

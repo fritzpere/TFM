@@ -113,6 +113,7 @@ def intensity(subj_dir,space,ts_band,labels,i_band):
     
             for i_vector in range(n_vectors+1):
                 for i_dim in range(n_dim):
+                    if pred_array[:,i_vector,i_dim,:]
                     pred=np.argmin(np.array(pred_array[:,i_vector,i_dim,:]),axis=1)
                     
                     perf[i_dim,i_vector,i_rep] = skm.accuracy_score(pred, labels[ind_test])

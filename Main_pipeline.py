@@ -20,6 +20,8 @@ import matplotlib.pyplot as plt
 import sklearn.preprocessing as skprp
 import pandas as pd
 import sklearn.neighbors as sklnn
+import numpy.linalg as la
+from mpl_toolkits.mplot3d import Axes3D
 '''
 from joblib import Memory
 from shutil import rmtree
@@ -73,7 +75,7 @@ if __name__ == "__main__":
 
     
     intensities=True
-    exploratory=False
+    exploratory=True
     classification=True
     last=True
     
@@ -125,20 +127,65 @@ if __name__ == "__main__":
                     print('global picture of band',band_dic[i_band] )
                     PC=np.abs(ts_band[:,i_band,:,:]).mean(axis=1)
                     PC=PC.reshape((-1,N))
-                
+                    
+                    
+                    X =PC.T- np.mean(PC, axis=1)
+                    n = X.shape[1]
+                    Y =  X.T/np.sqrt(n-1)
+                    
+                    u, s, vh = la.svd(Y, full_matrices=False)
+                    r=np.sum(np.where(s>1e-12,1,0))
+                    #pca = vh[:r,:] @ X[:,:] # Principal components
+                    variance_prop = s[:r]**2/np.sum(s[:r]**2) # Variance captured
+                    acc_variance = np.cumsum(variance_prop)
+                    std = s[:r]
+                    
+
+                    fig, axs = plt.subplots(1, 2, figsize=(18, 4))
+                  
+                    # 3/4 of the total variance rule
+                    axs[0].scatter(range(len(acc_variance)),acc_variance*100)
+                    axs[0].set_xticks(range(len(acc_variance)), minor=False)
+                    axs[0].hlines(75, xmin=0, xmax=len(std), colors='r', linestyles='dashdot')
+                    axs[0].set_title('3/4 of the total variance rule')
+                    axs[0].set_xlabel('PCA coordinates')
+                    axs[0].set_ylabel('accumulated variance')
+                    # Kraiser rule: Keep PC with eigenvalues > 1
+                    # Scree plot: keep PCs before elbow
+                    axs[1].scatter(range(len(std)),std**2)
+                    axs[1].set_xticks(range(len(acc_variance)), minor=False)
+
+                    axs[1].hlines(1, xmin=0, xmax=len(std), colors='r', linestyles='dashdot')
+                    axs[1].set_title('Scree Plot')
+                    axs[1].set_xlabel('PCA coordinates')
+                    axs[1].set_ylabel('eigenvalue')
+                  
+                    if not os.path.exists(subj_dir+space+'/global_picture'):
+                        print("create directory(plot):",subj_dir+space+'/global_picture')
+                        os.makedirs(subj_dir+space+'/global_picture')
+                    plt.savefig(subj_dir+space+'/global_picture/'+band_dic[i_band]+'pca_plots.png')
+                    print('acumulated variance:',acc_variance)
+                    pca = vh[:3,:] @ X[:,:] 
+                    fig = plt.figure()
+                    ax = Axes3D(fig)
+                    fig.add_axes(ax)
+                    #fig.add_subplot(projection='3d')
+                    ax.scatter(pca.T[:,0],pca.T[:,1],pca.T[:,2],zdir='z')
+                    ax.set_title(band_dic[i_band]+' pca projection PC')
+                    plt.savefig(subj_dir+space+'/global_picture/'+band_dic[i_band]+'_pca projection PC.png')
+
+                    
+                    '''
                     matrix=cdist(PC,PC)
                     Rips_complex_sample = gd.RipsComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
                     #Rips_complex_sample = gd.AlphaComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
                     Rips_simplex_tree_sample = Rips_complex_sample.create_simplex_tree(max_dimension=2)
                     persistence=Rips_simplex_tree_sample.persistence()
-                    
-                    if not os.path.exists(subj_dir+space+'/global_picture'):
-                        print("create directory(plot):",subj_dir+space+'/global_picture')
-                        os.makedirs(subj_dir+space+'/global_picture')
+
         
                     gd.plot_persistence_diagram(persistence)
                     plt.savefig(subj_dir+space+'/global_picture/'+band_dic[i_band]+'_Global_Persistence_diagram.png')
-                    plt.close()
+                    plt.close()'''
                 
                 resolut=1000
         
