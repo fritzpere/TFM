@@ -71,20 +71,20 @@ if __name__ == "__main__":
     if debug:
         subjects=[25]
     else:
-        subjects=[25,26]
+        subjects=[25,26,27,28,29]
 
     
-    intensities=True
+    intensities=False
     exploratory=True
     classification=True
-    last=True
+    last=False
     
     
     
     bands=[-1,0,1,2]  
     #bands=[-1,2]
     n_band=len(bands)
-    measures=["euclidean","correlation","quaf","dtw"]
+    measures=["euclidean","correlation","quaf"]#,"dtw"]
     #measures=["quaf","dtw"]
     n_measure=len(measures)
     dimensions=["zero","one"]
@@ -152,7 +152,7 @@ if __name__ == "__main__":
                     axs[0].set_ylabel('accumulated variance')
                     # Kraiser rule: Keep PC with eigenvalues > 1
                     # Scree plot: keep PCs before elbow
-                    axs[1].scatter(range(len(std)),std**2)
+                    axs[1].scatter(range(len(std)),(std**2)*100)
                     axs[1].set_xticks(range(len(acc_variance)), minor=False)
 
                     axs[1].hlines(1, xmin=0, xmax=len(std), colors='r', linestyles='dashdot')
@@ -166,15 +166,38 @@ if __name__ == "__main__":
                     plt.savefig(subj_dir+space+'/global_picture/'+band_dic[i_band]+'pca_plots.png')
                     print('acumulated variance:',acc_variance)
                     pca = vh[:3,:] @ X[:,:] 
+                    pca=pca.T
                     fig = plt.figure()
                     ax = Axes3D(fig)
                     fig.add_axes(ax)
                     #fig.add_subplot(projection='3d')
-                    ax.scatter(pca.T[:,0],pca.T[:,1],pca.T[:,2],zdir='z')
+                    pca_M0=pca[labels==0]
+                    pca_M1=pca[labels==1]
+                    pca_M2=pca[labels==2]
+                    ax.scatter(pca_M0[:,0],pca_M0[:,1],pca_M0[:,2],label='M0',c='r')
+                    ax.scatter(pca_M1[:,0],pca_M1[:,1],pca_M1[:,2],label='M1',c='g')
+                    ax.scatter(pca_M2[:,0],pca_M2[:,1],pca_M2[:,2],label='M2',c='b')
+                    ax.legend()
                     ax.set_title(band_dic[i_band]+' pca projection PC')
-                    plt.savefig(subj_dir+space+'/global_picture/'+band_dic[i_band]+'_pca projection PC.png')
-
                     
+                    ax.set_xlim3d(-1, 1)
+                    ax.set_ylim3d(-1, 1)
+                    ax.set_zlim3d(-1, 1)
+                    plt.savefig(subj_dir+space+'/global_picture/'+band_dic[i_band]+'_pca projection PC.png')
+                    '''
+                    pca_list=[pca_M0,pca_M1,pca_M2]
+
+                    matrix=cdist(pca_M0,pca_M0)
+                    Rips_complex_sample = gd.RipsComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
+                    #Rips_complex_sample = gd.AlphaComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
+                    Rips_simplex_tree_sample = Rips_complex_sample.create_simplex_tree(max_dimension=2)
+                    persistence=Rips_simplex_tree_sample.persistence()
+
+        
+                    gd.plot_persistence_diagram(persistence)
+                    plt.savefig(subj_dir+space+'/global_picture/'+band_dic[i_band]+'pca_Persistence_diagram.png')
+                    plt.close()'''
+                
                     '''
                     matrix=cdist(PC,PC)
                     Rips_complex_sample = gd.RipsComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
@@ -446,7 +469,7 @@ if __name__ == "__main__":
                 fmt_grph = 'png'
                 cmapcolours = ['Blues','Greens','Oranges','Reds']
                 
-                fig, axes = plt.subplots(nrows=n_band, ncols=n_vectors*n_measure*n_dim, figsize=(96, 24))
+                fig, axes = plt.subplots(nrows=n_band, ncols=n_vectors*n_measure*n_dim, figsize=(120, 24))
                     
                 for i_band in bands:
                     band = band_dic[i_band]
