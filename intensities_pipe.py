@@ -119,7 +119,9 @@ def intensity(subj_dir,space,ts_band,labels,i_band):
                     conf_matrix[i_dim,i_vector,i_rep,:,:] += skm.confusion_matrix(y_true=labels[ind_test], y_pred=pred) 
             #print((time.time()-t_rep)/60, 'minuts for classification for repetition',i_rep)
         
-        # save results       
+        # save results  
+    band_dic={-1: 'noFilter', 0:'alpha',1:'betta',2:'gamma'}
+    band = band_dic[i_band]
     np.save(subj_dir+space+'/intensities/'+band+'perf_intensity.npy',perf)
     np.save(subj_dir+space+'/intensities/'+band+'conf_matrix_intensity.npy',conf_matrix)                     
             
@@ -129,9 +131,9 @@ def intensity(subj_dir,space,ts_band,labels,i_band):
     
     fig, axes = plt.subplots(nrows=n_dim, ncols=1, figsize=(24, 12))
         
-    band_dic={-1: 'noFilter', 0:'alpha',1:'betta',2:'gamma'}
 
-    band = band_dic[i_band]
+
+
     for i_dim in range(n_dim):
             
         # the chance level is defined as the trivial classifier that predicts the label with more occurrences 

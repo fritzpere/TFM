@@ -71,12 +71,13 @@ if __name__ == "__main__":
     if debug:
         subjects=[25]
     else:
-        subjects=[25,26,27,28,29]
+        subjects=[25,26,27]
 
     
     intensities=False
-    exploratory=True
-    classification=True
+    exploratory=False
+    classification=False
+    PCA=True
     last=False
     
     
@@ -120,10 +121,14 @@ if __name__ == "__main__":
 
             
             band_dic={-1: 'noFilter', 0:'alpha',1:'betta',2:'gamma'}
-            if exploratory: 
+            if PCA: 
                 t_expl=time.time()
                 N=ts_band.shape[-1]
+                persistence={}
+                persistence_2d={}
                 for i_band in bands:
+                    persistence[i_band]={}
+                    persistence_2d[i_band]={}
                     print('global picture of band',band_dic[i_band] )
                     PC=np.abs(ts_band[:,i_band,:,:]).mean(axis=1)
                     PC=PC.reshape((-1,N))
@@ -152,7 +157,7 @@ if __name__ == "__main__":
                     axs[0].set_ylabel('accumulated variance')
                     # Kraiser rule: Keep PC with eigenvalues > 1
                     # Scree plot: keep PCs before elbow
-                    axs[1].scatter(range(len(std)),(std**2)*100)
+                    axs[1].scatter(range(len(std)),(std**2))
                     axs[1].set_xticks(range(len(acc_variance)), minor=False)
 
                     axs[1].hlines(1, xmin=0, xmax=len(std), colors='r', linestyles='dashdot')
@@ -174,44 +179,138 @@ if __name__ == "__main__":
                     pca_M0=pca[labels==0]
                     pca_M1=pca[labels==1]
                     pca_M2=pca[labels==2]
-                    ax.scatter(pca_M0[:,0],pca_M0[:,1],pca_M0[:,2],label='M0',c='r')
-                    ax.scatter(pca_M1[:,0],pca_M1[:,1],pca_M1[:,2],label='M1',c='g')
-                    ax.scatter(pca_M2[:,0],pca_M2[:,1],pca_M2[:,2],label='M2',c='b')
+                    
+                    ax.scatter(pca_M0[:,0],pca_M0[:,1],pca_M0[:,2],label='M0',c='r',alpha=0.5,zdir='z')
+                    ax.scatter(pca_M1[:,0],pca_M1[:,1],pca_M1[:,2],label='M1',c='g',alpha=0.5,zdir='z')
+                    ax.scatter(pca_M2[:,0],pca_M2[:,1],pca_M2[:,2],label='M2',c='b',alpha=0.5,zdir='z')
                     ax.legend()
                     ax.set_title(band_dic[i_band]+' pca projection PC')
                     
                     ax.set_xlim3d(-1, 1)
                     ax.set_ylim3d(-1, 1)
                     ax.set_zlim3d(-1, 1)
-                    plt.savefig(subj_dir+space+'/global_picture/'+band_dic[i_band]+'_pca projection PC.png')
-                    '''
+                    plt.savefig(subj_dir+space+'/global_picture/'+band_dic[i_band]+'_pca projection_z_PC.png')
+                    
+                    fig = plt.figure()
+                    ax = Axes3D(fig)
+                    fig.add_axes(ax)
+
+                    
+                    ax.scatter(pca_M0[:,0],pca_M0[:,1],pca_M0[:,2],label='M0',c='r',alpha=0.5,zdir='y')
+                    ax.scatter(pca_M1[:,0],pca_M1[:,1],pca_M1[:,2],label='M1',c='g',alpha=0.5,zdir='y')
+                    ax.scatter(pca_M2[:,0],pca_M2[:,1],pca_M2[:,2],label='M2',c='b',alpha=0.5,zdir='y')
+                    ax.legend()
+                    ax.set_title(band_dic[i_band]+' pca projection PC')
+                    
+                    ax.set_xlim3d(-1, 1)
+                    ax.set_ylim3d(-1, 1)
+                    ax.set_zlim3d(-1, 1)
+                    plt.savefig(subj_dir+space+'/global_picture/'+band_dic[i_band]+'_pca projection_y_PC.png')
+                    
+                    fig = plt.figure()
+                    ax = Axes3D(fig)
+                    fig.add_axes(ax)
+
+                    
+                    ax.scatter(pca_M0[:,0],pca_M0[:,1],pca_M0[:,2],label='M0',c='r',alpha=0.5,zdir='x')
+                    ax.scatter(pca_M1[:,0],pca_M1[:,1],pca_M1[:,2],label='M1',c='g',alpha=0.5,zdir='x')
+                    ax.scatter(pca_M2[:,0],pca_M2[:,1],pca_M2[:,2],label='M2',c='b',alpha=0.5,zdir='x')
+                    ax.legend()
+                    ax.set_title(band_dic[i_band]+' pca projection PC')
+                    
+                    ax.set_xlim3d(-1, 1)
+                    ax.set_ylim3d(-1, 1)
+                    ax.set_zlim3d(-1, 1)
+                    plt.savefig(subj_dir+space+'/global_picture/'+band_dic[i_band]+'_pca projection_x_PC.png')
+                    
                     pca_list=[pca_M0,pca_M1,pca_M2]
-
-                    matrix=cdist(pca_M0,pca_M0)
-                    Rips_complex_sample = gd.RipsComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
-                    #Rips_complex_sample = gd.AlphaComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
-                    Rips_simplex_tree_sample = Rips_complex_sample.create_simplex_tree(max_dimension=2)
-                    persistence=Rips_simplex_tree_sample.persistence()
-
+                    band_dic={-1: 'noFilter', 0:'alpha',1:'betta',2:'gamma'}
+                    for i in range(3):
+                        
+                        matrix=cdist(pca_list[i],pca_list[i])
+                        Rips_complex_sample = gd.RipsComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
+                        #Rips_complex_sample = gd.AlphaComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
+                        Rips_simplex_tree_sample = Rips_complex_sample.create_simplex_tree(max_dimension=2)
+                        persistence[i_band][i]=Rips_simplex_tree_sample.persistence()
         
-                    gd.plot_persistence_diagram(persistence)
-                    plt.savefig(subj_dir+space+'/global_picture/'+band_dic[i_band]+'pca_Persistence_diagram.png')
-                    plt.close()'''
+                    
+                    
+                    
+                    
+                    
+                    pca = vh[:2,:] @ X[:,:] 
+                    pca=pca.T
+                    fig = plt.figure()
+                    ax = plt.axes()
+                    pca_M0=pca[labels==0]
+                    pca_M1=pca[labels==1]
+                    pca_M2=pca[labels==2]
+                    ax.scatter(pca_M0[:,0],pca_M0[:,1],label='M0',c='r',alpha=0.5)
+                    ax.scatter(pca_M1[:,0],pca_M1[:,1],label='M1',c='g',alpha=0.5)
+                    ax.scatter(pca_M2[:,0],pca_M2[:,1],label='M2',c='b',alpha=0.5)
+                    ax.legend()
+                    ax.set_title(band_dic[i_band]+' pca projection PC 2d')
+                    
+                    ax.set_xlim(-1, 1)
+                    ax.set_ylim(-1, 1)
+                    plt.savefig(subj_dir+space+'/global_picture/'+band_dic[i_band]+'_pca_2d_projection PC.png')
+                    pca_list=[pca_M0,pca_M1,pca_M2]
+                    for i in range(3):
+                        
+                        matrix=cdist(pca_list[i],pca_list[i])
+                        Rips_complex_sample = gd.RipsComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
+                        #Rips_complex_sample = gd.AlphaComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
+                        Rips_simplex_tree_sample = Rips_complex_sample.create_simplex_tree(max_dimension=2)
+                        persistence_2d[i_band][i]=Rips_simplex_tree_sample.persistence()
+                fig, axes = plt.subplots(nrows=4, ncols=3, figsize=(16, 24))
+                if not os.path.exists(subj_dir+space+'/global_picture/diagrams'):
+                    print("create directory(plot):",subj_dir+space+'/global_picture/diagrams')
+                    os.makedirs(subj_dir+space+'/global_picture/diagrams')
+                plot_func=lambda x,axes: gd.plot_persistence_diagram(x,legend=True,max_intervals=1000,axes=axes)#,inf_delta=0.5)
+                for i in bands:
+                    aux_lis=np.array([persistence[i][0],persistence[i][1],persistence[i][2]], dtype=object)
+                    x_max=np.amax(list(map(lambda y: np.amax(list(map(lambda x: x[1][0],y))),aux_lis)))+0.05
+                    y_max=np.amax(list(map(lambda y: np.amax(list(map(lambda x: x[1][1] if x[1][1]!=np.inf  else 0 ,y))),aux_lis)))*1.2
+                    for j in range(3):
+                        a=plot_func(persistence[i][j],axes=axes[i][j])
+                        a.set_title('{0} persistence diagramsof \n motivational state {1} and band {2}'.format(space,j,band_dic[i]))
+                        a.set_xlim(-0.05,x_max)
+                        a.set_ylim(0,y_max)
+                fig.suptitle('Persistence diagrams of the {0} for\n different frequency bands and motivational state PCA'.format(space),fontsize=24)
+                fig.tight_layout(pad=0.5)
+                fig.subplots_adjust(top=0.8)
+                plt.savefig(subj_dir+space+'/global_picture/diagrams/'+'_pca_persistence_diagram.png')
                 
-                    '''
-                    matrix=cdist(PC,PC)
-                    Rips_complex_sample = gd.RipsComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
-                    #Rips_complex_sample = gd.AlphaComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
-                    Rips_simplex_tree_sample = Rips_complex_sample.create_simplex_tree(max_dimension=2)
-                    persistence=Rips_simplex_tree_sample.persistence()
+                fig, axes = plt.subplots(nrows=4, ncols=3, figsize=(16, 24))
+                for i in bands:
+                    aux_lis=np.array([persistence_2d[i][0],persistence_2d[i][1],persistence_2d[i][2]], dtype=object)
+                    x_max=np.amax(list(map(lambda y: np.amax(list(map(lambda x: x[1][0],y))),aux_lis)))+0.05
+                    y_max=np.amax(list(map(lambda y: np.amax(list(map(lambda x: x[1][1] if x[1][1]!=np.inf  else 0 ,y))),aux_lis)))*1.2
+                    for j in range(3):
+                        a=plot_func(persistence_2d[i][j],axes=axes[i][j])
+                        a.set_title('{0} persistence diagrams of \n motivational state {1} and band {2}'.format(space,j,band_dic[i]))
+                        a.set_xlim(-0.05,x_max)
+                        a.set_ylim(0,y_max)
+                fig.suptitle('Persistence diagrams of the {0} for\n different frequency bands and motivational state PCA 2d'.format(space),fontsize=24)
+                fig.tight_layout(pad=0.5)
+                fig.subplots_adjust(top=0.8)
+                plt.savefig(subj_dir+space+'/global_picture/diagrams/'+'_pca_persistence_diagram_2d.png')
+                    
+                '''
+                matrix=cdist(PC,PC)
+                Rips_complex_sample = gd.RipsComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
+                #Rips_complex_sample = gd.AlphaComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
+                Rips_simplex_tree_sample = Rips_complex_sample.create_simplex_tree(max_dimension=2)
+                persistence=Rips_simplex_tree_sample.persistence()
 
-        
-                    gd.plot_persistence_diagram(persistence)
-                    plt.savefig(subj_dir+space+'/global_picture/'+band_dic[i_band]+'_Global_Persistence_diagram.png')
-                    plt.close()'''
+    
+                gd.plot_persistence_diagram(persistence)
+                plt.savefig(subj_dir+space+'/global_picture/'+band_dic[i_band]+'_Global_Persistence_diagram.png')
+                plt.close()'''
                 
-                resolut=1000
-        
+        resolut=1000
+        if exploratory:
+            for i_band in bands:
                 for i_measure in range(n_measure):
                     print('plotting topological descriptors with ', measures[i_measure])   
                     
