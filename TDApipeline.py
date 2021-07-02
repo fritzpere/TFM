@@ -239,6 +239,8 @@ class TopologicalDescriptors:
         return dict()    
 
 
+
+
 def get_feat_dim0(X):
     n=len(X)
     avg_life,std_life,entropy=[],[],[]
@@ -252,7 +254,7 @@ def get_feat_dim0(X):
         else:
             avg_life.append(-1)
             std_life.append(-1)
-        entropy.append(-np.array(list(map(lambda d: (d/L)*np.log2(d/L) if L!=0 else -1,life))).sum())
+        entropy.append(-np.array(list(map(lambda d: (d/L)*np.log(d/L) if L!=0 else -1,life))).sum())
     avg_life,std_life,entropy=np.array(avg_life).reshape(-1,1),np.array(std_life).reshape(-1,1),np.array(entropy).reshape(-1,1)    
     return np.concatenate(( avg_life,std_life,entropy),axis=1)
         
@@ -289,3 +291,52 @@ def get_feat_dim1(X):
     avg_life,std_life,avg_midlife,std_midlife,entropy=np.array(avg_life).reshape(-1,1),np.array(std_life).reshape(-1,1),np.array(avg_midlife).reshape(-1,1),np.array(std_midlife).reshape(-1,1),np.array(entropy).reshape(-1,1)
     avg_birth,std_birth,avg_death,std_death=np.array(avg_birth).reshape(-1,1),np.array(std_birth).reshape(-1,1),np.array(avg_death).reshape(-1,1),np.array(std_death).reshape(-1,1)
     return np.concatenate(( avg_life,std_life,entropy,avg_midlife,std_midlife,avg_birth,std_birth,avg_death,std_death),axis=1)
+
+
+
+class TopologicalDescriptorsNocl:
+           
+
+    def fit(self,X,y=None):
+        return self
+    
+    
+    def transform(self, X):
+        
+        if type(X)==tuple:
+
+            vec0=get_feat_dim0_Nocl(X[0])
+            vec1=get_feat_dim1_Nocl(X[1])
+            return vec0,vec1
+        else:
+            print('wrong class')
+
+    def get_params(self, deep=True):
+        return dict()    
+
+
+
+
+def get_feat_dim0_Nocl(X):
+
+
+    life=np.array(list(map(lambda x: x[1]-x[0],X)))
+    L=life.sum()
+    n_lifes=life.shape[0]
+
+    entropy=-np.array(list(map(lambda d: (d/L)*np.log(d/L) if L!=0 else -1,life))).sum()
+
+    return life,entropy
+        
+def get_feat_dim1_Nocl(X):
+
+    birth=X[:,0]
+    death=X[:,1]
+    life=np.array(list(map(lambda x: x[1]-x[0],X)))
+    midlife=np.array(list(map(lambda x: (x[1]+x[0])/2,X)))
+    L=life.sum()
+    n_lifes=life.shape[0]
+
+    
+    entropy=-np.array(list(map(lambda d: (d/L)*np.log2(d/L) if L!=0 else -1,life))).sum()
+    return life,entropy,midlife,birth,death

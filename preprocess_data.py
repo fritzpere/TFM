@@ -54,6 +54,7 @@ class Preprocessor:
         :return: TimeSeries
         """
         # get time series for each block
+        temp=np.zeros([3,self.n_trials*4])
         ts = np.zeros([3,self.n_trials*4,self.T,self.N])
         for i_block in range(self.n_blocks):
             i=i_block%2
@@ -63,11 +64,18 @@ class Preprocessor:
             i_motiv=(i_block//2)%3
             for i_trial in range(self.n_trials):
                 # swap axes for time and channelsi
-                ts[i_motiv,i_trial+i+j,:,:] = self.data[:,:,i_trial,i_block].T 
+                ts[i_motiv,i_trial+i+j,:,:] = self.data[:,:,i_trial,i_block].T
+                temp[i_motiv,i_trial+i+j]=i_block
         clean_trials= lambda x: np.logical_and(np.isnan(ts[x,:,0,:]).sum(axis=1)==0,ts[x,:,0,:].sum(axis=1)!=0)
         self.ts_dic[0]=ts[0,clean_trials(0),:,:]
         self.ts_dic[1]=ts[1,clean_trials(1),:,:]
         self.ts_dic[2]=ts[2,clean_trials(2),:,:]
+        
+        self.tr2bl_ol=[]
+        self.tr2bl_ol.extend(temp[0,clean_trials(0)])
+        self.tr2bl_ol.extend(temp[1,clean_trials(1)])
+        self.tr2bl_ol.extend(temp[2,clean_trials(2)])
+        self.tr2bl_ol=np.array(self.tr2bl_ol)
         return
     
     def freq_filter(self): #dont need all variables if using dict
@@ -152,6 +160,11 @@ class Preprocessor:
                     ts_band[cum_trials[i_state]+k][i_band]=self.ts_dic[i_band][i_state][k]
                     
         labels=np.concatenate((np.zeros(trials[0]),np.ones(trials[1]),np.ones(trials[2])*2),axis=0)         
-    
+        #self.tr2bl_ol=self.tr2bl_ol.reshape(-1)
         return ts_band,labels
 
+    def reject_outliers(self,data, labels,m=2):
+        norms=np.linalg.norm(data,axis=1)
+        no_outliers=abs(norms - np.mean(norms,axis=0)) < m * np.std(norms)
+        self.tr2bl=self.tr2bl_ol[no_outliers]
+        return data[no_outliers],labels[no_outliers]
