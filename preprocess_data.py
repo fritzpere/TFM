@@ -163,7 +163,7 @@ class Preprocessor:
         #self.tr2bl_ol=self.tr2bl_ol.reshape(-1)
         return ts_band,labels
 
-    def reject_outliers(self,data, labels,m=2):
+    def reject_outliers(self,data, labels,m=1):
         norms=np.linalg.norm(data,axis=1)
         no_outliers=abs(norms - np.mean(norms,axis=0)) < m * np.std(norms)
         self.tr2bl=self.tr2bl_ol[no_outliers]

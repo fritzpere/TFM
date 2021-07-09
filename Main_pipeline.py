@@ -22,6 +22,8 @@ import pandas as pd
 import sklearn.neighbors as sklnn
 import numpy.linalg as la
 from mpl_toolkits.mplot3d import Axes3D
+
+import seaborn as sn
 '''
 from joblib import Memory
 from shutil import rmtree
@@ -72,11 +74,11 @@ if __name__ == "__main__":
     if debug:
         subjects=[25]
     else:
-        subjects=list(range(25,36))
+        subjects=list(range(25,30))
     
-    intensities=False
-    exploratory=False
-    classification=False
+    intensities=True
+    exploratory=True
+    classification=True
     PCA=True
     last=False
     
@@ -123,7 +125,7 @@ if __name__ == "__main__":
             if intensities:
                 for i_band in bands:
                     print('intensities for band ', i_band)
-                    intensity(subj_dir,space,ts_band,labels,i_band)
+                    intensity(subj_dir,space,ts_band,labels_original,i_band)
 
             data_table[subj_t,6]=(labels_original==0).sum()
             data_table[subj_t,7]=(labels_original==1).sum()
@@ -473,6 +475,7 @@ if __name__ == "__main__":
             resolut=1000
             if exploratory:
                 t_expl=time.time()
+                labels=labels_original
                 for i_band in bands:
                     for i_measure in range(n_measure):
                         print('plotting topological descriptors with ', measures[i_measure])   
@@ -707,7 +710,7 @@ if __name__ == "__main__":
                                             clf.fit(tda_vect[ind_train,:], labels[ind_train])
                                         
                                             perf[i_band,i_measure,i_dim,i_vector,i_rep,i_classifier] = clf.score(tda_vect[ind_test,:], labels[ind_test])
-                                            conf_matrix[i_band,i_measure,i_dim,i_vector,i_rep,i_classifier,:,:] += skm.confusion_matrix(y_true=labels[ind_test], y_pred=clf.predict(tda_vect[ind_test,:]),colorbar=True)  
+                                            conf_matrix[i_band,i_measure,i_dim,i_vector,i_rep,i_classifier,:,:] += skm.confusion_matrix(y_true=labels[ind_test], y_pred=clf.predict(tda_vect[ind_test,:]))
                                             
                                             
                                             shuf_labels = np.random.permutation(labels)
@@ -774,6 +777,7 @@ if __name__ == "__main__":
                                 
                                 # plot performance and surrogate
                                 #axes[i_band][i_vector].axes([0.2,0.2,0.7,0.7])
+                                
                                 axes2[i_band][i].imshow(conf_matrix[i_band,i_measure,i_dim,i_vector,:,0,:,:].mean(0), vmin=0, cmap=cmapcolours[i_band])
                                 #plt.colorbar()
                                 axes2[i_band][i].set_xlabel('true label',fontsize=8)
@@ -807,7 +811,7 @@ if __name__ == "__main__":
                                 clf.fit(ts_band[ind_train,i_band,:,:], labels[ind_train])
                                 pred=clf.predict(ts_band[ind_test,i_band,:,:])
                                 perf[i_band,i_classifier,i_rep] = skm.accuracy_score(pred, labels[ind_test])
-                                conf_matrix[i_band,i_classifier,i_rep,:,:] += skm.confusion_matrix(y_true=labels[ind_test], y_pred=pred,colorbar=True) 
+                                conf_matrix[i_band,i_classifier,i_rep,:,:] += skm.confusion_matrix(y_true=labels[ind_test], y_pred=pred) 
                                 
                                 
                                 shuf_labels = np.random.permutation(labels)
@@ -859,6 +863,7 @@ if __name__ == "__main__":
                         # plot performance and surrogate
                         #axes[i_band][i_vector].axes([0.2,0.2,0.7,0.7])
                         axes2[i_band][i_clf].imshow(conf_matrix[i_band,i_clf,:,:,:].mean(0), vmin=0, cmap=cmapcolours[i_band])
+                        axes2[i_band][i_clf].colorbar()
                         #plt.colorbar()
                         axes2[i_band][i_clf].set_xlabel('true label',fontsize=8)
                         axes2[i_band][i_clf].set_ylabel('predicted label',fontsize=8)
