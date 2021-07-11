@@ -16,14 +16,13 @@ import os
 
 
 
-def intensity(subj_dir,space,ts_band,labels,i_band):
+def intensity(subj_dir,space,PC,labels,i_band):
     dimensions=["zero","one"]
     n_dim=len(dimensions)
     feat_vect=[DimensionLandScape(),DimensionSilhouette(),TopologicalDescriptors()]
     n_vectors=len(feat_vect)
     cv_schem = skms.StratifiedShuffleSplit(n_splits=1, test_size=0.1)
-    ts=np.abs(ts_band[:,i_band,:,:])
-    ts_intens=ts.mean(axis=1)
+
     
     n_rep=10
     
@@ -32,8 +31,8 @@ def intensity(subj_dir,space,ts_band,labels,i_band):
     conf_matrix = np.zeros([n_dim,n_vectors+1,n_rep,3,3])
     
     if not os.path.exists(subj_dir+space+'/intensities'):
-                print("create directory(plot):",subj_dir+space+'/intensities')
-                os.makedirs(subj_dir+space+'/intensities')
+        print("create directory(plot):",subj_dir+space+'/intensities')
+        os.makedirs(subj_dir+space+'/intensities')
     
     t_int=time.time()
     
@@ -45,9 +44,9 @@ def intensity(subj_dir,space,ts_band,labels,i_band):
 
         X_motiv=[]
         tda_vect={0:defaultdict(lambda: defaultdict(lambda: [])),1:defaultdict(lambda: defaultdict(lambda: [])),2:defaultdict(lambda: defaultdict(lambda: []))}
-        for ind_train, ind_test in cv_schem.split(ts_intens,labels):
+        for ind_train, ind_test in cv_schem.split(PC,labels):
             
-            X_train=ts_intens[ind_train]
+            X_train=PC[ind_train]
             y_train=labels[ind_train]
             pred=np.zeros(len(ind_train))
             pred_array=np.zeros((len(ind_test),n_vectors+1,n_dim,3))
@@ -81,7 +80,7 @@ def intensity(subj_dir,space,ts_band,labels,i_band):
             i=0
             for index in ind_test:
                 for i_motiv  in range(3):
-                    X_temp=np.concatenate((X_motiv[i_motiv],ts_intens[index].reshape(1,-1)),axis=0)
+                    X_temp=np.concatenate((X_motiv[i_motiv],PC[index].reshape(1,-1)),axis=0)
                     n_coor=X_temp.shape[0]
                     matrix = np.zeros((n_coor, n_coor))
                     row,col = np.triu_indices(n_coor,1)

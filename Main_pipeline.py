@@ -65,24 +65,25 @@ def load_data(i_sub,space='both'):
     else:
         elec_space=raw_data['dataSorted'] # [N,T,n_trials,motiv] 
         font_space=raw_data['ic_data3']
-        return (elec_space,font_space),subj_dir
+        return (elec_space,font_space),subj_dir,raw_data['indexM']
     
 
 
 if __name__ == "__main__":
-    debug= False
-    if debug:
-        subjects=[25]
-    else:
-        subjects=list(range(25,30))
+    subjects=[25]
     
-    intensities=True
-    exploratory=True
-    classification=True
+    intensities=False
+    exploratory=False
+    classification=False
     PCA=True
     last=False
     
-    
+        
+    bloc_dic={}
+    bloc_subj_dic={}
+    bloc_subj_dic[27]=np.array([[1, 2, 10, 6, 7, 3],[5, 2, 4, 1, 8, 9]])
+    bloc_subj_dic[25]=np.array([[1, 2, 8, 3, 5, 4],[6, 7, 2, 10, 1, 9]])
+
     
     bands=[-1,0,1,2]  
     #bands=[-1,2]
@@ -96,15 +97,31 @@ if __name__ == "__main__":
     feat_vect=[DimensionLandScape(),DimensionSilhouette(),TopologicalDescriptors()]
     
     
-    data_table=np.zeros((2*len(subjects),29))
+    #data_table=np.zeros((2*len(subjects),29))
     subj_t=0
     
     n_vectors=len(feat_vect)
     for subject in subjects:
         space='both'
-        data_space,subj_dir=load_data(subject,space=space)
+        data_space,subj_dir,index=load_data(subject,space=space)
 
         spaces=['electrodeSpace','fontSpace']
+        index=index[0]
+
+        cont1=0
+        cont2=0
+        for ind in range(12):
+            if index[ind]==1:
+                cont1+=1
+                if cont1==2:
+                    index[ind]=11
+            if index[ind]==2:
+                cont2+=1
+                if cont2==2:
+                    index[ind]=12 
+        
+        bloc_subj_dic[subject][1][bloc_subj_dic[subject][1]<=2]=bloc_subj_dic[subject][1][bloc_subj_dic[subject][1]<=2]+10
+        bloc_session=np.where([ind in bloc_subj_dic[subject][1] for ind in index],2,1 )
         for sp in range(2):
             t=time.time()
             space=spaces[sp]
@@ -116,358 +133,382 @@ if __name__ == "__main__":
             #filtered_ts_dic=preprocessor.get_filtered_ts_dic()
             ts_band,labels_original=preprocessor.get_trials_and_labels()
             
-            data_table[subj_t,0]=preprocessor.N
-            data_table[subj_t,1]=ts_band.shape[0]
+            #data_table[subj_t,0]=preprocessor.N
+            #data_table[subj_t,1]=ts_band.shape[0]
+            '''
             if debug:
                 ts_band=np.concatenate((ts_band[:50,:],ts_band[432:482,:],ts_band[-50:,:]),axis=0)
-                labels=np.concatenate((np.zeros(50),np.ones(50),np.ones(50)*2))
+                labels=np.concatenate((np.zeros(50),np.ones(50),np.ones(50)*2))'''
             
             if intensities:
                 for i_band in bands:
                     print('intensities for band ', i_band)
-                    intensity(subj_dir,space,ts_band,labels_original,i_band)
+                    PC=np.abs(ts_band[:,i_band,:,:]).mean(axis=1)
+                    intensity(subj_dir,space,PC,labels_original,i_band)
 
-            data_table[subj_t,6]=(labels_original==0).sum()
-            data_table[subj_t,7]=(labels_original==1).sum()
-            data_table[subj_t,8]=(labels_original==2).sum()
+            #data_table[subj_t,6]=(labels_original==0).sum()
+            #data_table[subj_t,7]=(labels_original==1).sum()
+            #data_table[subj_t,8]=(labels_original==2).sum()
             
             
-            band_dic={-1: 'noFilter', 0:'alpha',1:'betta',2:'gamma'}
+            blocs=[]
+            blocs.append(np.array(list(range(12)))[bloc_session==1])
+            blocs.append(np.array(list(range(12)))[bloc_session==2])
+            band_dic={-1: 'noFilter', 0:'alpha',1:'betta',2:'gamma'}    
             if PCA: 
                 t_pca=time.time()
                 N=ts_band.shape[-1]
                 persistence={}
-                persistence_2d={}
+                #persistence_2d={}
+                fig = plt.figure(figsize=[18,8])
                 for i_band in bands:
                     persistence[i_band]={}
-                    persistence_2d[i_band]={}
-                    print('global picture of band',band_dic[i_band] )
+                    #persistence_2d[i_band]={}
+                    bloc_i=1
+                    fig = plt.figure(figsize=[18,8])
                     PC=np.abs(ts_band[:,i_band,:,:]).mean(axis=1)
                     PC=PC.reshape((-1,N))
                     labels=labels_original
                     PC,labels=preprocessor.reject_outliers(PC,labels)
                     
-                    data_table[subj_t,3+i_band]=PC.shape[0]
-                    
-                    X =(PC - np.mean(PC, axis=0)).T
-                    n = X.shape[1]
-                    Y =  X.T/np.sqrt(n-1)
-                    
-                    u, s, vh = la.svd(Y, full_matrices=False)
-                    r=np.sum(np.where(s>1e-12,1,0))
-                    #pca = vh[:r,:] @ X[:,:] # Principal components
-                    variance_prop = s[:r]**2/np.sum(s[:r]**2) # Variance captured
-                    acc_variance = np.cumsum(variance_prop)
-                    std = s[:r]
-                    
-
-                    fig, axs = plt.subplots(1, 2, figsize=(18, 4))
-                  
-                    # 3/4 of the total variance rule
-                    axs[0].scatter(range(len(acc_variance)),acc_variance*100)
-                    axs[0].set_xticks(range(len(acc_variance)), minor=False)
-                    axs[0].hlines(75, xmin=0, xmax=len(std), colors='r', linestyles='dashdot')
-                    axs[0].set_title('3/4 of the total variance rule')
-                    axs[0].set_xlabel('PCA coordinates')
-                    axs[0].set_ylabel('accumulated variance')
-                    # Kraiser rule: Keep PC with eigenvalues > 1
-                    # Scree plot: keep PCs before elbow
-                    axs[1].scatter(range(len(std)),(std**2))
-                    axs[1].set_xticks(range(len(acc_variance)), minor=False)
-
-                    axs[1].hlines(1, xmin=0, xmax=len(std), colors='r', linestyles='dashdot')
-                    axs[1].set_title('Scree Plot')
-                    axs[1].set_xlabel('PCA coordinates')
-                    axs[1].set_ylabel('eigenvalue')
-                  
-                    if not os.path.exists(subj_dir+space+'/PCA/'+band_dic[i_band] ):
-                        print("create directory(plot):",subj_dir+space+'/PCA/'+band_dic[i_band] )
-                        os.makedirs(subj_dir+space+'/PCA/'+band_dic[i_band] )
-                    plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/pca_plots.png')
-                    plt.close()
-                    print('acumulated variance:',acc_variance)
-                    data_table[subj_t,22+i_band]=acc_variance[2]
-                    data_table[subj_t,26+i_band]=acc_variance[3]
-                    
-                    
-                    pca = vh[:3,:] @ X[:,:] 
-                    pca=pca.T
-                    fig = plt.figure(figsize=[18,8])
-                    ax =fig.add_subplot(2, 3, 1, projection='3d')
-                    fig.add_axes(ax)
-                    #fig.add_subplot(projection='3d')
-                    pca_M0=pca[labels==0]
-                    pca_M1=pca[labels==1]
-                    pca_M2=pca[labels==2]
-                    
-                    
-                    data_table[subj_t,10+i_band]=(labels==0).sum()
-                    data_table[subj_t,14+i_band]=(labels==1).sum()
-                    data_table[subj_t,18+i_band]=(labels==2).sum()
-                    
-                    ax.scatter(pca_M0[:,0],pca_M0[:,1],pca_M0[:,2],label='M0',c='r',alpha=0.5,zdir='z')
-                    ax.scatter(pca_M1[:,0],pca_M1[:,1],pca_M1[:,2],label='M1',c='g',alpha=0.5,zdir='z')
-                    ax.scatter(pca_M2[:,0],pca_M2[:,1],pca_M2[:,2],label='M2',c='b',alpha=0.5,zdir='z')
-                    ax.legend()
-                    ax.set_title(band_dic[i_band]+' pca projection PC direction z')
-                    
-                    ax.set_xlim3d(-1, 1)
-                    ax.set_ylim3d(-1, 1)
-                    ax.set_zlim3d(-1, 1)
-                    
-                    ax.set_xlabel('$X$')
-                    ax.set_ylabel('$Y$')
-                    ax.set_zlabel('$Z$')
-                    
-                    #plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/pca projection_z_PC.png')
-                    #plt.close()
-                    
-                    #fig = plt.figure()
-                    ax = fig.add_subplot(2, 3, 2, projection='3d')
-                    fig.add_axes(ax)
-
-                    
-                    ax.scatter(pca_M0[:,0],pca_M0[:,1],pca_M0[:,2],label='M0',c='r',alpha=0.5,zdir='y')
-                    ax.scatter(pca_M1[:,0],pca_M1[:,1],pca_M1[:,2],label='M1',c='g',alpha=0.5,zdir='y')
-                    ax.scatter(pca_M2[:,0],pca_M2[:,1],pca_M2[:,2],label='M2',c='b',alpha=0.5,zdir='y')
-                    ax.legend()
-                    ax.set_title(band_dic[i_band]+' pca projection PC direction y')
-                    
-                    ax.set_xlim3d(-1, 1)
-                    ax.set_ylim3d(-1, 1)
-                    ax.set_zlim3d(-1, 1)
-                    
-                    ax.set_xlabel('$X$')
-                    ax.set_ylabel('$Z$')
-                    ax.set_zlabel('$Y$')
-                    '''plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/pca projection_y_PC.png')
-                    plt.close()
-                    
-                    
-                    fig = plt.figure()'''
-                    ax = fig.add_subplot(2, 3, 3, projection='3d')
-                    fig.add_axes(ax)
-
-                    
-                    ax.scatter(pca_M0[:,0],pca_M0[:,1],pca_M0[:,2],label='M0',c='r',alpha=0.5,zdir='x')
-                    ax.scatter(pca_M1[:,0],pca_M1[:,1],pca_M1[:,2],label='M1',c='g',alpha=0.5,zdir='x')
-                    ax.scatter(pca_M2[:,0],pca_M2[:,1],pca_M2[:,2],label='M2',c='b',alpha=0.5,zdir='x')
-                    ax.legend()
-                    ax.set_title(band_dic[i_band]+' pca projection PC direction x')
-                    
-                    ax.set_xlim3d(-1, 1)
-                    ax.set_ylim3d(-1, 1)
-                    ax.set_zlim3d(-1, 1)
-                    
-                    ax.set_xlabel('$Z$')
-                    ax.set_ylabel('$Y$')
-                    ax.set_zlabel('$X$')
-                    '''
-                    plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/pca projection_PC.png')
-                    plt.close()'''
                     tr2bl=preprocessor.tr2bl
-                    ax = fig.add_subplot(2, 3, 4, projection='3d')
-                    fig.add_axes(ax)
+                    for bl in blocs:
 
-                    #for bloc in range (12):
-                        #ax.scatter(pca_M0[:,0][tr2bl[labels==0]==bloc],pca_M0[:,1][tr2bl[labels==0]==bloc],pca_M0[:,2][tr2bl[labels==0]==bloc],label=bloc,alpha=0.5,zdir='x')
-                    ax.scatter(pca_M0[:,0],pca_M0[:,1],pca_M0[:,2],label='M0',alpha=0.5,c='r',zdir='z')
-                    ax.legend()
-                    ax.set_title(band_dic[i_band]+' pca projection PC motivation 0')
+                        temp=[tr_bl in bl for tr_bl in tr2bl]
+                        PC=PC[temp]
+                        labels=labels[temp]
                         
-                    ax.set_xlim3d(-1, 1)
-                    ax.set_ylim3d(-1, 1)
-                    ax.set_zlim3d(-1, 1)
+                        
+                        #data_table[subj_t,3+i_band]=PC.shape[0]
+                        
+                        X =(PC - np.mean(PC, axis=0)).T
+                        n = X.shape[1]
+                        Y =  X.T/np.sqrt(n-1)
                     
-                    ax.set_xlabel('$X$')
-                    ax.set_ylabel('$Y$')
-                    ax.set_zlabel('$Z$')
-                    
-                    ax = fig.add_subplot(2, 3, 5, projection='3d')
-                    fig.add_axes(ax)
+                        u, s, vh = la.svd(Y, full_matrices=False)
+                        r=np.sum(np.where(s>1e-12,1,0))
+                        #pca = vh[:r,:] @ X[:,:] # Principal components
+                        variance_prop = s[:r]**2/np.sum(s[:r]**2) # Variance captured
+                        acc_variance = np.cumsum(variance_prop)
+                        std = s[:r]
+                        
 
-                    #for bloc in range (12):
-                        #ax.scatter(pca_M1[:,0][tr2bl[labels==1]==bloc],pca_M1[:,1][tr2bl[labels==1]==bloc],pca_M1[:,2][tr2bl[labels==1]==bloc],label=bloc,alpha=0.5,zdir='x')
-                    ax.scatter(pca_M1[:,0],pca_M1[:,1],pca_M1[:,2],label='M1',alpha=0.5,c='g',zdir='z')
-                    ax.legend()
-                    ax.set_title(band_dic[i_band]+' pca projection PC motivation 1')
-                    
-                    ax.set_xlim3d(-1, 1)
-                    ax.set_ylim3d(-1, 1)
-                    ax.set_zlim3d(-1, 1)
-                    
-                    ax.set_xlabel('$X$')
-                    ax.set_ylabel('$Y$')
-                    ax.set_zlabel('$Z$')
-                    
-                    ax = fig.add_subplot(2, 3, 6, projection='3d')
-                    fig.add_axes(ax)
+                        fig, axs = plt.subplots(1, 2, figsize=(18, 4))
+                      
+                        # 3/4 of the total variance rule
+                        axs[0].scatter(range(len(acc_variance)),acc_variance*100)
+                        axs[0].set_xticks(range(len(acc_variance)), minor=False)
+                        axs[0].hlines(75, xmin=0, xmax=len(std), colors='r', linestyles='dashdot')
+                        axs[0].set_title('3/4 of the total variance rule')
+                        axs[0].set_xlabel('PCA coordinates')
+                        axs[0].set_ylabel('accumulated variance')
+                        # Kraiser rule: Keep PC with eigenvalues > 1
+                        # Scree plot: keep PCs before elbow
+                        axs[1].scatter(range(len(std)),(std**2))
+                        axs[1].set_xticks(range(len(acc_variance)), minor=False)
     
-                    #for bloc in range (12):    
-                        #ax.scatter(pca_M2[:,0][tr2bl[labels==2]==bloc],pca_M2[:,1][tr2bl[labels==2]==bloc],pca_M2[:,2][tr2bl[labels==2]==bloc],label=bloc,alpha=0.5,zdir='x')
-                    ax.scatter(pca_M2[:,0],pca_M2[:,1],pca_M2[:,2],label='M2',alpha=0.5,c='b',zdir='z')    
-                    ax.legend()
-                    ax.set_title(band_dic[i_band]+' pca projection PC motivation 2')
-                    
-                    ax.set_xlim3d(-1, 1)
-                    ax.set_ylim3d(-1, 1)
-                    ax.set_zlim3d(-1, 1)
-                    
-                    ax.set_xlabel('$X$')
-                    ax.set_ylabel('$Y$')
-                    ax.set_zlabel('$Z$')
-                    
-                    plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/pca projection_PC.png')
-                    plt.close()
-
-                    
-                    pca_list=[pca_M0,pca_M1,pca_M2]
-                    band_dic={-1: 'noFilter', 0:'alpha',1:'betta',2:'gamma'}
-                    
-                    
-                    for i in range(3):
+                        axs[1].hlines(1, xmin=0, xmax=len(std), colors='r', linestyles='dashdot')
+                        axs[1].set_title('Scree Plot')
+                        axs[1].set_xlabel('PCA coordinates')
+                        axs[1].set_ylabel('eigenvalue')
+                  
+                        if not os.path.exists(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i)):
+                            print("create directory(plot):",subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i) )
+                            os.makedirs(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i) )
+                        plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca_plots.png')
+                        plt.close()
+                        print('acumulated variance:',acc_variance)
+                        #data_table[subj_t,22+i_band]=acc_variance[2]
+                        #data_table[subj_t,26+i_band]=acc_variance[3]
                         
-                        n_coor = pca_list[i].shape[0]
-                        matrix = np.ones((n_coor, n_coor))
-                        row,col = np.triu_indices(n_coor,1)
-                        distancies=pdist(pca_list[i])
-                        matrix[row,col] = distancies
-                        matrix[col,row] = distancies
+                    
+                        pca = vh[:3,:] @ X[:,:] 
+                        pca=pca.T
+
+                        for i_band in bands:
+
+                            print('intensities for band ', i_band, 'and session', bloc_i)
+                            intensity(subj_dir,space+'PCA/'+band_dic[i_band]+'/session'+str(bloc_i),pca,labels,i_band)
+                        
+                        fig = plt.figure(figsize=[18,8])
+                        ax =fig.add_subplot(2, 3, 1, projection='3d')
+                        fig.add_axes(ax)
+                        #fig.add_subplot(projection='3d')
+                        
+                        pca_M0=pca[labels==0]
+                        pca_M1=pca[labels==1]
+                        pca_M2=pca[labels==2]
+                        
+                        
+                        #data_table[subj_t,10+i_band]=(labels==0).sum()
+                        #data_table[subj_t,14+i_band]=(labels==1).sum()
+                        #data_table[subj_t,18+i_band]=(labels==2).sum()
+                        
+                        ax.scatter(pca_M0[:,0],pca_M0[:,1],pca_M0[:,2],label='M0',c='r',alpha=0.5,zdir='z')
+                        ax.scatter(pca_M1[:,0],pca_M1[:,1],pca_M1[:,2],label='M1',c='g',alpha=0.5,zdir='z')
+                        ax.scatter(pca_M2[:,0],pca_M2[:,1],pca_M2[:,2],label='M2',c='b',alpha=0.5,zdir='z')
+                        ax.legend()
+                        ax.set_title(band_dic[i_band]+' pca projection PC direction z')
+                        
+                        ax.set_xlim3d(-1, 1)
+                        ax.set_ylim3d(-1, 1)
+                        ax.set_zlim3d(-1, 1)
+                        
+                        ax.set_xlabel('$X$')
+                        ax.set_ylabel('$Y$')
+                        ax.set_zlabel('$Z$')
+                    
+                        #plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/pca projection_z_PC.png')
+                        #plt.close()
+                        
+                        #fig = plt.figure()
+                        ax = fig.add_subplot(2, 3, 2, projection='3d')
+                        fig.add_axes(ax)
+    
+                        
+                        ax.scatter(pca_M0[:,0],pca_M0[:,1],pca_M0[:,2],label='M0',c='r',alpha=0.5,zdir='y')
+                        ax.scatter(pca_M1[:,0],pca_M1[:,1],pca_M1[:,2],label='M1',c='g',alpha=0.5,zdir='y')
+                        ax.scatter(pca_M2[:,0],pca_M2[:,1],pca_M2[:,2],label='M2',c='b',alpha=0.5,zdir='y')
+                        ax.legend()
+                        ax.set_title(band_dic[i_band]+' pca projection PC direction y')
+                        
+                        ax.set_xlim3d(-1, 1)
+                        ax.set_ylim3d(-1, 1)
+                        ax.set_zlim3d(-1, 1)
+                        
+                        ax.set_xlabel('$X$')
+                        ax.set_ylabel('$Z$')
+                        ax.set_zlabel('$Y$')
+                        '''plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/pca projection_y_PC.png')
+                        plt.close()
+                        
+                        
+                        fig = plt.figure()'''
+                        ax = fig.add_subplot(2, 3, 3, projection='3d')
+                        fig.add_axes(ax)
+    
+                        
+                        ax.scatter(pca_M0[:,0],pca_M0[:,1],pca_M0[:,2],label='M0',c='r',alpha=0.5,zdir='x')
+                        ax.scatter(pca_M1[:,0],pca_M1[:,1],pca_M1[:,2],label='M1',c='g',alpha=0.5,zdir='x')
+                        ax.scatter(pca_M2[:,0],pca_M2[:,1],pca_M2[:,2],label='M2',c='b',alpha=0.5,zdir='x')
+                        ax.legend()
+                        ax.set_title(band_dic[i_band]+' pca projection PC direction x')
+                        
+                        ax.set_xlim3d(-1, 1)
+                        ax.set_ylim3d(-1, 1)
+                        ax.set_zlim3d(-1, 1)
+                        
+                        ax.set_xlabel('$Z$')
+                        ax.set_ylabel('$Y$')
+                        ax.set_zlabel('$X$')
+                        '''
+                        plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/pca projection_PC.png')
+                        plt.close()'''
+                        tr2bl=preprocessor.tr2bl
+                        ax = fig.add_subplot(2, 3, 4, projection='3d')
+                        fig.add_axes(ax)
+    
+                        #for bloc in range (12):
+                            #ax.scatter(pca_M0[:,0][tr2bl[labels==0]==bloc],pca_M0[:,1][tr2bl[labels==0]==bloc],pca_M0[:,2][tr2bl[labels==0]==bloc],label=bloc,alpha=0.5,zdir='x')
+                        ax.scatter(pca_M0[:,0],pca_M0[:,1],pca_M0[:,2],label='M0',alpha=0.5,c='r',zdir='z')
+                        ax.legend()
+                        ax.set_title(band_dic[i_band]+' pca projection PC motivation 0')
+                            
+                        ax.set_xlim3d(-1, 1)
+                        ax.set_ylim3d(-1, 1)
+                        ax.set_zlim3d(-1, 1)
+                        
+                        ax.set_xlabel('$X$')
+                        ax.set_ylabel('$Y$')
+                        ax.set_zlabel('$Z$')
+                        
+                        ax = fig.add_subplot(2, 3, 5, projection='3d')
+                        fig.add_axes(ax)
+    
+                        #for bloc in range (12):
+                            #ax.scatter(pca_M1[:,0][tr2bl[labels==1]==bloc],pca_M1[:,1][tr2bl[labels==1]==bloc],pca_M1[:,2][tr2bl[labels==1]==bloc],label=bloc,alpha=0.5,zdir='x')
+                        ax.scatter(pca_M1[:,0],pca_M1[:,1],pca_M1[:,2],label='M1',alpha=0.5,c='g',zdir='z')
+                        ax.legend()
+                        ax.set_title(band_dic[i_band]+' pca projection PC motivation 1')
+                        
+                        ax.set_xlim3d(-1, 1)
+                        ax.set_ylim3d(-1, 1)
+                        ax.set_zlim3d(-1, 1)
+                        
+                        ax.set_xlabel('$X$')
+                        ax.set_ylabel('$Y$')
+                        ax.set_zlabel('$Z$')
+                        
+                        ax = fig.add_subplot(2, 3, 6, projection='3d')
+                        fig.add_axes(ax)
+        
+                        #for bloc in range (12):    
+                            #ax.scatter(pca_M2[:,0][tr2bl[labels==2]==bloc],pca_M2[:,1][tr2bl[labels==2]==bloc],pca_M2[:,2][tr2bl[labels==2]==bloc],label=bloc,alpha=0.5,zdir='x')
+                        ax.scatter(pca_M2[:,0],pca_M2[:,1],pca_M2[:,2],label='M2',alpha=0.5,c='b',zdir='z')    
+                        ax.legend()
+                        ax.set_title(band_dic[i_band]+' pca projection PC motivation 2')
+                        
+                        ax.set_xlim3d(-1, 1)
+                        ax.set_ylim3d(-1, 1)
+                        ax.set_zlim3d(-1, 1)
+                        
+                        ax.set_xlabel('$X$')
+                        ax.set_ylabel('$Y$')
+                        ax.set_zlabel('$Z$')
+                        
+                        plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca projection_PC.png')
+                        plt.close()
 
                     
-                        Rips_complex_sample = gd.RipsComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
-                        #Rips_complex_sample = gd.AlphaComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
-                        Rips_simplex_tree_sample = Rips_complex_sample.create_simplex_tree(max_dimension=2)
-                        persistence[i_band][i]=Rips_simplex_tree_sample.persistence()
+                        pca_list=[pca_M0,pca_M1,pca_M2]
+                        band_dic={-1: 'noFilter', 0:'alpha',1:'betta',2:'gamma'}
+                        
+                        
+                        for i in range(3):
+                            
+                            n_coor = pca_list[i].shape[0]
+                            matrix = np.ones((n_coor, n_coor))
+                            row,col = np.triu_indices(n_coor,1)
+                            distancies=pdist(pca_list[i])
+                            matrix[row,col] = distancies
+                            matrix[col,row] = distancies
+    
+                        
+                            Rips_complex_sample = gd.RipsComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
+                            #Rips_complex_sample = gd.AlphaComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
+                            Rips_simplex_tree_sample = Rips_complex_sample.create_simplex_tree(max_dimension=2)
+                            persistence[i_band][i]=Rips_simplex_tree_sample.persistence()
         
 
                     
                     
-                    
-                    pca = vh[:2,:] @ X[:,:] 
-                    pca=pca.T
-                    fig = plt.figure()
-                    ax = plt.axes()
-                    pca_M0=pca[labels==0]
-                    pca_M1=pca[labels==1]
-                    pca_M2=pca[labels==2]
-                    ax.scatter(pca_M0[:,0],pca_M0[:,1],label='M0',c='r',alpha=0.5)
-                    ax.scatter(pca_M1[:,0],pca_M1[:,1],label='M1',c='g',alpha=0.5)
-                    ax.scatter(pca_M2[:,0],pca_M2[:,1],label='M2',c='b',alpha=0.5)
-                    ax.legend()
-                    ax.set_title(band_dic[i_band]+' pca projection PC 2d')
-                    
-                    ax.set_xlim(-1, 1)
-                    ax.set_ylim(-1, 1)
-                    plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/pca_2d_projection_PC.png')
-                    plt.close()
-                    pca_list=[pca_M0,pca_M1,pca_M2]
-                    # fig = plt.figure()
-                    # ax = plt.axes()
-                    # tr2bl=preprocessor.tr2bl
-                    # for i in range(3):
-                    #     bl1=tr2bl%2==0
-                    #     connected_commponents_0=pca_list[i][bl1[labels==i]]
-                    #     connected_commponents_1=pca_list[i][~bl1[labels==i]]
-                    #     ax.scatter(connected_commponents_0[:,0],connected_commponents_0[:,1],c='r',alpha=0.5)
-                    #     ax.scatter(connected_commponents_1[:,0],connected_commponents_1[:,1],c='b',alpha=0.5)
-                    # ax.set_title(band_dic[i_band]+' pca projection PC connected components')
-                    
-                    # ax.set_xlim(-1, 1)
-                    # ax.set_ylim(-1, 1)
-                    # plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/pca projection_ConectedComponents_PC.png')
-                    # plt.close()
+                        ##2D PCA
+                        # pca = vh[:2,:] @ X[:,:] 
+                        # pca=pca.T
+                        # fig = plt.figure()
+                        # ax = plt.axes()
+                        # pca_M0=pca[labels==0]
+                        # pca_M1=pca[labels==1]
+                        # pca_M2=pca[labels==2]
+                        # ax.scatter(pca_M0[:,0],pca_M0[:,1],label='M0',c='r',alpha=0.5)
+                        # ax.scatter(pca_M1[:,0],pca_M1[:,1],label='M1',c='g',alpha=0.5)
+                        # ax.scatter(pca_M2[:,0],pca_M2[:,1],label='M2',c='b',alpha=0.5)
+                        # ax.legend()
+                        # ax.set_title(band_dic[i_band]+' pca projection PC 2d')
+                        
+                        # ax.set_xlim(-1, 1)
+                        # ax.set_ylim(-1, 1)
+                        # plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/pca_2d_projection_PC.png')
+                        # plt.close()
+                        # pca_list=[pca_M0,pca_M1,pca_M2]
+                        # for i in range(3):
+                        #     matrix=cdist(pca_list[i],pca_list[i])
+                        #     Rips_complex_sample = gd.RipsComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
+                        #     #Rips_complex_sample = gd.AlphaComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
+                        #     Rips_simplex_tree_sample = Rips_complex_sample.create_simplex_tree(max_dimension=2)
+                        #     persistence_2d[i_band][i]=Rips_simplex_tree_sample.persistence()
                 
-                    for i in range(3):
                         
-                        matrix=cdist(pca_list[i],pca_list[i])
+                        
+                        
+                        # ##Connected Componentes
+                        
+                        # fig = plt.figure()
+                        # ax = plt.axes()
+                        # tr2bl=preprocessor.tr2bl
+                        # for i in range(3):
+                        #     bl1=tr2bl%2==0
+                        #     connected_commponents_0=pca_list[i][bl1[labels==i]]
+                        #     connected_commponents_1=pca_list[i][~bl1[labels==i]]
+                        #     ax.scatter(connected_commponents_0[:,0],connected_commponents_0[:,1],c='r',alpha=0.5)
+                        #     ax.scatter(connected_commponents_1[:,0],connected_commponents_1[:,1],c='b',alpha=0.5)
+                        # ax.set_title(band_dic[i_band]+' pca projection PC connected components')
+                        
+                        # ax.set_xlim(-1, 1)
+                        # ax.set_ylim(-1, 1)
+                        # plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/pca projection_ConectedComponents_PC.png')
+                        # plt.close()
+                
+                        fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(18, 8))
+                        plot_func=lambda x,axes: gd.plot_persistence_diagram(x,legend=True,max_intervals=1000,axes=axes)#,inf_delta=0.5)
+    
+                        aux_lis=np.array([persistence[i_band][0],persistence[i_band][1],persistence[i_band][2]], dtype=object)
+                        x_max=np.amax(list(map(lambda y: np.amax(list(map(lambda x: x[1][0],y))),aux_lis)))+0.05
+                        y_max=np.amax(list(map(lambda y: np.amax(list(map(lambda x: x[1][1] if x[1][1]!=np.inf  else 0 ,y))),aux_lis)))*1.2
+                        for j in range(3):
+                            a=plot_func(persistence[i_band][j],axes=axes[j])
+                            a.set_title('{0} persistence diagramsof \n motivational state {1} and band {2}'.format(space,j,band_dic[i_band]))
+                            a.set_xlim(-0.05,x_max)
+                            a.set_ylim(0,y_max)
+                        fig.suptitle('Persistence diagrams of the {0} for\n frequency band {1} and motivational state PCA'.format(space,band_dic[i_band]),fontsize=24)
+                        fig.tight_layout(pad=0.5)
+                        fig.subplots_adjust(top=0.8)
+                        plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca_persistence_diagram.png')
+                        plt.close()
+                        ##2DPCA
+                        # fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(18, 8))
+                        # aux_lis=np.array([persistence_2d[i_band][0],persistence_2d[i_band][1],persistence_2d[i_band][2]], dtype=object)
+                        # x_max=np.amax(list(map(lambda y: np.amax(list(map(lambda x: x[1][0],y))),aux_lis)))+0.05
+                        # y_max=np.amax(list(map(lambda y: np.amax(list(map(lambda x: x[1][1] if x[1][1]!=np.inf  else 0 ,y))),aux_lis)))*1.2
+                        # for j in range(3):
+                        #     a=plot_func(persistence_2d[i_band][j],axes=axes[j])
+                        #     a.set_title('{0} persistence diagrams of \n motivational state {1} and band {2}'.format(space,j,band_dic[i_band]))
+                        #     a.set_xlim(-0.05,x_max)
+                        #     a.set_ylim(0,y_max)
+                        # fig.suptitle('Persistence diagrams of the {0} for\n frequency band {1} and motivational state PCA 2d'.format(space,band_dic[i_band]),fontsize=24)
+                        # fig.tight_layout(pad=0.5)
+                        # fig.subplots_adjust(top=0.8)
+                        # plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/pca_persistence_diagram_2d.png')
+                        # plt.close()
+                        
+                        '''
+                        matrix=cdist(PC,PC)
                         Rips_complex_sample = gd.RipsComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
                         #Rips_complex_sample = gd.AlphaComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
                         Rips_simplex_tree_sample = Rips_complex_sample.create_simplex_tree(max_dimension=2)
-                        persistence_2d[i_band][i]=Rips_simplex_tree_sample.persistence()
-                    fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(18, 8))
-                    '''
-                    if not os.path.exists(subj_dir+space+'/PCA/'+band_dic[i_band]+'/iagrams'):
-                        print("create directory(plot):",subj_dir+space+'/PCA/diagrams')
-                        os.makedirs(subj_dir+space+'/PCA/diagrams')'''
-                    plot_func=lambda x,axes: gd.plot_persistence_diagram(x,legend=True,max_intervals=1000,axes=axes)#,inf_delta=0.5)
-
-                    aux_lis=np.array([persistence[i_band][0],persistence[i_band][1],persistence[i_band][2]], dtype=object)
-                    x_max=np.amax(list(map(lambda y: np.amax(list(map(lambda x: x[1][0],y))),aux_lis)))+0.05
-                    y_max=np.amax(list(map(lambda y: np.amax(list(map(lambda x: x[1][1] if x[1][1]!=np.inf  else 0 ,y))),aux_lis)))*1.2
-                    for j in range(3):
-                        a=plot_func(persistence[i_band][j],axes=axes[j])
-                        a.set_title('{0} persistence diagramsof \n motivational state {1} and band {2}'.format(space,j,band_dic[i_band]))
-                        a.set_xlim(-0.05,x_max)
-                        a.set_ylim(0,y_max)
-                    fig.suptitle('Persistence diagrams of the {0} for\n frequency band {1} and motivational state PCA'.format(space,band_dic[i_band]),fontsize=24)
-                    fig.tight_layout(pad=0.5)
-                    fig.subplots_adjust(top=0.8)
-                    plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/pca_persistence_diagram.png')
-                    plt.close()
-                    
-                    fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(18, 8))
-                    aux_lis=np.array([persistence_2d[i_band][0],persistence_2d[i_band][1],persistence_2d[i_band][2]], dtype=object)
-                    x_max=np.amax(list(map(lambda y: np.amax(list(map(lambda x: x[1][0],y))),aux_lis)))+0.05
-                    y_max=np.amax(list(map(lambda y: np.amax(list(map(lambda x: x[1][1] if x[1][1]!=np.inf  else 0 ,y))),aux_lis)))*1.2
-                    for j in range(3):
-                        a=plot_func(persistence_2d[i_band][j],axes=axes[j])
-                        a.set_title('{0} persistence diagrams of \n motivational state {1} and band {2}'.format(space,j,band_dic[i_band]))
-                        a.set_xlim(-0.05,x_max)
-                        a.set_ylim(0,y_max)
-                    fig.suptitle('Persistence diagrams of the {0} for\n frequency band {1} and motivational state PCA 2d'.format(space,band_dic[i_band]),fontsize=24)
-                    fig.tight_layout(pad=0.5)
-                    fig.subplots_adjust(top=0.8)
-                    plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/pca_persistence_diagram_2d.png')
-                    plt.close()
-                        
-                    '''
-                    matrix=cdist(PC,PC)
-                    Rips_complex_sample = gd.RipsComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
-                    #Rips_complex_sample = gd.AlphaComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
-                    Rips_simplex_tree_sample = Rips_complex_sample.create_simplex_tree(max_dimension=2)
-                    persistence=Rips_simplex_tree_sample.persistence()
-    
+                        persistence=Rips_simplex_tree_sample.persistence()
         
-                    gd.plot_persistence_diagram(persistence)
-                    plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'_Global_Persistence_diagram.png')
-                    plt.close()'''
+            
+                        gd.plot_persistence_diagram(persistence)
+                        plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'_Global_Persistence_diagram.png')
+                        plt.close()'''
                         
-                    fig, axes = plt.subplots(nrows=5, ncols=1, figsize=(14, 14))
-                    vect0,vect1=[0,0,0],[0,0,0]
-                    for i in range(3):
-                        dim_list=np.array(list(map(lambda x: x[0], persistence[i_band][i])))
-                        point_list=np.array(list(map(lambda x: x[1], persistence[i_band][i])))
-                        zero_dim=point_list[np.logical_and(point_list[:,1]!=float('inf'),dim_list==0)]
-                        one_dim=point_list[np.logical_and(point_list[:,1]!=float('inf'),dim_list==1)]
+                        fig, axes = plt.subplots(nrows=5, ncols=1, figsize=(14, 14))
+                        vect0,vect1=[0,0,0],[0,0,0]
+                        for i in range(3):
+                            dim_list=np.array(list(map(lambda x: x[0], persistence[i_band][i])))
+                            point_list=np.array(list(map(lambda x: x[1], persistence[i_band][i])))
+                            zero_dim=point_list[np.logical_and(point_list[:,1]!=float('inf'),dim_list==0)]
+                            one_dim=point_list[np.logical_and(point_list[:,1]!=float('inf'),dim_list==1)]
+                            
+    
+                            descriptors_computer=TopologicalDescriptorsNocl()
+                            descriptors_computer.fit((zero_dim,one_dim))
+                            vect0[i],vect1[i]=descriptors_computer.transform((zero_dim,one_dim))
+                        
                         
 
-                        descriptors_computer=TopologicalDescriptorsNocl()
-                        descriptors_computer.fit((zero_dim,one_dim))
-                        vect0[i],vect1[i]=descriptors_computer.transform((zero_dim,one_dim))
+                        axes[0].boxplot([vect0[0][0],vect0[1][0],vect0[2][0]],showfliers=False)
+                        axes[0].set_title('Life BoxPlot dimension 0')
+                        axes[1].boxplot([vect1[0][0],vect1[1][0],vect1[2][0]],showfliers=False)
+                        axes[1].set_title('Life BoxPlot dimension 1')
                         
-                        
-
-                    axes[0].boxplot([vect0[0][0],vect0[1][0],vect0[2][0]],showfliers=False)
-                    axes[0].set_title('Life BoxPlot dimension 0')
-                    axes[1].boxplot([vect1[0][0],vect1[1][0],vect1[2][0]],showfliers=False)
-                    axes[1].set_title('Life BoxPlot dimension 1')
-                    
-                    axes[2].boxplot([vect1[0][2],vect1[1][2],vect1[2][2]],showfliers=False)
-                    axes[2].set_title('Midlife BoxPlot dimension 1')
-                    axes[3].boxplot([vect1[0][3],vect1[1][3],vect1[2][3]],showfliers=False)
-                    axes[3].set_title('Birth BoxPlot dimension 1')
-
-                    axes[4].boxplot([vect1[0][4],vect1[1][4],vect1[2][4]],showfliers=False)
-                    axes[4].set_title('Death BoxPlot dimension')
-                            #a.set_xlim(-0.05,x_max)
-                            #a.set_ylim(0,y_max)
-                    fig.suptitle('Descriptors Boxplots of the {0} for\n frequency band {1} and different motivational state'.format(space,band_dic[i_band]),fontsize=24)
-                    fig.tight_layout(pad=1.00)
-                    fig.subplots_adjust(top=0.8)
-                    plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/pca_descriptors.png')
-                    plt.close()
-                subj_t=subj_t+1
+                        axes[2].boxplot([vect1[0][2],vect1[1][2],vect1[2][2]],showfliers=False)
+                        axes[2].set_title('Midlife BoxPlot dimension 1')
+                        axes[3].boxplot([vect1[0][3],vect1[1][3],vect1[2][3]],showfliers=False)
+                        axes[3].set_title('Birth BoxPlot dimension 1')
+    
+                        axes[4].boxplot([vect1[0][4],vect1[1][4],vect1[2][4]],showfliers=False)
+                        axes[4].set_title('Death BoxPlot dimension')
+                                #a.set_xlim(-0.05,x_max)
+                                #a.set_ylim(0,y_max)
+                        fig.suptitle('Descriptors Boxplots of the {0} for\n frequency band {1} and different motivational state'.format(space,band_dic[i_band]),fontsize=24)
+                        fig.tight_layout(pad=1.00)
+                        fig.subplots_adjust(top=0.8)
+                        plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca_descriptors.png')
+                        plt.close()
+                        bloc_i+=1
+                    subj_t=subj_t+1
             
 
             print('======TIME======')    
@@ -885,6 +926,6 @@ if __name__ == "__main__":
     for subject in subjects:
         subjects_index.append('Subject ' +str(subject)+ ' ElectrodeSpace')
         subjects_index.append('Subject ' +str(subject)+ ' FontSpace')
-    data_table=pd.DataFrame(data_table,index=subjects_index,columns=['clean electrodes','Trials', 'Trials w/o OL NF', 'Trials w/o OL Alpha', 'Trials w/o OL Betta', 'Trials w/o OL Gamma', 'M0', 'M1', 'M2','M0 w /o OL NF', 'M1 w /o OL NF', 'M2 w /o OL NF','M0 w /o OL Alpha', 'M1 w /o OL Alpha', 'M2 w /o OL Alpha','M0 w /o OL Betta', 'M1 w /o OL Betta', 'M2 w /o OL Betta','M0 w /o OL Gamma', 'M1 w /o OL Gamma', 'M2 w /o OL Gamma','Variance with 3 components NF','Variance with 3 components Alpha','Variance with 3 components Betta','Variance with 3 components Gamma','Variance with 2 components NF','Variance with 2 components Alpha','Variance with 2 components Betta','Variance with 2 components Gamma'])
-    data_table.to_csv('results/data_table.csv')
+    #data_table=pd.DataFrame(#data_table,index=subjects_index,columns=['clean electrodes','Trials', 'Trials w/o OL NF', 'Trials w/o OL Alpha', 'Trials w/o OL Betta', 'Trials w/o OL Gamma', 'M0', 'M1', 'M2','M0 w /o OL NF', 'M1 w /o OL NF', 'M2 w /o OL NF','M0 w /o OL Alpha', 'M1 w /o OL Alpha', 'M2 w /o OL Alpha','M0 w /o OL Betta', 'M1 w /o OL Betta', 'M2 w /o OL Betta','M0 w /o OL Gamma', 'M1 w /o OL Gamma', 'M2 w /o OL Gamma','Variance with 3 components NF','Variance with 3 components Alpha','Variance with 3 components Betta','Variance with 3 components Gamma','Variance with 2 components NF','Variance with 2 components Alpha','Variance with 2 components Betta','Variance with 2 components Gamma'])
+    #data_table.to_csv('results/#data_table.csv')
                                        
