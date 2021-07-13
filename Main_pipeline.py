@@ -70,7 +70,7 @@ def load_data(i_sub,space='both'):
 
 
 if __name__ == "__main__":
-    subjects=[25]
+    subjects=[25,27,28]
     
     intensities=False
     exploratory=False
@@ -83,9 +83,10 @@ if __name__ == "__main__":
     bloc_subj_dic={}
     bloc_subj_dic[27]=np.array([[1, 2, 10, 6, 7, 3],[5, 2, 4, 1, 8, 9]])
     bloc_subj_dic[25]=np.array([[1, 2, 8, 3, 5, 4],[6, 7, 2, 10, 1, 9]])
-
+    bloc_subj_dic[28]=np.array([[1, 2, 9, 7, 4, 6],[5, 3, 2, 8, 1, 10]])
     
-    bands=[-1,0,1,2]  
+    
+    bands=[0,1,2,-1]  
     #bands=[-1,2]
     n_band=len(bands)
     measures=["euclidean","correlation","quaf"]#,"dtw"]
@@ -102,6 +103,7 @@ if __name__ == "__main__":
     
     n_vectors=len(feat_vect)
     for subject in subjects:
+        
         space='both'
         data_space,subj_dir,index=load_data(subject,space=space)
 
@@ -125,6 +127,9 @@ if __name__ == "__main__":
         for sp in range(2):
             t=time.time()
             space=spaces[sp]
+            
+            subject_table=np.zeros((8,15))
+            
             if not os.path.exists(subj_dir+space):
                 print("create directory(plot):",subj_dir+space)
                 os.makedirs(subj_dir+'/'+space)
@@ -132,6 +137,9 @@ if __name__ == "__main__":
             preprocessor=Preprocessor(data_space[sp])
             #filtered_ts_dic=preprocessor.get_filtered_ts_dic()
             ts_band,labels_original=preprocessor.get_trials_and_labels()
+            
+            subject_table[:,1]=preprocessor.N
+            
             
             #data_table[subj_t,0]=preprocessor.N
             #data_table[subj_t,1]=ts_band.shape[0]
@@ -162,26 +170,40 @@ if __name__ == "__main__":
                 #persistence_2d={}
                 fig = plt.figure(figsize=[18,8])
                 for i_band in bands:
+                    
                     persistence[i_band]={}
                     #persistence_2d[i_band]={}
                     bloc_i=1
                     fig = plt.figure(figsize=[18,8])
-                    PC=np.abs(ts_band[:,i_band,:,:]).mean(axis=1)
-                    PC=PC.reshape((-1,N))
-                    labels=labels_original
-                    PC,labels=preprocessor.reject_outliers(PC,labels)
+                    PC_all=np.abs(ts_band[:,i_band,:,:]).mean(axis=1)
+                    PC_all=PC_all.reshape((-1,N))
+                    labels_all=labels_original
+                                        
+                    tr2bl=preprocessor.tr2bl_ol
                     
-                    tr2bl=preprocessor.tr2bl
+                    table_i=-1
                     for bl in blocs:
+                        table_i+=1
+                        subject_table[table_i,0]=band_dic[i_band]+str(bloc_i)
 
                         temp=[tr_bl in bl for tr_bl in tr2bl]
-                        PC=PC[temp]
-                        labels=labels[temp]
+                        PC=PC_all[temp]
+                        labels=labels_all[temp]
                         
+                        subject_table[table_i,2]=len(labels)
+                        subject_table[table_i,3]=len(labels==0)
+                        subject_table[table_i,4]=len(labels==1)
+                        subject_table[table_i,5]=len(labels==2)
                         
+                        PC,labels=preprocessor.reject_outliers(PC,labels)
+                        
+                        subject_table[table_i,6]=len(labels)
+                        subject_table[table_i,7]=len(labels==0)
+                        subject_table[table_i,8]=len(labels==1)
+                        subject_table[table_i,9]=len(labels==2)
                         #data_table[subj_t,3+i_band]=PC.shape[0]
                         
-                        X =(PC - np.mean(PC, axis=0)).T
+                        X =(PC - np.mean(PC, axis=0)).T #X.shape: (42,632)
                         n = X.shape[1]
                         Y =  X.T/np.sqrt(n-1)
                     
@@ -217,18 +239,28 @@ if __name__ == "__main__":
                             os.makedirs(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i) )
                         plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca_plots.png')
                         plt.close()
-                        print('acumulated variance:',acc_variance)
+                        #print('acumulated variance:',acc_variance)
                         #data_table[subj_t,22+i_band]=acc_variance[2]
                         #data_table[subj_t,26+i_band]=acc_variance[3]
+                        subject_table[table_i,10]=acc_variance[3]
                         
-                    
+                        
+                        
                         pca = vh[:3,:] @ X[:,:] 
                         pca=pca.T
+                        
+                        pca,labels=preprocessor.reject_outliers(pca,labels)
+                        
+                        
+                        subject_table[table_i,11]=len(labels)
+                        subject_table[table_i,12]=len(labels==0)
+                        subject_table[table_i,13]=len(labels==1)
+                        subject_table[table_i,14]=len(labels==2)
+                        
 
-                        for i_band in bands:
-
-                            print('intensities for band ', i_band, 'and session', bloc_i)
-                            intensity(subj_dir,space+'PCA/'+band_dic[i_band]+'/session'+str(bloc_i),pca,labels,i_band)
+                        
+                        print('intensities for band ', i_band, 'and session', bloc_i)
+                        intensity(subj_dir,space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i),pca,labels,i_band)
                         
                         fig = plt.figure(figsize=[18,8])
                         ax =fig.add_subplot(2, 3, 1, projection='3d')
@@ -304,7 +336,7 @@ if __name__ == "__main__":
                         '''
                         plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/pca projection_PC.png')
                         plt.close()'''
-                        tr2bl=preprocessor.tr2bl
+                        #tr2bl=preprocessor.tr2bl
                         ax = fig.add_subplot(2, 3, 4, projection='3d')
                         fig.add_axes(ax)
     
@@ -509,6 +541,9 @@ if __name__ == "__main__":
                         plt.close()
                         bloc_i+=1
                     subj_t=subj_t+1
+                
+                subject_table=pd.DataFrame(subject_table[:,1:],index=subject_table[:,0],columns=['Clean Channels','N. trials','M0','M1','M2','N. trials w/o OL','M0 w/o OL','M1 w/o OL','M2 w/o OL','N. trials w/o OL 2','M0 w/o OL 2','M1 w/o OL 2','M2 w/o OL 2'])
+                subject_table.to_csv('subj_dir+space+/PCA/data_table.csv')
             
 
             print('======TIME======')    
