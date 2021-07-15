@@ -24,7 +24,7 @@ def intensity(subj_dir,space,PC,labels,i_band):
     cv_schem = skms.StratifiedShuffleSplit(n_splits=1, test_size=0.1)
 
     
-    n_rep=10
+    n_rep=5 ##Chaaange to 10
     
     perf = np.zeros([n_dim,n_vectors+1,n_rep])
     perf_n0 = np.zeros([n_dim,n_vectors+1,n_rep])
@@ -79,6 +79,28 @@ def intensity(subj_dir,space,PC,labels,i_band):
                         tda_compt.fit([dim_persistence])
                         tda_vect[i_motiv][i_vector][i_dim]=tda_compt.transform([dim_persistence])
                     tda_vect[i_motiv][n_vectors][i_dim]=dim_persistence
+                    
+                    
+            descriptors0=np.concatenate((tda_vect[0][2][0],tda_vect[1][2][0],tda_vect[2][2][0]),axis=0)
+            descriptors1=np.concatenate((tda_vect[0][2][1],tda_vect[1][2][1],tda_vect[2][2][1]),axis=0)
+            
+            
+            max0=descriptors0.max(axis=0)
+            max1=descriptors1.max(axis=0)
+            
+            min0=descriptors0.min(axis=0)
+            min1=descriptors1.min(axis=0)
+              
+            descriptors0=(descriptors0-min0)/(max0-min0)
+            descriptors1=(descriptors1-min1)/(max1-min1)
+            
+            maxs=[max0,max1]
+            mins=[min0,min1]
+            
+            for m in range(3):
+                tda_vect[m][2][0]=descriptors0[m]
+                tda_vect[m][2][1]=descriptors1[m]
+            
             i=0
             for index in ind_test:
                 for i_motiv  in range(3):
@@ -103,11 +125,17 @@ def intensity(subj_dir,space,PC,labels,i_band):
                         dimensionscaler=DimensionDiagramScaler(dimensions=dimensions[i_dim])
                         dimensionscaler.fit(persistence)
                         dimensional_persistence=np.array(dimensionscaler.transform(persistence))
-                        for i_vector in range(n_vectors):
+                        for i_vector in range(n_vectors-1):
                             tda_compt=feat_vect[i_vector]
                             tda_compt.fit([dimensional_persistence])
                             
                             pred_array[i,i_vector,i_dim,i_motiv]=np.linalg.norm(tda_compt.transform([dimensional_persistence])-tda_vect[i_motiv][i_vector][i_dim])
+                        
+                        tda_compt=feat_vect[n_vectors-1]
+                        tda_compt.fit([dimensional_persistence])
+                        
+                        pred_array[i,n_vectors-1,i_dim,i_motiv]=np.linalg.norm(((tda_compt.transform([dimensional_persistence])-mins[i_dim])/(maxs[i_dim]-mins[i_dim]))-tda_vect[i_motiv][n_vectors-1][i_dim])
+
                         pred_array[i,n_vectors,i_dim,i_motiv]=gd.bottleneck_distance(dimensional_persistence,tda_vect[i_motiv][n_vectors][i_dim],0.01)
                 i=i+1
         
@@ -218,22 +246,4 @@ def intensity(subj_dir,space,PC,labels,i_band):
     print('======TIME======') 
     print((time.time()-t_int)/60, 'minuts for classification w intensities for band',band)
     return    
-    '''
-    fig2_n0, axes2_n0 = plt.subplots(nrows=n_dim, ncols=n_vectors+1, figsize=(96, 24))
-
-    for i_vector in range(n_vectors+1):
-        for i_dim in range(n_dim):
-       
-            axes2_n0[i_dim][i_vector].imshow(conf_matrix_n0[i_dim,i_vector,:,:,:].mean(0), vmin=0, cmap=cmapcolours[i_band])
-            #plt.colorbar()
-            axes2_n0[i_dim][i_vector].set_xlabel('true label',fontsize=8)
-            axes2_n0[i_dim][i_vector].set_ylabel('predicted label',fontsize=8)
-            axes2_n0[i_dim][i_vector].set_title(band+dimensions[i_dim]+str(i_vector)+'n0')
-    fig.tight_layout(pad=0.5)
-    plt.savefig(subj_dir+space+'/intensities/confusion_matrix_intensities_'+band+'_n0.png', format=fmt_grph)
-    plt.close()'''
-    
-    
-    print('======TIME======') 
-    print((time.time()-t_int)/60, 'minuts for classification w intensities for band',band)
-    return                
+             

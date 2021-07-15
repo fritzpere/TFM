@@ -86,8 +86,7 @@ if __name__ == "__main__":
     bloc_subj_dic[28]=np.array([[1, 2, 9, 7, 4, 6],[5, 3, 2, 8, 1, 10]])
     
     
-    bands=[0,1,2,-1]  
-    #bands=[-1,2]
+    bands=[2,1,0,-1] 
     n_band=len(bands)
     measures=["euclidean","correlation","quaf"]#,"dtw"]
     #measures=["quaf","dtw"]
@@ -128,7 +127,7 @@ if __name__ == "__main__":
             t=time.time()
             space=spaces[sp]
             
-            subject_table=np.zeros((8,15))
+            subject_table=np.zeros((8,14))
             
             if not os.path.exists(subj_dir+space):
                 print("create directory(plot):",subj_dir+space)
@@ -138,7 +137,7 @@ if __name__ == "__main__":
             #filtered_ts_dic=preprocessor.get_filtered_ts_dic()
             ts_band,labels_original=preprocessor.get_trials_and_labels()
             
-            subject_table[:,1]=preprocessor.N
+            subject_table[:,0]=preprocessor.N
             
             
             #data_table[subj_t,0]=preprocessor.N
@@ -169,6 +168,8 @@ if __name__ == "__main__":
                 persistence={}
                 #persistence_2d={}
                 fig = plt.figure(figsize=[18,8])
+                subject_table_index=[]
+                table_i=-1
                 for i_band in bands:
                     
                     persistence[i_band]={}
@@ -181,26 +182,28 @@ if __name__ == "__main__":
                                         
                     tr2bl=preprocessor.tr2bl_ol
                     
-                    table_i=-1
+                    
+                    
+                    
                     for bl in blocs:
                         table_i+=1
-                        subject_table[table_i,0]=band_dic[i_band]+str(bloc_i)
+                        subject_table_index.append(band_dic[i_band]+str(bloc_i))
 
                         temp=[tr_bl in bl for tr_bl in tr2bl]
                         PC=PC_all[temp]
                         labels=labels_all[temp]
                         
-                        subject_table[table_i,2]=len(labels)
-                        subject_table[table_i,3]=len(labels==0)
-                        subject_table[table_i,4]=len(labels==1)
-                        subject_table[table_i,5]=len(labels==2)
+                        subject_table[table_i,1]=len(labels)
+                        subject_table[table_i,2]=len(labels[labels==0])
+                        subject_table[table_i,3]=len(labels[labels==1])
+                        subject_table[table_i,4]=len(labels[labels==2])
                         
                         PC,labels=preprocessor.reject_outliers(PC,labels)
                         
-                        subject_table[table_i,6]=len(labels)
-                        subject_table[table_i,7]=len(labels==0)
-                        subject_table[table_i,8]=len(labels==1)
-                        subject_table[table_i,9]=len(labels==2)
+                        subject_table[table_i,5]=len(labels)
+                        subject_table[table_i,6]=len(labels[labels==0])
+                        subject_table[table_i,7]=len(labels[labels==1])
+                        subject_table[table_i,8]=len(labels[labels==2])
                         #data_table[subj_t,3+i_band]=PC.shape[0]
                         
                         X =(PC - np.mean(PC, axis=0)).T #X.shape: (42,632)
@@ -242,20 +245,20 @@ if __name__ == "__main__":
                         #print('acumulated variance:',acc_variance)
                         #data_table[subj_t,22+i_band]=acc_variance[2]
                         #data_table[subj_t,26+i_band]=acc_variance[3]
-                        subject_table[table_i,10]=acc_variance[3]
+                        subject_table[table_i,9]=acc_variance[3]
                         
                         
                         
                         pca = vh[:3,:] @ X[:,:] 
                         pca=pca.T
                         
-                        pca,labels=preprocessor.reject_outliers(pca,labels)
+                        pca,labels=preprocessor.reject_outliers(pca,labels,m=2)
                         
                         
-                        subject_table[table_i,11]=len(labels)
-                        subject_table[table_i,12]=len(labels==0)
-                        subject_table[table_i,13]=len(labels==1)
-                        subject_table[table_i,14]=len(labels==2)
+                        subject_table[table_i,10]=len(labels)
+                        subject_table[table_i,11]=len(labels[labels==0])
+                        subject_table[table_i,12]=len(labels[labels==1])
+                        subject_table[table_i,13]=len(labels[labels==2])
                         
 
                         
@@ -542,8 +545,8 @@ if __name__ == "__main__":
                         bloc_i+=1
                     subj_t=subj_t+1
                 
-                subject_table=pd.DataFrame(subject_table[:,1:],index=subject_table[:,0],columns=['Clean Channels','N. trials','M0','M1','M2','N. trials w/o OL','M0 w/o OL','M1 w/o OL','M2 w/o OL','N. trials w/o OL 2','M0 w/o OL 2','M1 w/o OL 2','M2 w/o OL 2'])
-                subject_table.to_csv('subj_dir+space+/PCA/data_table.csv')
+                subject_table=pd.DataFrame(subject_table,index=subject_table_index,columns=['Clean Channels','N. trials','M0','M1','M2','N. trials w/o OL','M0 w/o OL','M1 w/o OL','M2 w/o OL','captured variance','N. trials w/o OL 2','M0 w/o OL 2','M1 w/o OL 2','M2 w/o OL 2'])
+                subject_table.to_csv(subj_dir+space+'/PCA/data_table.csv')
             
 
             print('======TIME======')    
