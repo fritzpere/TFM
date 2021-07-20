@@ -80,7 +80,7 @@ class Preprocessor:
     
     def freq_filter(self): #dont need all variables if using dict
         """
-        filters the frequency into 'alpha', 'betta' and 'gamma' waves.
+        filters the frequency into 'alpha', 'beta' and 'gamma' waves.
         :param ts: TimeSeries obtained from the EEGs
         :param n_motiv: number of motivational states
         :param n_trials: number of trials per block

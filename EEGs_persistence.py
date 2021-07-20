@@ -34,7 +34,7 @@ def plot_landscapes(persistences,subj_dir,space='',measure='',resolut=1000):
     fig, axes = plt.subplots(nrows=4, ncols=3, figsize=(16, 16))
     zero_dim={}
     one_dim={}
-    band_dic={-1: 'no_filter', 0:'alpha',1:'betta',2:'gamma'}
+    band_dic={-1: 'no_filter', 0:'alpha',1:'beta',2:'gamma'}
     
     LS = gd.representations.Landscape(num_landscapes=2,resolution=resolut)
     L0 = []

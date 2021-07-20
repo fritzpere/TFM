@@ -13,6 +13,15 @@ import sklearn.metrics as skm
 import matplotlib.pyplot as plt
 import time
 import os
+from sklearn.metrics import ConfusionMatrixDisplay
+
+def topological_clf(arr):
+    pred=-np.ones(len(arr))
+
+    pred[(arr==0).sum(axis=1)<=1]=np.argmin((arr[(arr==0).sum(axis=1)<=1]),axis=1)
+    random_selections=((arr==0).sum(axis=1)>1).sum()
+    pred[(arr==0).sum(axis=1)>1]=np.random.choice(3,random_selections)
+    return pred,random_selections
 
 
 
@@ -20,12 +29,13 @@ def intensity(subj_dir,space,PC,labels,i_band):
     dimensions=["zero","one"]
     n_dim=len(dimensions)
     feat_vect=[DimensionLandScape(),DimensionSilhouette(),TopologicalDescriptors()]
+    feat_vect_names=['Landscapes','Silhouettes','Descriptors','Bottleneck']
     n_vectors=len(feat_vect)
-    cv_schem = skms.StratifiedShuffleSplit(n_splits=1, test_size=0.1)
+    cv_schem = skms.StratifiedShuffleSplit(n_splits=1, test_size=0.2)
 
     
-    n_rep=5 ##Chaaange to 10
-    
+    n_rep=10 ##Chaaange to 10
+    rand_n=np.zeros(n_rep)
     perf = np.zeros([n_dim,n_vectors+1,n_rep])
     perf_n0 = np.zeros([n_dim,n_vectors+1,n_rep])
     perf_shuf = np.zeros([n_dim,n_vectors+1,n_rep])
@@ -38,18 +48,28 @@ def intensity(subj_dir,space,PC,labels,i_band):
     
     t_int=time.time()
     
+    trials_per_m=min((labels==0).sum(),(labels==1).sum(),(labels==2).sum())
     
+    if trials_per_m==0:
+        return -1
+    X_m0_dwnsamp=PC[labels==0][np.random.choice(len(PC[labels==0]),trials_per_m)]
+    X_m1_dwnsamp=PC[labels==1][np.random.choice(len(PC[labels==1]),trials_per_m)]
+    X_m2_dwnsamp=PC[labels==2][np.random.choice(len(PC[labels==2]),trials_per_m)]
+    
+    PC_dwnsamp=np.concatenate((X_m0_dwnsamp,X_m1_dwnsamp,X_m2_dwnsamp),axis=0)
+    labels_dwnsamp=np.concatenate((np.zeros(trials_per_m),np.ones(trials_per_m),np.ones(trials_per_m)*2))
 
     for i_rep in range(n_rep):
         t_rep=time.time()
 
-
+        
+            
         X_motiv=[]
         tda_vect={0:defaultdict(lambda: defaultdict(lambda: [])),1:defaultdict(lambda: defaultdict(lambda: [])),2:defaultdict(lambda: defaultdict(lambda: []))}
-        for ind_train, ind_test in cv_schem.split(PC,labels):
+        for ind_train, ind_test in cv_schem.split(PC_dwnsamp,labels_dwnsamp):
             
-            X_train=PC[ind_train]
-            y_train=labels[ind_train]
+            X_train=PC_dwnsamp[ind_train]
+            y_train=labels_dwnsamp[ind_train]
             pred=np.zeros(len(ind_train))
             pred_array=np.zeros((len(ind_test),n_vectors+1,n_dim,3))
             for i_motiv  in range(3):
@@ -142,25 +162,17 @@ def intensity(subj_dir,space,PC,labels,i_band):
     
             for i_vector in range(n_vectors+1):
                 for i_dim in range(n_dim):
-                    pred=np.argmin(np.array(pred_array[:,i_vector,i_dim,:]),axis=1)
-                    no0=pred_array[:,i_vector,i_dim,:].sum(axis=1)!=0
-                    pred_n0=np.argmin(np.array(pred_array[:,i_vector,i_dim,:][no0]),axis=1)
-                    perf[i_dim,i_vector,i_rep] = skm.accuracy_score(pred, labels[ind_test])
-                    conf_matrix[i_dim,i_vector,i_rep,:,:] += skm.confusion_matrix(y_true=labels[ind_test], y_pred=pred)
+                    pred,rand_n[i_rep]=topological_clf(pred_array[:,i_vector,i_dim,:])
+
+                    perf[i_dim,i_vector,i_rep] = skm.accuracy_score(pred, labels_dwnsamp[ind_test])
+                    conf_matrix[i_dim,i_vector,i_rep,:,:] += skm.confusion_matrix(y_true=labels_dwnsamp[ind_test], y_pred=pred)
                         
-                    if any(no0):
-                        perf_n0[i_dim,i_vector,i_rep] = skm.accuracy_score(pred_n0, labels[ind_test][no0])
                     
-                        #conf_matrix_n0[i_dim,i_vector,i_rep,:,:] += skm.confusion_matrix(y_true=labels[ind_test][no0], y_pred=pred_n0) 
-                
-                    
-                    #print('trials',len(labels[ind_test]))
-                    #print('trials where the topology changes',len(labels[ind_test][no0]))
                     
             #print((time.time()-t_rep)/60, 'minuts for classification for repetition',i_rep)
         
         # save results  
-    band_dic={-1: 'noFilter', 0:'alpha',1:'betta',2:'gamma'}
+    band_dic={-1: 'noFilter', 0:'alpha',1:'beta',2:'gamma'}
     band = band_dic[i_band]
     np.save(subj_dir+space+'/intensities/'+band+'perf_intensity.npy',perf)
     np.save(subj_dir+space+'/intensities/'+band+'conf_matrix_intensity.npy',conf_matrix)                     
@@ -169,15 +181,17 @@ def intensity(subj_dir,space,PC,labels,i_band):
     fmt_grph = 'png'
     cmapcolours = ['Blues','Greens','Oranges','Reds']
     
+    plt.rcParams['xtick.labelsize']=16 
+    plt.rcParams['ytick.labelsize']=8
     fig, axes = plt.subplots(nrows=n_dim, ncols=1, figsize=(24, 12))
         
 
 
 
     for i_dim in range(n_dim):
-            
+               
         # the chance level is defined as the trivial classifier that predicts the label with more occurrences 
-        chance_level = np.max(np.unique(labels, return_counts=True)[1]) / labels.size
+        chance_level = np.max(np.unique(labels_dwnsamp, return_counts=True)[1]) / labels_dwnsamp.size
     
         # plot performance and surrogate
         #axes[i_band][i_vector].axes([0.2,0.2,0.7,0.7])
@@ -192,58 +206,38 @@ def intensity(subj_dir,space,PC,labels,i_band):
         axes[i_dim].plot([-1,2],[chance_level]*2,'--k')
         axes[i_dim].axis(xmin=-0.6,xmax=1.4,ymin=0,ymax=1.05)
 
-        axes[i_dim].set_ylabel('accuracy '+band,fontsize=8)
-        axes[i_dim].set_title(band+dimensions[i_dim])
+        axes[i_dim].set_ylabel('accuracy '+band,fontsize=16)
+        axes[i_dim].set_title('band '+band+' dimension '+dimensions[i_dim],fontsize=24)
+        
+        plt.setp(axes, xticks=[-0.2, 0.2, 0.6,1], xticklabels=feat_vect_names,yticks=[0, 0.2,0.4, 0.6,0.8,1])
     plt.savefig(subj_dir+space+'/intensities/accuracies_intensity_'+band+'.png', format=fmt_grph)
-    plt.close()
+    plt.close(fig)
     
-    
-    fig_n0, axes_n0 = plt.subplots(nrows=n_dim, ncols=1, figsize=(24, 12))
-        
 
-
-
-    for i_dim in range(n_dim):
-            
-        # the chance level is defined as the trivial classifier that predicts the label with more occurrences 
-        chance_level = np.max(np.unique(labels, return_counts=True)[1]) / labels.size
-    
-        # plot performance and surrogate
-        #axes[i_band][i_vector].axes([0.2,0.2,0.7,0.7])
-        axes_n0[i_dim].violinplot(perf_n0[i_dim,0,:],positions=[-0.2],widths=[0.3])
-        axes_n0[i_dim].violinplot(perf_n0[i_dim,1,:],positions=[0.2],widths=[0.3])
-        axes_n0[i_dim].violinplot(perf_n0[i_dim,2,:],positions=[0.6],widths=[0.3])
-        axes_n0[i_dim].violinplot(perf_n0[i_dim,3,:],positions=[1],widths=[0.3])
-        #axes[i_dim].violinplot(perf[i_dim,3,:],positions=[1],widths=[0.3])
-
-
-        
-        axes_n0[i_dim].plot([-1,2],[chance_level]*2,'--k')
-        axes_n0[i_dim].axis(xmin=-0.6,xmax=1.4,ymin=0,ymax=1.05)
-
-        axes_n0[i_dim].set_ylabel('accuracy '+band,fontsize=8)
-        axes_n0[i_dim].set_title(band+dimensions[i_dim])
-    plt.savefig(subj_dir+space+'/intensities/accuracies_intensity_'+band+'_n0.png', format=fmt_grph)
-    plt.close()
-
-
-    
-    fig2, axes2 = plt.subplots(nrows=n_dim, ncols=n_vectors+1, figsize=(96, 24))
+    plt.rcParams['xtick.labelsize']=30
+    plt.rcParams['ytick.labelsize']=30
+    plt.rcParams.update({'font.size': 30})
+    fig2, axes2 = plt.subplots(nrows=n_dim, ncols=n_vectors+1, figsize=(60, 30))
 
     for i_vector in range(n_vectors+1):
         for i_dim in range(n_dim):
-       
-            axes2[i_dim][i_vector].imshow(conf_matrix[i_dim,i_vector,:,:,:].mean(0), vmin=0, cmap=cmapcolours[i_band])
+            disp = ConfusionMatrixDisplay(conf_matrix[i_dim,i_vector,:,:,:].mean(0),
+                                  display_labels=['M0','M1','M2'])
+            disp.plot(ax=axes2[i_dim][i_vector],include_values=True,cmap=cmapcolours[i_band],colorbar=True)
+            
             #plt.colorbar()
-            axes2[i_dim][i_vector].set_xlabel('true label',fontsize=8)
-            axes2[i_dim][i_vector].set_ylabel('predicted label',fontsize=8)
-            axes2[i_dim][i_vector].set_title(band+dimensions[i_dim]+str(i_vector)+'n0')
-    fig.tight_layout(pad=0.5)
+            axes2[i_dim][i_vector].set_xlabel('true label',fontsize=30)
+            axes2[i_dim][i_vector].set_ylabel('predicted label',fontsize=30)
+            axes2[i_dim][i_vector].set_title('band '+band+' dimension '+dimensions[i_dim]+' w/ '+feat_vect_names[i_vector],fontsize=36)
+            plt.subplots_adjust(top=0.75)
+            plt.setp(axes, xticks=[0, 1, 2],yticks=[0, 1, 2])
+
+    #fig.tight_layout(pad=0.5)
     plt.savefig(subj_dir+space+'/intensities/confusion_matrix_intensities_'+band+'.png', format=fmt_grph)
-    plt.close()
+    plt.close(fig2)
     
     
     print('======TIME======') 
     print((time.time()-t_int)/60, 'minuts for classification w intensities for band',band)
-    return    
+    return rand_n.mean()
              
