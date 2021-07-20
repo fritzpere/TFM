@@ -79,24 +79,24 @@ if __name__ == "__main__":
     PCA=True
     last=False
     
-        
+    
     bloc_dic={}
     bloc_subj_dic={}
     
     bloc_subj_dic[25]=np.array([[1, 2, 8, 3, 5, 4],[6, 7, 2, 10, 1, 9]])
     
     bloc_subj_dic[26]=np.array([[1, 2, 10, 6, 3, 7],[1, 2, 4, 5, 8, 9]])
-
+    
     bloc_subj_dic[27]=np.array([[1, 2, 10, 6, 7, 3],[5, 2, 4, 1, 8, 9]])
     
     bloc_subj_dic[28]=np.array([[1, 2, 9, 7, 4, 6],[5, 3, 2, 8, 1, 10]])
     
     bloc_subj_dic[29]=np.array([[1, 2, 8, 5, 4, 7],[3, 6, 2, 10, 9, 1]])
-
+    
     bloc_subj_dic[30]=np.array([[1, 2, 10, 8, 7, 3],[5, 6, 2, 9, 4, 1]])
     
     bloc_subj_dic[31]=np.array([[1, 3, 2, 5, 8, 10],[4, 5, 1, 6, 2, 7]])
-
+    
     bloc_subj_dic[32]=np.array([[1, 2, 5, 9, 8, 10],[2, 4, 6, 1, 7, 3]])
     
     bloc_subj_dic[33]=np.array([[1, 3, 5, 4, 2 ,6],[8, 2, 10, 9, 1, 7]])
@@ -104,30 +104,31 @@ if __name__ == "__main__":
     bloc_subj_dic[34]=np.array([[2, 6, 4, 3, 1, 5],[7, 1, 9, 10, 2, 8]])
     
     bloc_subj_dic[35]=np.array([[1, 3, 5, 4, 2, 6],[8, 10, 2, 9, 1, 7]])
-    
+
     bands=[2,1,0,-1] 
     n_band=len(bands)
     measures=["euclidean","correlation","quaf"]#,"dtw"]
-    #measures=["quaf","dtw"]
+    
     n_measure=len(measures)
     dimensions=["zero","one"]
-    #dimensions=[]
+    
     n_dim=len(dimensions)
     feat_vect=[DimensionLandScape(),DimensionSilhouette(),TopologicalDescriptors()]
-    
-    
-    data_table=np.zeros((2*len(subjects),7))
-    subj_t=0
-    
     n_vectors=len(feat_vect)
+    
+    data_table=np.zeros((2*len(subjects),9))
+    subj_t=0
+
+                    
+    random_predictions_matrix=np.zeros((n_dim,n_vectors+1))
     for subject in subjects:
-        
+
         space='both'
         data_space,subj_dir,index=load_data(subject,space=space)
-
+    
         spaces=['electrodeSpace','fontSpace']
         index=index[0]
-
+    
         cont1=0
         cont2=0
         for ind in range(12):
@@ -139,15 +140,16 @@ if __name__ == "__main__":
                 cont2+=1
                 if cont2==2:
                     index[ind]=12 
-        
+    
         bloc_subj_dic[subject][1][bloc_subj_dic[subject][1]<=2]=bloc_subj_dic[subject][1][bloc_subj_dic[subject][1]<=2]+10
         bloc_session=np.where([ind in bloc_subj_dic[subject][1] for ind in index],2,1 )
         for sp in range(2):
             t=time.time()
             space=spaces[sp]
-            
+    
             subject_table=np.zeros((8,11))
-            
+            max_acc=np.zeros((2,4))
+    
             if not os.path.exists(subj_dir+space):
                 print("create directory(plot):",subj_dir+space)
                 os.makedirs(subj_dir+'/'+space)
@@ -155,28 +157,28 @@ if __name__ == "__main__":
             preprocessor=Preprocessor(data_space[sp])
             #filtered_ts_dic=preprocessor.get_filtered_ts_dic()
             ts_band,labels_original=preprocessor.get_trials_and_labels()
-            
+    
             subject_table[:,0]=preprocessor.N
-            
-            
+    
+    
             data_table[subj_t,0]=preprocessor.N
             data_table[subj_t,1]=ts_band.shape[0]
             '''
             if debug:
                 ts_band=np.concatenate((ts_band[:50,:],ts_band[432:482,:],ts_band[-50:,:]),axis=0)
                 labels=np.concatenate((np.zeros(50),np.ones(50),np.ones(50)*2))'''
-            
+    
             if intensities:
                 for i_band in bands:
                     print('intensities for band ', i_band)
                     PC=np.abs(ts_band[:,i_band,:,:]).mean(axis=1)
                     intensity(subj_dir,space,PC,labels_original,i_band)
-
+    
             data_table[subj_t,2]=(labels_original==0).sum()
             data_table[subj_t,3]=(labels_original==1).sum()
             data_table[subj_t,4]=(labels_original==2).sum()
-            
-            
+    
+    
             blocs=[]
             blocs.append(np.array(list(range(12)))[bloc_session==1])
             blocs.append(np.array(list(range(12)))[bloc_session==2])
@@ -185,176 +187,156 @@ if __name__ == "__main__":
                 t_pca=time.time()
                 N=ts_band.shape[-1]
                 persistence={}
-                #persistence_2d={}
-
+    
+    
                 subject_table_index=[]
                 table_i=-1
                 for i_band in bands:
-                    
+    
                     persistence[i_band]={}
-                    #persistence_2d[i_band]={}
+    
                     bloc_i=1
-
+    
                     PC_all=np.abs(ts_band[:,i_band,:,:]).mean(axis=1)
                     PC_all=PC_all.reshape((-1,N))
                     labels_all=labels_original
-                                        
+    
                     tr2bl=preprocessor.tr2bl_ol
-                    
-                    
-                    
-                    
+    
+    
+    
+    
                     for bl in blocs:
                         table_i+=1
                         subject_table_index.append(band_dic[i_band]+str(bloc_i))
-
+    
                         temp=[tr_bl in bl for tr_bl in tr2bl]
                         PC=PC_all[temp]
                         labels=labels_all[temp]
-                        
+    
                         subject_table[table_i,1]=len(labels)
                         subject_table[table_i,2]=len(labels[labels==0])
                         subject_table[table_i,3]=len(labels[labels==1])
                         subject_table[table_i,4]=len(labels[labels==2])
-                        
-                        
+    
+    
                         data_table[subj_t,4+bloc_i]=PC.shape[0]
-                        
+    
                         X =(PC - np.mean(PC, axis=0)).T #X.shape: (42,632)
                         n = X.shape[1]
                         Y =  X.T/np.sqrt(n-1)
-                    
+    
                         u, s, vh = la.svd(Y, full_matrices=False)
                         r=np.sum(np.where(s>1e-12,1,0))
                         #pca = vh[:r,:] @ X[:,:] # Principal components
                         variance_prop = s[:r]**2/np.sum(s[:r]**2) # Variance captured
                         acc_variance = np.cumsum(variance_prop)
                         std = s[:r]
-                        
-
-                        fig, axs = plt.subplots(1, 2, figsize=(18, 4))
-                      
-                        # 3/4 of the total variance rule
-                        axs[0].scatter(range(len(acc_variance)),acc_variance*100)
-                        axs[0].set_xticks(range(len(acc_variance)), minor=False)
-                        axs[0].hlines(75, xmin=0, xmax=len(std), colors='r', linestyles='dashdot')
-                        axs[0].set_title('3/4 of the total variance rule')
-                        axs[0].set_xlabel('PCA coordinates')
-                        axs[0].set_ylabel('accumulated variance')
-                        # Kraiser rule: Keep PC with eigenvalues > 1
-                        # Scree plot: keep PCs before elbow
-                        axs[1].scatter(range(len(std)),(std**2))
-                        axs[1].set_xticks(range(len(acc_variance)), minor=False)
     
-                        axs[1].hlines(1, xmin=0, xmax=len(std), colors='r', linestyles='dashdot')
-                        axs[1].set_title('Scree Plot')
-                        axs[1].set_xlabel('PCA coordinates')
-                        axs[1].set_ylabel('eigenvalue')
-                  
+    
+                        fig= plt.figure( figsize=(18, 4))
+    
+                        # 3/4 of the total variance rule
+                        plt.scatter(range(len(acc_variance)),acc_variance*100)
+                        plt.xticks(range(len(acc_variance)))
+                        plt.hlines(75, xmin=0, xmax=len(std), colors='r', linestyles='dashdot')
+                        plt.title('3/4 of the total variance rule')
+                        plt.xlabel('PCA coordinates')
+                        plt.ylabel('accumulated variance')
+    
+    
                         if not os.path.exists(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i)):
                             print("create directory(plot):",subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i) )
                             os.makedirs(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i) )
-                        plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca_plots.png')
-                        plt.close(fig)
+                        plt.show()
                         #print('acumulated variance:',acc_variance)
-
+    
                         subject_table[table_i,5]=acc_variance[3]
-                        
-                        
-                        
+    
+    
+    
                         pca = vh[:3,:] @ X[:,:] 
                         pca=pca.T
-                        
+    
                         pca,labels=preprocessor.reject_outliers(pca,labels,m=2)
-                        
-                        
+    
+    
                         subject_table[table_i,6]=len(labels)
                         subject_table[table_i,7]=len(labels[labels==0])
                         subject_table[table_i,8]=len(labels[labels==1])
                         subject_table[table_i,9]=len(labels[labels==2])
-                        
-
-                        
+    
+    
                         print('intensities for band ', band_dic[i_band], 'and session', bloc_i)
-                        subject_table[table_i,10]=intensity(subj_dir,space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i),pca,labels,i_band)
-                        
-                        
-                        plt.rcParams['xtick.labelsize']=8
-                        plt.rcParams['ytick.labelsize']=8
-                        plt.rcParams.update({'font.size': 8})
-                        
+                        subject_table[table_i,10],random_predictions_matrix,max_acc[bloc_i-1,i_band]=intensity(subj_dir,space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i),pca,labels,i_band)
+    
+    
+                        plt.rcParams['xtick.labelsize']=16
+                        plt.rcParams['ytick.labelsize']=16
+                        plt.rcParams.update({'font.size': 16})
+    
                         fig = plt.figure(figsize=[36,16])
                         ax =fig.add_subplot(2, 3, 1, projection='3d')
                         fig.add_axes(ax)
                         #fig.add_subplot(projection='3d')
-                        
+    
                         pca_M0=pca[labels==0]
                         pca_M1=pca[labels==1]
                         pca_M2=pca[labels==2]
-                        
-                    
-                        
+    
+    
+    
                         ax.scatter(pca_M0[:,0],pca_M0[:,1],pca_M0[:,2],label='M0',c='r',alpha=0.5,zdir='z')
                         ax.scatter(pca_M1[:,0],pca_M1[:,1],pca_M1[:,2],label='M1',c='g',alpha=0.5,zdir='z')
                         ax.scatter(pca_M2[:,0],pca_M2[:,1],pca_M2[:,2],label='M2',c='b',alpha=0.5,zdir='z')
                         ax.legend()
                         ax.set_title(band_dic[i_band]+' pca projection PC direction z')
-                        
+    
                         ax.set_xlim3d(-1, 1)
                         ax.set_ylim3d(-1, 1)
                         ax.set_zlim3d(-1, 1)
-                        
+    
                         ax.set_xlabel('$X$')
                         ax.set_ylabel('$Y$')
                         ax.set_zlabel('$Z$')
-                    
-                        #plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/pca projection_z_PC.png')
-                        #plt.close()
-                        
-                        #fig = plt.figure()
+    
+    
                         ax = fig.add_subplot(2, 3, 2, projection='3d')
                         fig.add_axes(ax)
     
-                        
+    
                         ax.scatter(pca_M0[:,0],pca_M0[:,1],pca_M0[:,2],label='M0',c='r',alpha=0.5,zdir='y')
                         ax.scatter(pca_M1[:,0],pca_M1[:,1],pca_M1[:,2],label='M1',c='g',alpha=0.5,zdir='y')
                         ax.scatter(pca_M2[:,0],pca_M2[:,1],pca_M2[:,2],label='M2',c='b',alpha=0.5,zdir='y')
                         ax.legend()
                         ax.set_title(band_dic[i_band]+' pca projection PC direction y')
-                        
+    
                         ax.set_xlim3d(-1, 1)
                         ax.set_ylim3d(-1, 1)
                         ax.set_zlim3d(-1, 1)
-                        
+    
                         ax.set_xlabel('$X$')
                         ax.set_ylabel('$Z$')
                         ax.set_zlabel('$Y$')
-                        '''plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/pca projection_y_PC.png')
-                        plt.close()
-                        
-                        
-                        fig = plt.figure()'''
+    
                         ax = fig.add_subplot(2, 3, 3, projection='3d')
                         fig.add_axes(ax)
     
-                        
+    
                         ax.scatter(pca_M0[:,0],pca_M0[:,1],pca_M0[:,2],label='M0',c='r',alpha=0.5,zdir='x')
                         ax.scatter(pca_M1[:,0],pca_M1[:,1],pca_M1[:,2],label='M1',c='g',alpha=0.5,zdir='x')
                         ax.scatter(pca_M2[:,0],pca_M2[:,1],pca_M2[:,2],label='M2',c='b',alpha=0.5,zdir='x')
                         ax.legend()
                         ax.set_title(band_dic[i_band]+' pca projection PC direction x')
-                        
+    
                         ax.set_xlim3d(-1, 1)
                         ax.set_ylim3d(-1, 1)
                         ax.set_zlim3d(-1, 1)
-                        
+    
                         ax.set_xlabel('$Z$')
                         ax.set_ylabel('$Y$')
                         ax.set_zlabel('$X$')
-                        '''
-                        plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/pca projection_PC.png')
-                        plt.close()'''
-                        #tr2bl=preprocessor.tr2bl
+    
                         ax = fig.add_subplot(2, 3, 4, projection='3d')
                         fig.add_axes(ax)
     
@@ -363,15 +345,15 @@ if __name__ == "__main__":
                         ax.scatter(pca_M0[:,0],pca_M0[:,1],pca_M0[:,2],label='M0',alpha=0.5,c='r',zdir='z')
                         ax.legend()
                         ax.set_title(band_dic[i_band]+' pca projection PC motivation 0')
-                            
+    
                         ax.set_xlim3d(-1, 1)
                         ax.set_ylim3d(-1, 1)
                         ax.set_zlim3d(-1, 1)
-                        
+    
                         ax.set_xlabel('$X$')
                         ax.set_ylabel('$Y$')
                         ax.set_zlabel('$Z$')
-                        
+    
                         ax = fig.add_subplot(2, 3, 5, projection='3d')
                         fig.add_axes(ax)
     
@@ -380,42 +362,43 @@ if __name__ == "__main__":
                         ax.scatter(pca_M1[:,0],pca_M1[:,1],pca_M1[:,2],label='M1',alpha=0.5,c='g',zdir='z')
                         ax.legend()
                         ax.set_title(band_dic[i_band]+' pca projection PC motivation 1')
-                        
+    
                         ax.set_xlim3d(-1, 1)
                         ax.set_ylim3d(-1, 1)
                         ax.set_zlim3d(-1, 1)
-                        
+    
                         ax.set_xlabel('$X$')
                         ax.set_ylabel('$Y$')
                         ax.set_zlabel('$Z$')
-                        
+    
                         ax = fig.add_subplot(2, 3, 6, projection='3d')
                         fig.add_axes(ax)
-        
+    
                         #for bloc in range (12):    
                             #ax.scatter(pca_M2[:,0][tr2bl[labels==2]==bloc],pca_M2[:,1][tr2bl[labels==2]==bloc],pca_M2[:,2][tr2bl[labels==2]==bloc],label=bloc,alpha=0.5,zdir='x')
                         ax.scatter(pca_M2[:,0],pca_M2[:,1],pca_M2[:,2],label='M2',alpha=0.5,c='b',zdir='z')    
                         ax.legend()
                         ax.set_title(band_dic[i_band]+' pca projection PC motivation 2')
-                        
+    
                         ax.set_xlim3d(-1, 1)
                         ax.set_ylim3d(-1, 1)
                         ax.set_zlim3d(-1, 1)
-                        
+    
                         ax.set_xlabel('$X$')
                         ax.set_ylabel('$Y$')
                         ax.set_zlabel('$Z$')
                         
-                        plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca projection_PC.png')
-                        plt.close(fig)
-
-                    
+                        fig.suptitle('Point Clouds of Principal Components of band '+band_dic[i_band] ,fontsize=48)
+                        
+                        plt.show()
+    
+    
                         pca_list=[pca_M0,pca_M1,pca_M2]
                         band_dic={-1: 'noFilter', 0:'alpha',1:'beta',2:'gamma'}
-                        
-                        
+    
+    
                         for i in range(3):
-                            
+    
                             n_coor = pca_list[i].shape[0]
                             matrix = np.ones((n_coor, n_coor))
                             row,col = np.triu_indices(n_coor,1)
@@ -423,67 +406,19 @@ if __name__ == "__main__":
                             matrix[row,col] = distancies
                             matrix[col,row] = distancies
     
-                        
+    
                             Rips_complex_sample = gd.RipsComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
                             #Rips_complex_sample = gd.AlphaComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
                             Rips_simplex_tree_sample = Rips_complex_sample.create_simplex_tree(max_dimension=2)
                             persistence[i_band][i]=Rips_simplex_tree_sample.persistence()
                             if persistence[i_band][i]==[]:
                                 persistence[i_band][i]=[(0,(0.0,0.0))]
-        
-
-                    
-                    
-                        ##2D PCA
-                        # pca = vh[:2,:] @ X[:,:] 
-                        # pca=pca.T
-                        # fig = plt.figure()
-                        # ax = plt.axes()
-                        # pca_M0=pca[labels==0]
-                        # pca_M1=pca[labels==1]
-                        # pca_M2=pca[labels==2]
-                        # ax.scatter(pca_M0[:,0],pca_M0[:,1],label='M0',c='r',alpha=0.5)
-                        # ax.scatter(pca_M1[:,0],pca_M1[:,1],label='M1',c='g',alpha=0.5)
-                        # ax.scatter(pca_M2[:,0],pca_M2[:,1],label='M2',c='b',alpha=0.5)
-                        # ax.legend()
-                        # ax.set_title(band_dic[i_band]+' pca projection PC 2d')
-                        
-                        # ax.set_xlim(-1, 1)
-                        # ax.set_ylim(-1, 1)
-                        # plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/pca_2d_projection_PC.png')
-                        # plt.close()
-                        # pca_list=[pca_M0,pca_M1,pca_M2]
-                        # for i in range(3):
-                        #     matrix=cdist(pca_list[i],pca_list[i])
-                        #     Rips_complex_sample = gd.RipsComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
-                        #     #Rips_complex_sample = gd.AlphaComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
-                        #     Rips_simplex_tree_sample = Rips_complex_sample.create_simplex_tree(max_dimension=2)
-                        #     persistence_2d[i_band][i]=Rips_simplex_tree_sample.persistence()
-                
-                        
-                        
-                        
-                        # ##Connected Componentes
-                        
-                        # fig = plt.figure()
-                        # ax = plt.axes()
-                        # tr2bl=preprocessor.tr2bl
-                        # for i in range(3):
-                        #     bl1=tr2bl%2==0
-                        #     connected_commponents_0=pca_list[i][bl1[labels==i]]
-                        #     connected_commponents_1=pca_list[i][~bl1[labels==i]]
-                        #     ax.scatter(connected_commponents_0[:,0],connected_commponents_0[:,1],c='r',alpha=0.5)
-                        #     ax.scatter(connected_commponents_1[:,0],connected_commponents_1[:,1],c='b',alpha=0.5)
-                        # ax.set_title(band_dic[i_band]+' pca projection PC connected components')
-                        
-                        # ax.set_xlim(-1, 1)
-                        # ax.set_ylim(-1, 1)
-                        # plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/pca projection_ConectedComponents_PC.png')
-                        # plt.close()
-                
+    
+    
+    
                         fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(18, 8))
                         plot_func=lambda x,axes: gd.plot_persistence_diagram(x,legend=True,max_intervals=1000,axes=axes)#,inf_delta=0.5)
-                        
+    
                         aux_lis=np.array([persistence[i_band][0],persistence[i_band][1],persistence[i_band][2]], dtype=object)
                         x_max=np.amax(list(map(lambda y: np.amax(list(map(lambda x: x[1][0],y))),aux_lis)))+0.05
                         y_max=np.amax(list(map(lambda y: np.amax(list(map(lambda x: x[1][1] if x[1][1]!=np.inf  else 0 ,y))),aux_lis)))*1.2
@@ -495,36 +430,10 @@ if __name__ == "__main__":
                         fig.suptitle('Persistence diagrams of the {0} for\n frequency band {1} and motivational state PCA'.format(space,band_dic[i_band]),fontsize=24)
                         fig.tight_layout(pad=0.5)
                         fig.subplots_adjust(top=0.8)
-                        plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca_persistence_diagram.png')
-                        plt.close(fig)
-                        ##2DPCA
-                        # fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(18, 8))
-                        # aux_lis=np.array([persistence_2d[i_band][0],persistence_2d[i_band][1],persistence_2d[i_band][2]], dtype=object)
-                        # x_max=np.amax(list(map(lambda y: np.amax(list(map(lambda x: x[1][0],y))),aux_lis)))+0.05
-                        # y_max=np.amax(list(map(lambda y: np.amax(list(map(lambda x: x[1][1] if x[1][1]!=np.inf  else 0 ,y))),aux_lis)))*1.2
-                        # for j in range(3):
-                        #     a=plot_func(persistence_2d[i_band][j],axes=axes[j])
-                        #     a.set_title('{0} persistence diagrams of \n motivational state {1} and band {2}'.format(space,j,band_dic[i_band]))
-                        #     a.set_xlim(-0.05,x_max)
-                        #     a.set_ylim(0,y_max)
-                        # fig.suptitle('Persistence diagrams of the {0} for\n frequency band {1} and motivational state PCA 2d'.format(space,band_dic[i_band]),fontsize=24)
-                        # fig.tight_layout(pad=0.5)
-                        # fig.subplots_adjust(top=0.8)
-                        # plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/pca_persistence_diagram_2d.png')
-                        # plt.close()
-                        
-                        '''
-                        matrix=cdist(PC,PC)
-                        Rips_complex_sample = gd.RipsComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
-                        #Rips_complex_sample = gd.AlphaComplex(distance_matrix=matrix)#,max_edge_length=max_edge)
-                        Rips_simplex_tree_sample = Rips_complex_sample.create_simplex_tree(max_dimension=2)
-                        persistence=Rips_simplex_tree_sample.persistence()
-        
-            
-                        gd.plot_persistence_diagram(persistence)
-                        plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'_Global_Persistence_diagram.png')
-                        plt.close()'''
-                        
+                        plt.show()
+    
+    
+    
                         fig, axes = plt.subplots(nrows=5, ncols=1, figsize=(14, 14))
                         vect0,vect1=[0,0,0],[0,0,0]
                         for i in range(3):
@@ -532,19 +441,19 @@ if __name__ == "__main__":
                             point_list=np.array(list(map(lambda x: x[1], persistence[i_band][i])))
                             zero_dim=point_list[np.logical_and(point_list[:,1]!=float('inf'),dim_list==0)]
                             one_dim=point_list[np.logical_and(point_list[:,1]!=float('inf'),dim_list==1)]
-                            
+    
     
                             descriptors_computer=TopologicalDescriptorsNocl()
                             descriptors_computer.fit((zero_dim,one_dim))
                             vect0[i],vect1[i]=descriptors_computer.transform((zero_dim,one_dim))
-                        
-                        
-
+    
+    
+    
                         axes[0].boxplot([vect0[0][0],vect0[1][0],vect0[2][0]],showfliers=False)
                         axes[0].set_title('Life BoxPlot dimension 0')
                         axes[1].boxplot([vect1[0][0],vect1[1][0],vect1[2][0]],showfliers=False)
                         axes[1].set_title('Life BoxPlot dimension 1')
-                        
+    
                         axes[2].boxplot([vect1[0][2],vect1[1][2],vect1[2][2]],showfliers=False)
                         axes[2].set_title('Midlife BoxPlot dimension 1')
                         axes[3].boxplot([vect1[0][3],vect1[1][3],vect1[2][3]],showfliers=False)
@@ -552,22 +461,32 @@ if __name__ == "__main__":
     
                         axes[4].boxplot([vect1[0][4],vect1[1][4],vect1[2][4]],showfliers=False)
                         axes[4].set_title('Death BoxPlot dimension')
-                                #a.set_xlim(-0.05,x_max)
-                                #a.set_ylim(0,y_max)
-                        fig.suptitle('Descriptors Boxplots of the {0} for\n frequency band {1} and different motivational state'.format(space,band_dic[i_band]),fontsize=24)
+    
+                        fig.suptitle('Descriptors Boxplots of the {0} for\n frequency band {1} and different motivational states'.format(space,band_dic[i_band]),fontsize=24)
                         fig.tight_layout(pad=1.00)
                         fig.subplots_adjust(top=0.8)
-                        plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca_descriptors.png')
-                        plt.close(fig)
+                        plt.show()
                         bloc_i+=1
-                subj_t=subj_t+1
+                max_bloc1=np.argmax(max_acc[0,:])
+                print('maximum accuracy w/ Silhouette achieved in bloc 1 with band',band_dic[max_bloc1])##en data table
+                max_bloc2=np.argmax(max_acc[1,:])
+                print('maximum accuracy w/ Silhouette achieved in bloc 1 with band',band_dic[max_bloc2])
+                if max_bloc1==3:
+                    max_bloc1=-1
+                data_table[subj_t,7]=max_acc[0,max_bloc1]
+                if max_bloc2==3:
+                    max_bloc2=-1
+                data_table[subj_t,8]=max_acc[1,max_bloc2]
                 
-                subject_table=pd.DataFrame(subject_table,index=subject_table_index,columns=['Clean Channels','N. trials','M0','M1','M2','captured variance','N. trials w/o OL ','M0 w/o OL ','M1 w/o OL ','M2 w/o OL ', 'Random predictions'])
+                subj_t=subj_t+1
+    
+                subject_table=pd.DataFrame(subject_table,index=subject_table_index,columns=['Clean Channels','N. trials','M0','M1','M2','captured variance after PCA','N. trials w/o Outliers ','M0 w/o Outliers ','M1 w/o Outliers ','M2 w/o Outliers ','test size'])
                 subject_table.to_csv(subj_dir+space+'/PCA/subject_table.csv')
-            
-
-            print('======TIME======')    
-            print((time.time()-t_pca)/60, 'minuts for pca')
+    
+                random_predictions_matrix=pd.DataFrame(random_predictions_matrix,columns=['dimension 0','dimension 1'],index=['Landscapes','Silhouettes','Descriptors','Bottleneck'])
+                random_predictions_matrix.to_csv(subj_dir+space+'/PCA/random_preds.csv')
+                print('======TIME======')    
+                print((time.time()-t_pca)/60, 'minuts for pca')
             resolut=1000
             if exploratory:
                 t_expl=time.time()
@@ -761,14 +680,14 @@ if __name__ == "__main__":
             
                     print('======TIME======')    
                     print((time.time()-t_expl)/60, 'minuts for exploration')
-                dimensions.append('both')
-                n_dim+=1
-                classifiers=[skppl.Pipeline([('Std_scal',skprp.StandardScaler()),('Clf',skllm.LogisticRegression(C=10, penalty='l2', multi_class='multinomial', solver='lbfgs', max_iter=5000))]),sklnn.KNeighborsClassifier(n_neighbors=1, algorithm='brute', metric='correlation')  ]
-                n_classifiers=len(classifiers)
-                
-                
-                cv_schem = skms.StratifiedShuffleSplit(n_splits=1, test_size=0.2)
-                n_rep = 10 # number of repetitions
+            dimensions.append('both')
+            n_dim+=1
+            classifiers=[skppl.Pipeline([('Std_scal',skprp.StandardScaler()),('Clf',skllm.LogisticRegression(C=10, penalty='l2', multi_class='multinomial', solver='lbfgs', max_iter=5000))]),sklnn.KNeighborsClassifier(n_neighbors=1, algorithm='brute', metric='correlation')  ]
+            n_classifiers=len(classifiers)
+            
+            
+            cv_schem = skms.StratifiedShuffleSplit(n_splits=1, test_size=0.2)
+            n_rep = 10 # number of repetitions
                 
             if classification:
         
@@ -852,7 +771,6 @@ if __name__ == "__main__":
                                 
                                 axes[i_band][i].plot([-1,2],[chance_level]*2,'--k')
                                 axes[i_band][i].axis(xmin=-0.6,xmax=2.4,ymin=0,ymax=1.05)
-                                #axes[i_band][i].set_xticks([0,1,2,3],['MLR','1NN','control1','control2'])##Provar
                                 axes[i_band][i].set_ylabel('accuracy '+band_dic[i_band]+' '+str(i_vector),fontsize=8)
                                 axes[i_band][i].set_title(band_dic[i_band]+' '+measures[i_measure]+dimensions[i_dim]+str(i_vector))
                                 i=1+i
