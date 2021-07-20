@@ -390,7 +390,8 @@ if __name__ == "__main__":
                         
                         fig.suptitle('Point Clouds of Principal Components of band '+band_dic[i_band] ,fontsize=48)
                         
-                        plt.show()
+                        plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca projection_PC.png')
+                        plt.close(fig)
     
     
                         pca_list=[pca_M0,pca_M1,pca_M2]
@@ -465,12 +466,12 @@ if __name__ == "__main__":
                         fig.suptitle('Descriptors Boxplots of the {0} for\n frequency band {1} and different motivational states'.format(space,band_dic[i_band]),fontsize=24)
                         fig.tight_layout(pad=1.00)
                         fig.subplots_adjust(top=0.8)
-                        plt.show()
+                        plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca_descriptors.png')
+                        plt.close(fig)
                         bloc_i+=1
                 max_bloc1=np.argmax(max_acc[0,:])
-                print('maximum accuracy w/ Silhouette achieved in bloc 1 with band',band_dic[max_bloc1])##en data table
                 max_bloc2=np.argmax(max_acc[1,:])
-                print('maximum accuracy w/ Silhouette achieved in bloc 1 with band',band_dic[max_bloc2])
+
                 if max_bloc1==3:
                     max_bloc1=-1
                 data_table[subj_t,7]=max_acc[0,max_bloc1]
@@ -835,7 +836,7 @@ if __name__ == "__main__":
                         print((time.time()-t_nn)/60, 'minuts for classifier', i_classifier)         
                             # save results       
                 np.save(subj_dir+space+'/perf2.npy',perf)
-                np.save(subj_dir+space+'/perf_shuf2.npy',perf_shuf)
+                np.(subj_dir+space+'/perf_shuf2.npy',perf_shuf)
                 np.save(subj_dir+space+'/conf_matrix2.npy',conf_matrix) 
         
                 fmt_grph = 'png'
@@ -899,6 +900,6 @@ if __name__ == "__main__":
     for subject in subjects:
         subjects_index.append('Subject ' +str(subject)+ ' ElectrodeSpace')
         subjects_index.append('Subject ' +str(subject)+ ' FontSpace')
-    data_table=pd.DataFrame(data_table,index=subjects_index,columns=['Channels','Trials', 'Trials M0', 'Trials M1', 'Trials M2', 'Trials Block 1', 'Trials Block 2'])
+    data_table=pd.DataFrame(data_table,index=subjects_index,columns=['Channels','Trials', 'Trials M0', 'Trials M1', 'Trials M2', 'Trials Block 1', 'Trials Block 2','maximum accuracy w/ Silhouette achieved in bloc 1 with band '+band_dic[max_bloc1],'maximum accuracy w/ Silhouette achieved in bloc 2 with band '+band_dic[max_bloc2]])
     data_table.to_csv('results/data_table.csv')
                                        

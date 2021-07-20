@@ -171,6 +171,8 @@ def intensity(subj_dir,space,PC,labels,i_band):
  
     band_dic={-1: 'noFilter', 0:'alpha',1:'beta',2:'gamma'}
     band = band_dic[i_band]
+    np.save(subj_dir+space+'/intensities/'+band+'perf_intensity.npy',perf)  
+    np.save(subj_dir+space+'/intensities/'+band+'conf_matrix_intensity.npy',conf_matrix)
     fmt_grph = 'png'
     cmapcolours = ['Blues','Greens','Oranges','Reds']
     plt.rcParams['xtick.labelsize']=16 
@@ -201,8 +203,8 @@ def intensity(subj_dir,space,PC,labels,i_band):
         fig.suptitle('Accuracies for different dimensions and feature vectors of band '+band,fontsize=36)
         plt.setp(axes, xticks=[-0.2, 0.2, 0.6,1], xticklabels=feat_vect_names,yticks=[0, 0.2,0.4, 0.6,0.8,1])
     
-    plt.show()
-    
+    plt.savefig(subj_dir+space+'/intensities/accuracies_intensity_'+band+'.png', format=fmt_grph)
+    plt.close(fig)
     plt.rcParams['xtick.labelsize']=24
     plt.rcParams['ytick.labelsize']=24
     plt.rcParams.update({'font.size': 24})
@@ -225,6 +227,6 @@ def intensity(subj_dir,space,PC,labels,i_band):
             plt.setp(axes, xticks=[0, 1, 2],yticks=[0, 1, 2])
 
     #fig2.tight_layout(pad=0.5)
-    plt.show()
-    
+    plt.savefig(subj_dir+space+'/intensities/confusion_matrix_intensities_'+band+'.png', format=fmt_grph)
+    plt.close(fig2)
     return test_size.mean(),rand_n.mean(axis=0),perf[0,1,:].mean()
