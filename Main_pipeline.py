@@ -70,8 +70,8 @@ def load_data(i_sub,space='both'):
 
 
 if __name__ == "__main__":
-    subjects=[29]
-    subjects=list(range(25,36))
+    subjects=[25]
+    subjects=list(range(25,28)) ##canviar
     
     intensities=False
     exploratory=False
@@ -248,7 +248,8 @@ if __name__ == "__main__":
                         if not os.path.exists(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i)):
                             print("create directory(plot):",subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i) )
                             os.makedirs(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i) )
-                        plt.show()
+                        plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca_plots.png')
+                        plt.close(fig)
                         #print('acumulated variance:',acc_variance)
     
                         subject_table[table_i,5]=acc_variance[3]
@@ -431,8 +432,8 @@ if __name__ == "__main__":
                         fig.suptitle('Persistence diagrams of the {0} for\n frequency band {1} and motivational state PCA'.format(space,band_dic[i_band]),fontsize=24)
                         fig.tight_layout(pad=0.5)
                         fig.subplots_adjust(top=0.8)
-                        plt.show()
-    
+                        plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca_persistence_diagram.png')
+                        plt.close(fig)
     
     
                         fig, axes = plt.subplots(nrows=5, ncols=1, figsize=(14, 14))
@@ -468,6 +469,10 @@ if __name__ == "__main__":
                         fig.subplots_adjust(top=0.8)
                         plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca_descriptors.png')
                         plt.close(fig)
+                        
+                        random_predictions_matrix=pd.DataFrame(random_predictions_matrix,columns=['dimension 0','dimension 1'],index=['Landscapes','Silhouettes','Descriptors','Bottleneck'])
+                        random_predictions_matrix.to_csv(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i)+'/random_preds.csv')
+                        
                         bloc_i+=1
                 max_bloc1=np.argmax(max_acc[0,:])
                 max_bloc2=np.argmax(max_acc[1,:])
@@ -484,8 +489,7 @@ if __name__ == "__main__":
                 subject_table=pd.DataFrame(subject_table,index=subject_table_index,columns=['Clean Channels','N. trials','M0','M1','M2','captured variance after PCA','N. trials w/o Outliers ','M0 w/o Outliers ','M1 w/o Outliers ','M2 w/o Outliers ','test size'])
                 subject_table.to_csv(subj_dir+space+'/PCA/subject_table.csv')
     
-                random_predictions_matrix=pd.DataFrame(random_predictions_matrix,columns=['dimension 0','dimension 1'],index=['Landscapes','Silhouettes','Descriptors','Bottleneck'])
-                random_predictions_matrix.to_csv(subj_dir+space+'/PCA/random_preds.csv')
+
                 print('======TIME======')    
                 print((time.time()-t_pca)/60, 'minuts for pca')
             resolut=1000
@@ -836,7 +840,7 @@ if __name__ == "__main__":
                         print((time.time()-t_nn)/60, 'minuts for classifier', i_classifier)         
                             # save results       
                 np.save(subj_dir+space+'/perf2.npy',perf)
-                np.(subj_dir+space+'/perf_shuf2.npy',perf_shuf)
+                np.save(subj_dir+space+'/perf_shuf2.npy',perf_shuf)
                 np.save(subj_dir+space+'/conf_matrix2.npy',conf_matrix) 
         
                 fmt_grph = 'png'
@@ -900,6 +904,6 @@ if __name__ == "__main__":
     for subject in subjects:
         subjects_index.append('Subject ' +str(subject)+ ' ElectrodeSpace')
         subjects_index.append('Subject ' +str(subject)+ ' FontSpace')
-    data_table=pd.DataFrame(data_table,index=subjects_index,columns=['Channels','Trials', 'Trials M0', 'Trials M1', 'Trials M2', 'Trials Block 1', 'Trials Block 2','maximum accuracy w/ Silhouette achieved in bloc 1 with band '+band_dic[max_bloc1],'maximum accuracy w/ Silhouette achieved in bloc 2 with band '+band_dic[max_bloc2]])
+    data_table=pd.DataFrame(data_table,index=subjects_index,columns=['Channels','Trials', 'Trials M0', 'Trials M1', 'Trials M2', 'Trials Block 1', 'Trials Block 2','maximum accuracy w/ Silhouette achieved in bloc 1','maximum accuracy w/ Silhouette achieved in bloc 2'])
     data_table.to_csv('results/data_table.csv')
                                        

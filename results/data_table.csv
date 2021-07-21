@@ -1,9 +1,5 @@
-,Channels,Trials,Trials M0,Trials M1,Trials M2,Trials Block 1,Trials Block 2
-Subject 32 ElectrodeSpace,29.0,1296.0,432.0,432.0,432.0,648.0,648.0
-Subject 32 FontSpace,29.0,1296.0,432.0,432.0,432.0,648.0,648.0
-Subject 33 ElectrodeSpace,54.0,1296.0,432.0,432.0,432.0,648.0,648.0
-Subject 33 FontSpace,54.0,1296.0,432.0,432.0,432.0,648.0,648.0
-Subject 34 ElectrodeSpace,42.0,1296.0,432.0,432.0,432.0,648.0,648.0
-Subject 34 FontSpace,43.0,1296.0,432.0,432.0,432.0,648.0,648.0
-Subject 35 ElectrodeSpace,45.0,1296.0,432.0,432.0,432.0,648.0,648.0
-Subject 35 FontSpace,45.0,1296.0,432.0,432.0,432.0,648.0,648.0
+,Channels,Trials,Trials M0,Trials M1,Trials M2,Trials Block 1,Trials Block 2,maximum accuracy w/ Silhouette achieved in bloc 1 with band alpha,maximum accuracy w/ Silhouette achieved in bloc 2 with band alpha
+Subject 30 ElectrodeSpace,48.0,1296.0,432.0,432.0,432.0,648.0,648.0,0.3384615384615385,0.3307692307692308
+Subject 30 FontSpace,49.0,1296.0,432.0,432.0,432.0,648.0,648.0,0.3307692307692308,0.31746031746031744
+Subject 31 ElectrodeSpace,45.0,1080.0,432.0,432.0,216.0,432.0,648.0,-1.0,0.7245762711864406
+Subject 31 FontSpace,45.0,1080.0,432.0,432.0,216.0,432.0,648.0,-1.0,0.7727272727272727

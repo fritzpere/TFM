@@ -34,7 +34,7 @@ def intensity(subj_dir,space,PC,labels,i_band):
     cv_schem = skms.StratifiedShuffleSplit(n_splits=1, test_size=0.2)
 
     
-    n_rep=10 
+    n_rep=3 ##canviar
     rand_n=np.zeros((n_rep,n_vectors+1,n_dim))
     test_size=np.zeros(n_rep)
     perf = np.zeros([n_dim,n_vectors+1,n_rep])
@@ -50,6 +50,10 @@ def intensity(subj_dir,space,PC,labels,i_band):
     t_int=time.time()
     
     trials_per_m=min((labels==0).sum(),(labels==1).sum(),(labels==2).sum())
+    
+    if trials_per_m==0:
+        return -1,np.zeros((n_vectors+1,n_dim)),-1
+    
     X_m0_dwnsamp=PC[labels==0][np.random.choice(len(PC[labels==0]),trials_per_m)]
     X_m1_dwnsamp=PC[labels==1][np.random.choice(len(PC[labels==1]),trials_per_m)]
     X_m2_dwnsamp=PC[labels==2][np.random.choice(len(PC[labels==2]),trials_per_m)]
@@ -171,8 +175,8 @@ def intensity(subj_dir,space,PC,labels,i_band):
  
     band_dic={-1: 'noFilter', 0:'alpha',1:'beta',2:'gamma'}
     band = band_dic[i_band]
-    np.save(subj_dir+space+'/intensities/'+band+'perf_intensity.npy',perf)  
-    np.save(subj_dir+space+'/intensities/'+band+'conf_matrix_intensity.npy',conf_matrix)
+    np.save(subj_dir+space+'/clf/'+band+'perf_intensity.npy',perf)  
+    np.save(subj_dir+space+'/clf/'+band+'conf_matrix_intensity.npy',conf_matrix)
     fmt_grph = 'png'
     cmapcolours = ['Blues','Greens','Oranges','Reds']
     plt.rcParams['xtick.labelsize']=16 
@@ -203,7 +207,7 @@ def intensity(subj_dir,space,PC,labels,i_band):
         fig.suptitle('Accuracies for different dimensions and feature vectors of band '+band,fontsize=36)
         plt.setp(axes, xticks=[-0.2, 0.2, 0.6,1], xticklabels=feat_vect_names,yticks=[0, 0.2,0.4, 0.6,0.8,1])
     
-    plt.savefig(subj_dir+space+'/intensities/accuracies_intensity_'+band+'.png', format=fmt_grph)
+    plt.savefig(subj_dir+space+'/clf/accuracies_intensity_'+band+'.png', format=fmt_grph)
     plt.close(fig)
     plt.rcParams['xtick.labelsize']=24
     plt.rcParams['ytick.labelsize']=24
@@ -227,6 +231,6 @@ def intensity(subj_dir,space,PC,labels,i_band):
             plt.setp(axes, xticks=[0, 1, 2],yticks=[0, 1, 2])
 
     #fig2.tight_layout(pad=0.5)
-    plt.savefig(subj_dir+space+'/intensities/confusion_matrix_intensities_'+band+'.png', format=fmt_grph)
+    plt.savefig(subj_dir+space+'/clf/confusion_matrix_intensities_'+band+'.png', format=fmt_grph)
     plt.close(fig2)
     return test_size.mean(),rand_n.mean(axis=0),perf[0,1,:].mean()
