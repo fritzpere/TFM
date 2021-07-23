@@ -23,7 +23,7 @@ import sklearn.neighbors as sklnn
 import numpy.linalg as la
 from mpl_toolkits.mplot3d import Axes3D
 
-import seaborn as sn
+#import seaborn as sn
 '''
 from joblib import Memory
 from shutil import rmtree
@@ -70,8 +70,8 @@ def load_data(i_sub,space='both'):
 
 
 if __name__ == "__main__":
-    subjects=[25]
-    subjects=list(range(25,28)) ##canviar
+    subjects=[25,27]
+    subjects=list(range(25,36)) ##canviar
     
     intensities=False
     exploratory=False
@@ -248,7 +248,7 @@ if __name__ == "__main__":
                         if not os.path.exists(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i)):
                             print("create directory(plot):",subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i) )
                             os.makedirs(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i) )
-                        plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca_plots.png')
+                        plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i)+'/accumulated_variance.png')
                         plt.close(fig)
                         #print('acumulated variance:',acc_variance)
     
@@ -433,6 +433,57 @@ if __name__ == "__main__":
                         fig.tight_layout(pad=0.5)
                         fig.subplots_adjust(top=0.8)
                         plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca_persistence_diagram.png')
+                        plt.close(fig)
+                        
+                        fig, axes = plt.subplots(nrows=2, ncols=3, figsize=(18, 8))
+                        
+    
+                        ###
+
+                        
+                        for i_dim in range(2):
+                            silhouettes=[]
+                            for i_motiv in range(3):
+                                dim_list=np.array(list(map(lambda x: x[0], persistence[i_band][i_motiv])))
+                                point_list=np.array(list(map(lambda x: x[1], persistence[i_band][i_motiv])))
+                                zero_dim=point_list[np.logical_and(point_list[:,1]!=float('inf'),dim_list==0)]
+                                one_dim=point_list[np.logical_and(point_list[:,1]!=float('inf'),dim_list==1)]
+                                dim_persistence=(zero_dim,one_dim)
+                            
+
+                                silhouettes.append(dim_persistence[i_dim])
+                            silhouette_computer=DimensionSilhouette()
+                            silhouette_computer.fit([silhouettes[0],silhouettes[1],silhouettes[2]])
+                            vect=silhouette_computer.transform([silhouettes[0],silhouettes[1],silhouettes[2]])
+
+
+                                
+                            y_max=np.max(vect)
+                            axes[i_dim][0].plot(vect[0])
+                            axes[i_dim][0].set_title('{0} persistence Silhouette of \n motivational state 0 and band {1} of dimension {2}'.format(space,band_dic[i_band],dimensions[i_dim]))
+                            axes[i_dim][0].set_xlim(-2,1000)
+                            axes[i_dim][0].set_ylim(0,y_max*1.1)
+                            
+                            
+                            axes[i_dim][1].plot(vect[1])
+                            axes[i_dim][1].set_title('{0} persistence Silhouette of \n motivational state 1 and band {1} of dimension {2}'.format(space,band_dic[i_band],dimensions[i_dim]))
+                            axes[i_dim][1].set_xlim(-2,1000)
+                            axes[i_dim][1].set_ylim(0,y_max*1.1)
+                            
+                            
+                            axes[i_dim][2].plot(vect[2])
+                            axes[i_dim][2].set_title('{0} persistence Silhouette of \n motivational state 2 and band {1} of dimension {2}'.format(space,band_dic[i_band],dimensions[i_dim]))
+                            axes[i_dim][2].set_xlim(-2,1000)
+                            axes[i_dim][2].set_ylim(0,y_max*1.1)
+                            
+                            
+
+                       
+                        
+                        fig.suptitle('Persistence Silhouettes of the {0} for\n frequency band {1} and motivational state PCA'.format(space,band_dic[i_band]),fontsize=24)
+                        fig.tight_layout(pad=0.5)
+                        fig.subplots_adjust(top=0.8)
+                        plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca_persistence_silhouettes.png')
                         plt.close(fig)
     
     

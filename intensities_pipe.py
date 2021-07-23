@@ -34,7 +34,7 @@ def intensity(subj_dir,space,PC,labels,i_band):
     cv_schem = skms.StratifiedShuffleSplit(n_splits=1, test_size=0.2)
 
     
-    n_rep=3 ##canviar
+    n_rep=10 ##canviar
     rand_n=np.zeros((n_rep,n_vectors+1,n_dim))
     test_size=np.zeros(n_rep)
     perf = np.zeros([n_dim,n_vectors+1,n_rep])
@@ -53,6 +53,8 @@ def intensity(subj_dir,space,PC,labels,i_band):
     
     if trials_per_m==0:
         return -1,np.zeros((n_vectors+1,n_dim)),-1
+    
+    #trials_per_m=trials_per_m//2
     
     X_m0_dwnsamp=PC[labels==0][np.random.choice(len(PC[labels==0]),trials_per_m)]
     X_m1_dwnsamp=PC[labels==1][np.random.choice(len(PC[labels==1]),trials_per_m)]
@@ -167,7 +169,7 @@ def intensity(subj_dir,space,PC,labels,i_band):
                     pred,rand_n[i_rep,i_vector,i_dim]=topological_clf(pred_array[:,i_vector,i_dim,:])
 
                     perf[i_dim,i_vector,i_rep] = skm.accuracy_score(pred, labels_dwnsamp[ind_test])
-                    conf_matrix[i_dim,i_vector,i_rep,:,:] += skm.confusion_matrix(y_true=labels_dwnsamp[ind_test], y_pred=pred)
+                    conf_matrix[i_dim,i_vector,i_rep,:,:] += skm.confusion_matrix(y_true=labels_dwnsamp[ind_test], y_pred=pred,normalize='true')
                         
                     
                     
