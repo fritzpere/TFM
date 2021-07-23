@@ -5,24 +5,16 @@ Created on Wed Feb 10 10:51:44 2021
 
 @author: fritz
 """
-import scipy.io as sio
-import os
-#from EEGs_persistence import *
+
 from preprocess_data import *
 from TDApipeline import *
-from intensities_pipe import *
+from intensities_pipeline import *
+import scipy.io as sio
+import os
 import time  
-import sklearn.pipeline as skppl
-import sklearn.linear_model as skllm
-import sklearn.model_selection as skms
-import sklearn.metrics as skm
 import matplotlib.pyplot as plt
-import sklearn.preprocessing as skprp
 import pandas as pd
-import sklearn.neighbors as sklnn
 import numpy.linalg as la
-from mpl_toolkits.mplot3d import Axes3D
-
 
 
 def define_subject_dir(i_sub):
@@ -31,7 +23,7 @@ def define_subject_dir(i_sub):
     :param i_sub: subject id
     :return: directory path
     """
-    res_dir = "results/subject_" + str(i_sub) + "/"
+    res_dir = "results/intensities/subject_" + str(i_sub) +'/'
     if not os.path.exists(res_dir):
         print("create directory:", res_dir)
         os.makedirs(res_dir)
@@ -63,38 +55,22 @@ def load_data(i_sub,space='both'):
 
 if __name__ == "__main__":
     
-    
-    subjects=list(range(25,36)) 
-    
+    subjects=list(range(30,32)) 
 
-    
-    
     bloc_dic={}
     bloc_subj_dic={}
-    
     ##We define which blocs correspond to which sessions. This is information we need to get handed from the experiment.
     bloc_subj_dic[25]=np.array([[1, 2, 8, 3, 5, 4],[6, 7, 2, 10, 1, 9]])
-    
     bloc_subj_dic[26]=np.array([[1, 2, 10, 6, 3, 7],[1, 2, 4, 5, 8, 9]])
-    
     bloc_subj_dic[27]=np.array([[1, 2, 10, 6, 7, 3],[5, 2, 4, 1, 8, 9]])
-    
     bloc_subj_dic[28]=np.array([[1, 2, 9, 7, 4, 6],[5, 3, 2, 8, 1, 10]])
-    
     bloc_subj_dic[29]=np.array([[1, 2, 8, 5, 4, 7],[3, 6, 2, 10, 9, 1]])
-    
     bloc_subj_dic[30]=np.array([[1, 2, 10, 8, 7, 3],[5, 6, 2, 9, 4, 1]])
-    
     bloc_subj_dic[31]=np.array([[1, 3, 2, 5, 8, 10],[4, 5, 1, 6, 2, 7]])
-    
     bloc_subj_dic[32]=np.array([[1, 2, 5, 9, 8, 10],[2, 4, 6, 1, 7, 3]])
-    
     bloc_subj_dic[33]=np.array([[1, 3, 5, 4, 2 ,6],[8, 2, 10, 9, 1, 7]])
-    
     bloc_subj_dic[34]=np.array([[2, 6, 4, 3, 1, 5],[7, 1, 9, 10, 2, 8]])
-    
     bloc_subj_dic[35]=np.array([[1, 3, 5, 4, 2, 6],[8, 10, 2, 9, 1, 7]])
-    
     
     ##  We define the bands, dimensions and TOpological Feature Vectors that we will use
     band_dic={-1: 'noFilter', 0:'alpha',1:'beta',2:'gamma'} 
@@ -130,11 +106,10 @@ if __name__ == "__main__":
                 if cont2==2:
                     index[ind]=12 
         
-        
         bloc_subj_dic[subject][1][bloc_subj_dic[subject][1]<=2]=bloc_subj_dic[subject][1][bloc_subj_dic[subject][1]<=2]+10
         bloc_session=np.where([ind in bloc_subj_dic[subject][1] for ind in index],2,1 )
         
-         #For both Electrode Space and Font Space we will preprocess the data. (we remove Nans, organize the data into Time Series, filter the data into 3 different frequancy bands)
+        #For both Electrode Space and Font Space we will preprocess the data. (we remove Nans, organize the data into Time Series, filter the data into 3 different frequancy bands)
         for sp in range(2):
             t=time.time()
             space=spaces[sp]
@@ -165,7 +140,6 @@ if __name__ == "__main__":
             sessions.append(np.array(list(range(12)))[bloc_session==1])
             sessions.append(np.array(list(range(12)))[bloc_session==2])
               
-
             t_pca=time.time()
             N=ts_band.shape[-1]
             persistence={}
@@ -216,10 +190,10 @@ if __name__ == "__main__":
                     plt.xlabel('PCA coordinates')
                     plt.ylabel('accumulated variance')
 
-                    if not os.path.exists(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i)):
-                        print("create directory(plot):",subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i) )
-                        os.makedirs(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i) )
-                    plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i)+'/accumulated_variance.png')
+                    if not os.path.exists(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)):
+                        print("create directory(plot):",subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i) )
+                        os.makedirs(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i) )
+                    plt.savefig(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/accumulated_variance.png')
                     plt.close(fig)
                     #print('acumulated variance:',acc_variance)
                     #We save on our subject table the accumulated variance within the 3 most important dimensions.
@@ -237,7 +211,7 @@ if __name__ == "__main__":
 
                     #Now we can use Topology om order to classify trials depending on how much they change the topology of each Point Cloud of motivational States
                     print('intensities for band ', band_dic[i_band], 'and session', bloc_i)
-                    subject_table[table_i,10],random_predictions_matrix,max_acc[bloc_i-1,i_band]=tda_intensity_classifier(subj_dir,space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i),pca,labels,i_band)
+                    subject_table[table_i,10],random_predictions_matrix,max_acc[bloc_i-1,i_band]=tda_intensity_classifier(subj_dir,space+'/'+band_dic[i_band]+'/session'+str(bloc_i),pca,labels,i_band)
 
                     ##Now we weill plot the Point CLoud in 3 different Perspectives and also the point cloud of each motivational State
                     plt.rcParams['xtick.labelsize']=16
@@ -330,7 +304,7 @@ if __name__ == "__main__":
                     ax.set_zlabel('$Z$')
                     
                     fig.suptitle('Point Clouds of Principal Components of band '+band_dic[i_band] ,fontsize=48)
-                    plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca projection_PC.png')
+                    plt.savefig(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca projection_PC.png')
                     plt.close(fig)
                     ##let us compute the persistence Diagram for each Motavational state and plot it
                     pca_list=[pca_M0,pca_M1,pca_M2]
@@ -361,7 +335,7 @@ if __name__ == "__main__":
                     fig.suptitle('Persistence diagrams of the {0} for\n frequency band {1} and motivational state PCA'.format(space,band_dic[i_band]),fontsize=24)
                     fig.tight_layout(pad=0.5)
                     fig.subplots_adjust(top=0.8)
-                    plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca_persistence_diagram.png')
+                    plt.savefig(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca_persistence_diagram.png')
                     plt.close(fig)
                     ##let us compute the persistence Silhouettes for each Motavational state and plot it
                     fig, axes = plt.subplots(nrows=2, ncols=3, figsize=(18, 8))
@@ -396,7 +370,7 @@ if __name__ == "__main__":
                     fig.suptitle('Persistence Silhouettes of the {0} for\n frequency band {1} and motivational state PCA'.format(space,band_dic[i_band]),fontsize=24)
                     fig.tight_layout(pad=0.5)
                     fig.subplots_adjust(top=0.8)
-                    plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca_persistence_silhouettes.png')
+                    plt.savefig(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca_persistence_silhouettes.png')
                     plt.close(fig)
                     ##let us compute the Topological Descriptors for each Motavational state and plot it
                     fig, axes = plt.subplots(nrows=5, ncols=1, figsize=(14, 14))
@@ -414,26 +388,23 @@ if __name__ == "__main__":
                     axes[0].set_title('Life BoxPlot dimension 0')
                     axes[1].boxplot([vect1[0][0],vect1[1][0],vect1[2][0]],showfliers=False)
                     axes[1].set_title('Life BoxPlot dimension 1')
-
                     axes[2].boxplot([vect1[0][2],vect1[1][2],vect1[2][2]],showfliers=False)
                     axes[2].set_title('Midlife BoxPlot dimension 1')
                     axes[3].boxplot([vect1[0][3],vect1[1][3],vect1[2][3]],showfliers=False)
                     axes[3].set_title('Birth BoxPlot dimension 1')
-
                     axes[4].boxplot([vect1[0][4],vect1[1][4],vect1[2][4]],showfliers=False)
                     axes[4].set_title('Death BoxPlot dimension')
-
                     fig.suptitle('Descriptors Boxplots of the {0} for\n frequency band {1} and different motivational states'.format(space,band_dic[i_band]),fontsize=24)
                     fig.tight_layout(pad=1.00)
                     fig.subplots_adjust(top=0.8)
-                    plt.savefig(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca_descriptors.png')
+                    plt.savefig(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca_descriptors.png')
                     plt.close(fig)
                     ##We save the number of random classifications we have made for each dimension and Feature vector
                     random_predictions_matrix=pd.DataFrame(random_predictions_matrix,columns=['dimension 0','dimension 1'],index=['Landscapes','Silhouettes','Descriptors','Bottleneck'])
-                    random_predictions_matrix.to_csv(subj_dir+space+'/PCA/'+band_dic[i_band]+'/session'+str(bloc_i)+'/random_preds.csv')
+                    random_predictions_matrix.to_csv(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/random_preds.csv')
                     
                     bloc_i+=1
-            ## We select the band with highet mean accuracy from the silkhouette feature vector       
+            ## We select the band with highet mean accuracy from the silhouette feature vector       
             max_bloc1=np.argmax(max_acc[0,:])
             max_bloc2=np.argmax(max_acc[1,:])
 
@@ -446,7 +417,7 @@ if __name__ == "__main__":
             subj_t=subj_t+1
             ## We finish complete table for the subject
             subject_table=pd.DataFrame(subject_table,index=subject_table_index,columns=['Clean Channels','N. trials','M0','M1','M2','captured variance after PCA','N. trials w/o Outliers ','M0 w/o Outliers ','M1 w/o Outliers ','M2 w/o Outliers ','test size'])
-            subject_table.to_csv(subj_dir+space+'/PCA/subject_table.csv')
+            subject_table.to_csv(subj_dir+space+'/'+'/subject_table.csv')
 
             print('======TIME======')    
             print((time.time()-t_pca)/60, 'minuts for pca')
@@ -457,5 +428,5 @@ if __name__ == "__main__":
         subjects_index.append('Subject ' +str(subject)+ ' ElectrodeSpace')
         subjects_index.append('Subject ' +str(subject)+ ' FontSpace')
     data_table=pd.DataFrame(data_table,index=subjects_index,columns=['Channels','Trials', 'Trials M0', 'Trials M1', 'Trials M2', 'Trials Block 1', 'Trials Block 2','maximum accuracy w/ Silhouette achieved in bloc 1','maximum accuracy w/ Silhouette achieved in bloc 2'])
-    data_table.to_csv('results/data_table.csv')
+    data_table.to_csv('results/intensities/data_table.csv')
                                        
