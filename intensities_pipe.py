@@ -25,7 +25,7 @@ def topological_clf(arr):
 
 
 
-def intensity(subj_dir,space,PC,labels,i_band):
+def tda_intensity_classifier(subj_dir,space,PC,labels,i_band):
     dimensions=["zero","one"]
     n_dim=len(dimensions)
     feat_vect=[DimensionLandScape(),DimensionSilhouette(),TopologicalDescriptors()]
