@@ -50,7 +50,7 @@ def tda_intensity_classifier(subj_dir,space,PC,labels,i_band):
     feat_vect=[DimensionLandScape(),DimensionSilhouette(),TopologicalDescriptors()]
     feat_vect_names=['Landscapes','Silhouettes','Descriptors','Bottleneck']
     n_vectors=len(feat_vect)
-    n_rep=1 ##canviar
+    n_rep=10 ##canviar
     #Initiialize matrices where we will save several information (accuracies distribution, confusion matrix, random predictions matrix)
     rand_n=np.zeros((n_rep,n_vectors+1,n_dim))
     test_size=np.zeros(n_rep)
