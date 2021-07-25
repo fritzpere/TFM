@@ -66,6 +66,7 @@ def tda_intensity_classifier(subj_dir,space,PC,labels,i_band):
     #We lool which motivational state has less points
     trials_per_m=min((labels==0).sum(),(labels==1).sum(),(labels==2).sum())
     if trials_per_m==0: #If there is a motivational state without a point we will not classify
+        np.save(subj_dir+space+'/topological_clf/'+band+'perf_intensity.npy',perf)  
         return -1,np.zeros((n_vectors+1,n_dim)),-1
     
     #trials_per_m=trials_per_m//2 ###PROVA
