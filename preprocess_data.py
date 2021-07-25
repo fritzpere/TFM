@@ -10,9 +10,19 @@ import numpy as np
 import scipy.signal as spsg
 import sklearn.pipeline as skppl
 
-
+def reject_outliers(self,data, labels,m=1):
+    '''
+    rejecting outliers for after performing PCA
+    '''
+    norms=np.linalg.norm(data,axis=1)
+    no_outliers=abs(norms - np.mean(norms,axis=0)) < m * np.std(norms)
+    #self.tr2bl=self.tr2bl_ol[no_outliers]
+    return data[no_outliers],labels[no_outliers]
 
 class Preprocessor:
+    '''
+    Class with all the preproccesing functions needed
+    '''
     def __init__(self,data):
         self.data = data
 
@@ -26,8 +36,8 @@ class Preprocessor:
     def clean_data(self):
         """
          discard silent channels
-        :param data: data to clean (N,T,n_trials,n_blocks)
-        :return: cleaned data
+        :param data: self.data to clean (N,T,n_trials,n_blocks)
+        :param N: Number of clean channels
         """
         invalid_ch_s0 = np.logical_or(np.abs(self.data[:, :, 0, 0]).max(axis=1) == 0,np.isnan(self.data[:, 0, 0, 0]))
         invalid_ch_s1 = np.logical_or(np.abs(self.data[:, :, 0, 1]).max(axis=1) == 0,np.isnan(self.data[:, 0, 0, 1]))
@@ -50,8 +60,9 @@ class Preprocessor:
         :param n_block: number of blocks of trials
         :param n_trials: number of trials per block
         :param T: number of miliseconds recorded per trial
-        param N: number of channels
-        :return: TimeSeries
+        :param N: number of channels
+        :param ts_dic: TimeSeries dictionary
+        :param tr2bl_ol: trials to block dictionary
         """
         # get time series for each block
         temp=np.zeros([3,self.n_trials*4])
@@ -81,12 +92,9 @@ class Preprocessor:
     def freq_filter(self): #dont need all variables if using dict
         """
         filters the frequency into 'alpha', 'beta' and 'gamma' waves.
-        :param ts: TimeSeries obtained from the EEGs
-        :param n_motiv: number of motivational states
-        :param n_trials: number of trials per block
-        :param T: number of miliseconds recorded per trial
-        param N: number of channels
-        :return: Filtered TimeSeries
+        :param ts_dic: TimeSeries dictionary filtered by frequency bands
+        :param n_bands: number of frequency bands
+
         """
         freq_bands = ['alpha','beta','gamma']
         filtered_ts_dic = {}#np.zeros([n_bands,n_motiv,n_trials,T,N])
@@ -131,6 +139,9 @@ class Preprocessor:
 
 
     def get_filtered_ts_dic(self):
+        '''
+        function that  cleans and filters the EEGs
+        '''
         if not bool(self.ts_dic):
             self.clean_data()
             self.get_ts()       
@@ -138,6 +149,10 @@ class Preprocessor:
         return self.ts_dic
     
     def get_trials_and_labels(self):
+        '''
+        function that  cleans and filters the EEGs and generate 
+        a labels vector and a timeseries per band vector
+        '''
         if not bool(self.ts_dic):
             self.clean_data()
             self.get_ts()       
@@ -163,8 +178,3 @@ class Preprocessor:
         #self.tr2bl_ol=self.tr2bl_ol.reshape(-1)
         return ts_band,labels
 
-    def reject_outliers(self,data, labels,m=1):
-        norms=np.linalg.norm(data,axis=1)
-        no_outliers=abs(norms - np.mean(norms,axis=0)) < m * np.std(norms)
-        #self.tr2bl=self.tr2bl_ol[no_outliers]
-        return data[no_outliers],labels[no_outliers]
