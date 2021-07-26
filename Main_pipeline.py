@@ -9,6 +9,7 @@ Created on Wed Feb 10 10:51:44 2021
 from preprocess_data import *
 from TDApipeline import *
 from intensities_pipeline import *
+from knn_pipeline import *
 import scipy.io as sio
 import os
 import time  
@@ -55,7 +56,7 @@ def load_data(i_sub,space='both'):
 
 if __name__ == "__main__":
     
-    subjects=list(range(31,32 )) 
+    subjects=list(range(25,36 )) 
 
     bloc_dic={}
     bloc_subj_dic={}
@@ -212,6 +213,7 @@ if __name__ == "__main__":
                     #Now we can use Topology om order to classify trials depending on how much they change the topology of each Point Cloud of motivational States
                     print('intensities for band ', band_dic[i_band], 'and session', bloc_i)
                     subject_table[table_i,10],random_predictions_matrix,max_acc[bloc_i-1,i_band]=tda_intensity_classifier(subj_dir,space+'/'+band_dic[i_band]+'/session'+str(bloc_i),pca,labels,i_band)
+                    1nn_intensity_classifier(subj_dir,space+'/'+band_dic[i_band]+'/session'+str(bloc_i),pca,labels,i_band)
 
                     ##Now we weill plot the Point CLoud in 3 different Perspectives and also the point cloud of each motivational State
                     plt.rcParams['xtick.labelsize']=16

@@ -255,8 +255,8 @@ class TopologicalDescriptors:
         
         if type(X)==tuple:
 
-            vec0=get_feat_dim0(X[0])
-            vec1=get_feat_dim1(X[1])
+            vec0=self.get_feat_dim0(X[0])
+            vec1=self.get_feat_dim1(X[1])
             return np.concatenate((vec0,vec1),axis=1)
         elif all([all(X[i][:,0]==0) for i in range(len(X))]):
             return self.get_feat_dim0(X)

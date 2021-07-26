@@ -57,8 +57,8 @@ def tda_intensity_classifier(subj_dir,space,PC,labels,i_band):
     rand_n=np.zeros((n_rep,n_vectors+1,n_dim))
     test_size=np.zeros(n_rep)
     perf = np.zeros([n_dim,n_vectors+1,n_rep])
-    perf_shuf = np.zeros([n_dim,n_vectors+1,n_rep])
-    conf_matrix = np.zeros([n_dim,n_vectors+1,n_rep,3,3])
+    #perf_shuf = np.zeros([n_dim,n_vectors+1,n_rep])
+    #conf_matrix = np.zeros([n_dim,n_vectors+1,n_rep,3,3])
 
     if not os.path.exists(subj_dir+space+'/topological_clf'):
         print("create directory(plot):",subj_dir+space+'/topological_clf')
@@ -81,8 +81,7 @@ def tda_intensity_classifier(subj_dir,space,PC,labels,i_band):
     
     #We begin the classificatino
     cv_schem = skms.StratifiedShuffleSplit(n_splits=1, test_size=0.2)
-    for i_rep in range(n_rep):
-        t_rep=time.time()    
+    for i_rep in range(n_rep): 
         X_motiv=[]
         tda_vect={0:defaultdict(lambda: defaultdict(lambda: [])),1:defaultdict(lambda: defaultdict(lambda: [])),2:defaultdict(lambda: defaultdict(lambda: []))}
         for ind_train, ind_test in cv_schem.split(PC_dwnsamp,labels_dwnsamp):

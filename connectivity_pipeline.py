@@ -35,7 +35,7 @@ def define_subject_dir(i_sub):
     :param i_sub: subject id
     :return: directory path
     """
-    res_dir = "results/conncectivity/subject_" + str(i_sub) + '/'
+    res_dir = "results/connectivity/subject_" + str(i_sub) + '/'
     if not os.path.exists(res_dir):
         print("create directory:", res_dir)
         os.makedirs(res_dir)
