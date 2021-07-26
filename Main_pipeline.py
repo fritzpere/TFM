@@ -55,7 +55,7 @@ def load_data(i_sub,space='both'):
 
 if __name__ == "__main__":
     
-    subjects=list(range(25,36)) 
+    subjects=list(range(31,32 )) 
 
     bloc_dic={}
     bloc_subj_dic={}

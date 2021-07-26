@@ -44,13 +44,15 @@ def tda_intensity_classifier(subj_dir,space,PC,labels,i_band):
     :return: test size,random selections matrix, accuracy of dimension 0 silhouettes
     """
     
-    #We define the dimensions and the feature vectors we will use and define the number of times we will repeat the classification
+    #We define the dimensions and the feature vectors we will use, as well as the frequency band, and define the number of times we will repeat the classification
     dimensions=["zero","one"]
     n_dim=len(dimensions)
     feat_vect=[DimensionLandScape(),DimensionSilhouette(),TopologicalDescriptors()]
     feat_vect_names=['Landscapes','Silhouettes','Descriptors','Bottleneck']
     n_vectors=len(feat_vect)
-    n_rep=10 ##canviar
+    n_rep=10 
+    band_dic={-1: 'noFilter', 0:'alpha',1:'beta',2:'gamma'}
+    band = band_dic[i_band]
     #Initiialize matrices where we will save several information (accuracies distribution, confusion matrix, random predictions matrix)
     rand_n=np.zeros((n_rep,n_vectors+1,n_dim))
     test_size=np.zeros(n_rep)
@@ -183,8 +185,7 @@ def tda_intensity_classifier(subj_dir,space,PC,labels,i_band):
                     conf_matrix[i_dim,i_vector,i_rep,:,:] += skm.confusion_matrix(y_true=labels_dwnsamp[ind_test], y_pred=pred,normalize='true')               
     print((time.time()-t_int)/60, 'minuts for classification')
     #We plot accuracies and confusion matrices
-    band_dic={-1: 'noFilter', 0:'alpha',1:'beta',2:'gamma'}
-    band = band_dic[i_band]
+
     np.save(subj_dir+space+'/topological_clf/'+band+'perf_intensity.npy',perf)  
     np.save(subj_dir+space+'/topological_clf/'+band+'conf_matrix_intensity.npy',conf_matrix)
     fmt_grph = 'png'
