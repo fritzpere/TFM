@@ -267,7 +267,7 @@ class TopologicalDescriptors:
     def get_params(self, deep=True):
         return dict()    
 
-    def get_feat_dim0(X):
+    def get_feat_dim0(self,X):
         '''
         get the 0-dimensional features (Avarage Life, Standard Desviation of Life, and topological Entropy)
         '''
@@ -287,7 +287,7 @@ class TopologicalDescriptors:
         avg_life,std_life,entropy=np.array(avg_life).reshape(-1,1),np.array(std_life).reshape(-1,1),np.array(entropy).reshape(-1,1)    
         return np.concatenate(( avg_life,std_life,entropy),axis=1)
             
-    def get_feat_dim1(X):
+    def get_feat_dim1(self,X):
         '''
         get the 1-dimensional features (Same as 0-dimensional, plus Midlife, Birth and Death (avarages and STDs))
         '''
@@ -353,7 +353,7 @@ class TopologicalDescriptorsNocl:
 
 
 
-    def get_feat_dim0_Nocl(X):
+    def get_feat_dim0_Nocl(self,X):
     
     
         life=np.array(list(map(lambda x: x[1]-x[0],X)))
@@ -364,7 +364,7 @@ class TopologicalDescriptorsNocl:
     
         return life,entropy
             
-    def get_feat_dim1_Nocl(X):
+    def get_feat_dim1_Nocl(self,X):
     
         birth=X[:,0]
         death=X[:,1]

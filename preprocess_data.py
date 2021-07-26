@@ -10,14 +10,7 @@ import numpy as np
 import scipy.signal as spsg
 import sklearn.pipeline as skppl
 
-def reject_outliers(self,data, labels,m=1):
-    '''
-    rejecting outliers for after performing PCA
-    '''
-    norms=np.linalg.norm(data,axis=1)
-    no_outliers=abs(norms - np.mean(norms,axis=0)) < m * np.std(norms)
-    #self.tr2bl=self.tr2bl_ol[no_outliers]
-    return data[no_outliers],labels[no_outliers]
+
 
 class Preprocessor:
     '''
@@ -177,4 +170,13 @@ class Preprocessor:
         labels=np.concatenate((np.zeros(trials[0]),np.ones(trials[1]),np.ones(trials[2])*2),axis=0)         
         #self.tr2bl_ol=self.tr2bl_ol.reshape(-1)
         return ts_band,labels
+    
+    def reject_outliers(self,data, labels,m=1):
+        '''
+        rejecting outliers for after performing PCA
+        '''
+        norms=np.linalg.norm(data,axis=1)
+        no_outliers=abs(norms - np.mean(norms,axis=0)) < m * np.std(norms)
+        #self.tr2bl=self.tr2bl_ol[no_outliers]
+        return data[no_outliers],labels[no_outliers]
 

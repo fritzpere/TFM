@@ -55,7 +55,7 @@ def load_data(i_sub,space='both'):
 
 if __name__ == "__main__":
     
-    subjects=list(range(25,36)) 
+    subjects=list(range(31,32)) 
 
     bloc_dic={}
     bloc_subj_dic={}
@@ -93,7 +93,7 @@ if __name__ == "__main__":
     
         spaces=['electrodeSpace','fontSpace']
         index=index[0]
-        ## We reoganize the blocks betwee sessions to make it easier to work with
+        ## We reoganize the blocks between sessions to make it easier to work with
         cont1=0
         cont2=0
         for ind in range(12):
@@ -211,7 +211,9 @@ if __name__ == "__main__":
 
                     #Now we can use Topology om order to classify trials depending on how much they change the topology of each Point Cloud of motivational States
                     print('intensities for band ', band_dic[i_band], 'and session', bloc_i)
-                    subject_table[table_i,10],random_predictions_matrix,max_acc[bloc_i-1,i_band]=tda_intensity_classifier(subj_dir,space+'/'+band_dic[i_band]+'/session'+str(bloc_i),pca,labels,i_band)
+                    for divisor in np.arange(1, 2.1, 0.2):
+                        print('divisor=',divisor)
+                        subject_table[table_i,10],random_predictions_matrix,max_acc[bloc_i-1,i_band]=tda_intensity_classifier(subj_dir,space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/divisor'+str(divisor),pca,labels,i_band,divisor)
 
                     ##Now we weill plot the Point CLoud in 3 different Perspectives and also the point cloud of each motivational State
                     plt.rcParams['xtick.labelsize']=16

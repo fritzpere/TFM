@@ -494,7 +494,6 @@ if __name__ == "__main__":
                         # plot performance and surrogate
                         #axes[i_band][i_vector].axes([0.2,0.2,0.7,0.7])
                         axes2[i_band][i_clf].imshow(conf_matrix[i_band,i_clf,:,:,:].mean(0), vmin=0, cmap=cmapcolours[i_band])
-                        axes2[i_band][i_clf].colorbar()
                         #plt.colorbar()
                         axes2[i_band][i_clf].set_xlabel('true label',fontsize=8)
                         axes2[i_band][i_clf].set_ylabel('predicted label',fontsize=8)
