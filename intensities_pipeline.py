@@ -10,6 +10,7 @@ import sklearn.model_selection as skms
 from TDApipeline import *
 from collections import defaultdict
 import sklearn.metrics as skm
+import sklearn.neighbors as sklnn
 import matplotlib.pyplot as plt
 import time
 import os
@@ -56,9 +57,18 @@ def tda_intensity_classifier(subj_dir,space,PC,labels,i_band):
     #Initiialize matrices where we will save several information (accuracies distribution, confusion matrix, random predictions matrix)
     rand_n=np.zeros((n_rep,n_vectors+1,n_dim))
     test_size=np.zeros(n_rep)
-    perf = np.zeros([n_dim,n_vectors+1,n_rep])
+    topo_perf = np.zeros([n_dim,n_vectors+1,n_rep])
+    
+    knn_perf = np.zeros(n_rep)
+    knn_conf_matrix =np.zeros((n_rep,3,3))
+    #Initialize 1 Nearest Neighbor classifier
+    clf= sklnn.KNeighborsClassifier(n_neighbors=1, algorithm='brute', metric='correlation')
+
+    if not os.path.exists(subj_dir+space+'/1nn_clf'):
+        print("create directory(plot):",subj_dir+space+'/1nn_clf')
+        os.makedirs(subj_dir+space+'/1nn_clf')
     #perf_shuf = np.zeros([n_dim,n_vectors+1,n_rep])
-    #conf_matrix = np.zeros([n_dim,n_vectors+1,n_rep,3,3])
+    topo_conf_matrix = np.zeros([n_dim,n_vectors+1,n_rep,3,3])
 
     if not os.path.exists(subj_dir+space+'/topological_clf'):
         print("create directory(plot):",subj_dir+space+'/topological_clf')
@@ -68,7 +78,8 @@ def tda_intensity_classifier(subj_dir,space,PC,labels,i_band):
     #We lool which motivational state has less points
     trials_per_m=min((labels==0).sum(),(labels==1).sum(),(labels==2).sum())
     if trials_per_m==0: #If there is a motivational state without a point we will not classify
-        np.save(subj_dir+space+'/topological_clf/'+band+'perf_intensity.npy',perf)  
+        np.save(subj_dir+space+'/topological_clf/'+band+'perf_intensity.npy',topo_perf)
+        np.save(subj_dir+space+'/1nn_clf/'+band+'perf_intensity.npy',knn_perf) 
         return -1,np.zeros((n_vectors+1,n_dim)),-1
     
     #trials_per_m=trials_per_m//2 ###PROVA
@@ -89,8 +100,15 @@ def tda_intensity_classifier(subj_dir,space,PC,labels,i_band):
             test_size[i_rep]=len(ind_test)
             X_train=PC_dwnsamp[ind_train]
             y_train=labels_dwnsamp[ind_train]
-            pred=np.zeros(len(ind_train))
-            pred_array=np.zeros((len(ind_test),n_vectors+1,n_dim,3))
+            #1nn
+            knn_pred=np.zeros(len(ind_train))
+            clf.fit(X_train,y_train)
+            knn_pred=clf.predict(PC_dwnsamp[ind_test])
+            knn_perf[i_rep]=skm.accuracy_score(knn_pred, labels_dwnsamp[ind_test])
+            knn_conf_matrix[i_rep,:,:] += skm.confusion_matrix(y_true=labels_dwnsamp[ind_test], y_pred=knn_pred,normalize='true')  
+            #topological classifier
+            topo_pred=np.zeros(len(ind_train))
+            topo_pred_array=np.zeros((len(ind_test),n_vectors+1,n_dim,3))
             #For each motivational state we compute Persistence Diagrams
             for i_motiv  in range(3):
                 X_motiv.append(X_train[y_train==i_motiv])
@@ -165,28 +183,67 @@ def tda_intensity_classifier(subj_dir,space,PC,labels,i_band):
                             tda_compt=feat_vect[i_vector]
                             tda_compt.fit([dimensional_persistence])
                             
-                            pred_array[i,i_vector,i_dim,i_motiv]=np.linalg.norm(tda_compt.transform([dimensional_persistence])-tda_vect[i_motiv][i_vector][i_dim])
+                            topo_pred_array[i,i_vector,i_dim,i_motiv]=np.linalg.norm(tda_compt.transform([dimensional_persistence])-tda_vect[i_motiv][i_vector][i_dim])
                         
                         tda_compt=feat_vect[n_vectors-1]
                         tda_compt.fit([dimensional_persistence])
                         
-                        pred_array[i,n_vectors-1,i_dim,i_motiv]=np.linalg.norm(((tda_compt.transform([dimensional_persistence])-mins[i_dim])/(maxs[i_dim]-mins[i_dim]))-tda_vect[i_motiv][n_vectors-1][i_dim])
+                        topo_pred_array[i,n_vectors-1,i_dim,i_motiv]=np.linalg.norm(((tda_compt.transform([dimensional_persistence])-mins[i_dim])/(maxs[i_dim]-mins[i_dim]))-tda_vect[i_motiv][n_vectors-1][i_dim])
 
-                        pred_array[i,n_vectors,i_dim,i_motiv]=gd.bottleneck_distance(dimensional_persistence,tda_vect[i_motiv][n_vectors][i_dim],0.01)
+                        topo_pred_array[i,n_vectors,i_dim,i_motiv]=gd.bottleneck_distance(dimensional_persistence,tda_vect[i_motiv][n_vectors][i_dim],0.01)
                 i=i+1
         
             #We predict and compute accuracy and confusion martix
             for i_vector in range(n_vectors+1):
                 for i_dim in range(n_dim):
-                    pred,rand_n[i_rep,i_vector,i_dim]=topological_clf(pred_array[:,i_vector,i_dim,:])
+                    topo_pred,rand_n[i_rep,i_vector,i_dim]=topological_clf(topo_pred_array[:,i_vector,i_dim,:])
 
-                    perf[i_dim,i_vector,i_rep] = skm.accuracy_score(pred, labels_dwnsamp[ind_test])
-                    conf_matrix[i_dim,i_vector,i_rep,:,:] += skm.confusion_matrix(y_true=labels_dwnsamp[ind_test], y_pred=pred,normalize='true')               
+                    topo_perf[i_dim,i_vector,i_rep] = skm.accuracy_score(topo_pred, labels_dwnsamp[ind_test])
+                    topo_conf_matrix[i_dim,i_vector,i_rep,:,:] += skm.confusion_matrix(y_true=labels_dwnsamp[ind_test], y_pred=topo_pred,normalize='true')               
     print((time.time()-t_int)/60, 'minuts for classification')
-    #We plot accuracies and confusion matrices
+    
+    
+    #We plot accuracies and confusion matrices for 1nn
+    np.save(subj_dir+space+'/1nn_clf/'+band+'perf_intensity.npy',knn_perf)  
+    np.save(subj_dir+space+'/1nn_clf/'+band+'conf_matrix_intensity.npy',knn_conf_matrix)
+    fmt_grph = 'png'
+    cmapcolours = ['Blues','Greens','Oranges','Reds']
+    plt.rcParams['xtick.labelsize']=16 
+    plt.rcParams['ytick.labelsize']=8
+    plt.figure(figsize=[16,9])
 
-    np.save(subj_dir+space+'/topological_clf/'+band+'perf_intensity.npy',perf)  
-    np.save(subj_dir+space+'/topological_clf/'+band+'conf_matrix_intensity.npy',conf_matrix)
+    plt.violinplot(knn_perf)
+    chance_level = np.max(np.unique(labels, return_counts=True)[1]) / labels.size
+    #plt.plot([-1,2],[chance_level]*2,'--k')
+
+    plt.ylabel('accuracy '+band,fontsize=8)
+    plt.title(band+' 1nn classification')
+    plt.yticks([0, 0.2,0.4, 0.6,0.8,1])
+    
+    plt.savefig(subj_dir+space+'/1nn_clf/1nn_accuracies_intensity_'+band+'.png', format=fmt_grph)
+    plt.close()
+    
+    plt.rcParams['xtick.labelsize']=24
+    plt.rcParams['ytick.labelsize']=24
+    plt.rcParams.update({'font.size': 24})
+    
+    plt.figure(figsize=[16,9])
+
+
+    disp = skm.ConfusionMatrixDisplay(knn_conf_matrix[:,:,:].mean(0),display_labels=['M0','M1','M2'])
+    disp.plot(include_values=True,cmap=cmapcolours[i_band],colorbar=True)
+    
+    plt.xlabel('true label',fontsize=12)
+    plt.ylabel('predicted label',fontsize=12)
+    plt.title('Confusion Matix for band '+band+' and a 1NN classifier',fontsize=18)
+
+
+    plt.savefig(subj_dir+space+'/1nn_clf/1nn_confusion_matrix_intensities_'+band+'.png', format=fmt_grph)
+    plt.close()
+    #We plot accuracies and confusion matrices for topological classifiers
+
+    np.save(subj_dir+space+'/topological_clf/'+band+'perf_intensity.npy',topo_perf)  
+    np.save(subj_dir+space+'/topological_clf/'+band+'conf_matrix_intensity.npy',topo_conf_matrix)
     fmt_grph = 'png'
     cmapcolours = ['Blues','Greens','Oranges','Reds']
     plt.rcParams['xtick.labelsize']=16 
@@ -197,10 +254,10 @@ def tda_intensity_classifier(subj_dir,space,PC,labels,i_band):
         # the chance level is defined as the trivial classifier that predicts the label with more occurrences 
         chance_level = np.max(np.unique(labels_dwnsamp, return_counts=True)[1]) / labels_dwnsamp.size
 
-        axes[i_dim].violinplot(perf[i_dim,0,:],positions=[-0.2],widths=[0.3])
-        axes[i_dim].violinplot(perf[i_dim,1,:],positions=[0.2],widths=[0.3])
-        axes[i_dim].violinplot(perf[i_dim,2,:],positions=[0.6],widths=[0.3])
-        axes[i_dim].violinplot(perf[i_dim,3,:],positions=[1],widths=[0.3])
+        axes[i_dim].violinplot(topo_perf[i_dim,0,:],positions=[-0.2],widths=[0.3])
+        axes[i_dim].violinplot(topo_perf[i_dim,1,:],positions=[0.2],widths=[0.3])
+        axes[i_dim].violinplot(topo_perf[i_dim,2,:],positions=[0.6],widths=[0.3])
+        axes[i_dim].violinplot(topo_perf[i_dim,3,:],positions=[1],widths=[0.3])
 
         axes[i_dim].plot([-1,2],[chance_level]*2,'--k')
         axes[i_dim].axis(xmin=-0.6,xmax=1.4,ymin=0,ymax=1.05)
@@ -219,7 +276,7 @@ def tda_intensity_classifier(subj_dir,space,PC,labels,i_band):
 
     for i_vector in range(n_vectors+1):
         for i_dim in range(n_dim):
-            disp = skm.ConfusionMatrixDisplay(conf_matrix[i_dim,i_vector,:,:,:].mean(0),display_labels=['M0','M1','M2'])
+            disp = skm.ConfusionMatrixDisplay(topo_conf_matrix[i_dim,i_vector,:,:,:].mean(0),display_labels=['M0','M1','M2'])
             disp.plot(ax=axes2[i_dim][i_vector],include_values=True,cmap=cmapcolours[i_band],colorbar=True)
             
             axes2[i_dim][i_vector].set_xlabel('true label',fontsize=24)
@@ -234,4 +291,4 @@ def tda_intensity_classifier(subj_dir,space,PC,labels,i_band):
     #fig2.tight_layout(pad=0.5)
     plt.savefig(subj_dir+space+'/topological_clf/confusion_matrix_intensities_'+band+'.png', format=fmt_grph)
     plt.close(fig2)
-    return test_size.mean(),rand_n.mean(axis=0),perf[0,1,:].mean()
+    return test_size.mean(),rand_n.mean(axis=0),topo_perf[0,1,:].mean()
