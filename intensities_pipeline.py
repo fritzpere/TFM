@@ -33,7 +33,7 @@ def topological_clf(arr):
 
 
 
-def tda_intensity_classifier(subj_dir,space,PC,labels,i_band):
+def tda_intensity_classifier(subj_dir,space,PC,labels,i_band,divisor):
     """
     Pipeline of a Topological Classifier
     
@@ -82,7 +82,7 @@ def tda_intensity_classifier(subj_dir,space,PC,labels,i_band):
         np.save(subj_dir+space+'/1nn_clf/'+band+'perf_intensity.npy',knn_perf) 
         return -1,np.zeros((n_vectors+1,n_dim)),-1
     
-    #trials_per_m=trials_per_m//2 ###PROVA
+    trials_per_m=int(trials_per_m//divisor) ###PROVA
     #We balabce the dataset by downsampling
     X_m0_dwnsamp=PC[labels==0][np.random.choice(len(PC[labels==0]),trials_per_m)]
     X_m1_dwnsamp=PC[labels==1][np.random.choice(len(PC[labels==1]),trials_per_m)]
