@@ -171,11 +171,11 @@ class Preprocessor:
         #self.tr2bl_ol=self.tr2bl_ol.reshape(-1)
         return ts_band,labels
 
-    def reject_outliers(self,data, labels,m=1):
+    def reject_outliers(self,data,labels,PC,m=1):
         '''
         rejecting outliers for after performing PCA
         '''
         norms=np.linalg.norm(data,axis=1)
         no_outliers=abs(norms - np.mean(norms,axis=0)) < m * np.std(norms)
         #self.tr2bl=self.tr2bl_ol[no_outliers]
-        return data[no_outliers],labels[no_outliers]
+        return data[no_outliers],labels[no_outliers],PC[no_outliers]
