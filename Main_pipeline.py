@@ -423,11 +423,12 @@ if __name__ == "__main__":
 
             print('======TIME======')    
             print((time.time()-t_pca)/60, 'minuts for pca')
-    subj_t=subj_t+1
+        subj_t=subj_t+1
     #Finishing the general table
     subjects_index=[]
     for subject in subjects:
         subjects_index.append('Subject ' +str(subject)+ ' ElectrodeSpace')
+    for subject in subjects:
         subjects_index.append('Subject ' +str(subject)+ ' FontSpace')
     data_table=pd.DataFrame(data_table,index=subjects_index,columns=['Channels','Trials', 'Trials M0', 'Trials M1', 'Trials M2', 'Trials Block 1', 'Trials Block 2','maximum accuracy w/ Silhouette achieved in bloc 1','maximum accuracy w/ Silhouette achieved in bloc 2'])
     data_table.to_csv('results/intensities/data_table.csv')
