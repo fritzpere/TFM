@@ -200,9 +200,12 @@ if __name__ == "__main__":
                     #We save on our subject table the accumulated variance within the 3 most important dimensions.
                     subject_table[table_i,5]=acc_variance[3]
                     #Let us work with this 3-dimensional Point Cloud. 
-                    pca = vh[:3,:] @ X[:,:] 
+                    pca = vh[:3,:] @ X[:,:]
+                    
+                    ###reproj= vh[:3,:].T @ pca Reprojection 
+                    
                     pca=pca.T
-
+                    
                     pca,labels=preprocessor.reject_outliers(pca,labels,m=2) #Removing Outliers
                     #We fill up the table again since we have removed outliers
                     subject_table[table_i,6]=len(labels)
@@ -212,7 +215,7 @@ if __name__ == "__main__":
 
                     #Now we can use Topology om order to classify trials depending on how much they change the topology of each Point Cloud of motivational States
                     print('intensities for band ', band_dic[i_band], 'and session', bloc_i)
-                    ###subject_table[table_i,10],random_predictions_matrix,max_acc[bloc_i-1,i_band]=tda_intensity_classifier(subj_dir,space+'/'+band_dic[i_band]+'/session'+str(bloc_i),pca,labels,i_band)
+                    subject_table[table_i,10],random_predictions_matrix,max_acc[bloc_i-1,i_band]=tda_intensity_classifier(subj_dir,space+'/'+band_dic[i_band]+'/session'+str(bloc_i),pca,labels,i_band)
                     #knn_intensity_classifier(subj_dir,space+'/'+band_dic[i_band]+'/session'+str(bloc_i),pca,labels,i_band)
 
                     #Now we weill plot the Point Cloud in 3 different Perspectives and also the point cloud of each motivational State
@@ -402,8 +405,8 @@ if __name__ == "__main__":
                     plt.savefig(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca_descriptors.png')
                     plt.close(fig)
                     ##We save the number of random classifications we have made for each dimension and Feature vector
-                    ###random_predictions_matrix=pd.DataFrame(random_predictions_matrix,columns=['dimension 0','dimension 1'],index=['Landscapes','Silhouettes','Descriptors','Bottleneck'])
-                    ###random_predictions_matrix.to_csv(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/random_preds.csv')
+                    random_predictions_matrix=pd.DataFrame(random_predictions_matrix,columns=['dimension 0','dimension 1'],index=['Landscapes','Silhouettes','Descriptors','Bottleneck'])
+                    random_predictions_matrix.to_csv(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/random_preds.csv')
                     
                     bloc_i+=1
             ## We select the band with highet mean accuracy from the silhouette feature vector       
@@ -412,10 +415,10 @@ if __name__ == "__main__":
             
             if max_bloc1==3:
                 max_bloc1=-1
-            ###data_table[subj_t+n_subj*sp,7]=max_acc[0,max_bloc1]
+            data_table[subj_t+n_subj*sp,7]=max_acc[0,max_bloc1]
             if max_bloc2==3:
                 max_bloc2=-1
-            ###data_table[subj_t+n_subj*sp,8]=max_acc[1,max_bloc2]
+            data_table[subj_t+n_subj*sp,8]=max_acc[1,max_bloc2]
             
             ## We finish complete table for the subject
             subject_table=pd.DataFrame(subject_table,index=subject_table_index,columns=['Clean Channels','N. trials','M0','M1','M2','captured variance after PCA','N. trials w/o Outliers ','M0 w/o Outliers ','M1 w/o Outliers ','M2 w/o Outliers ','test size'])
