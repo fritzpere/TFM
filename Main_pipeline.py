@@ -81,8 +81,8 @@ if __name__ == "__main__":
     n_dim=len(dimensions)
     feat_vect=[DimensionLandScape(),DimensionSilhouette(),TopologicalDescriptors()]
     n_vectors=len(feat_vect)
-    
-    data_table=np.zeros((2*len(subjects),9))
+    n_subj=len(subjects)
+    data_table=np.zeros((2*n_subj,9))
     subj_t=0              
     random_predictions_matrix=np.zeros((n_dim,n_vectors+1))
     
@@ -130,11 +130,11 @@ if __name__ == "__main__":
             ## We fill up a table with the number of clean electrodes for each subject.(A table for each subject) (general table for all subjects)
             subject_table[:,0]=preprocessor.N
              ## We fill up a table with the number of trials in total and for each motivational state. (general table for all subjects)
-            data_table[subj_t,0]=preprocessor.N
-            data_table[subj_t,1]=ts_band.shape[0]
-            data_table[subj_t,2]=(labels_original==0).sum()
-            data_table[subj_t,3]=(labels_original==1).sum()
-            data_table[subj_t,4]=(labels_original==2).sum()
+            data_table[subj_t+n_subj*sp,0]=preprocessor.N
+            data_table[subj_t+n_subj*sp,1]=ts_band.shape[0]
+            data_table[subj_t+n_subj*sp,2]=(labels_original==0).sum()
+            data_table[subj_t+n_subj*sp,3]=(labels_original==1).sum()
+            data_table[subj_t+n_subj*sp,4]=(labels_original==2).sum()
     
             #We defina which trials correspond to which Session
             sessions=[]
@@ -167,7 +167,7 @@ if __name__ == "__main__":
                     subject_table[table_i,3]=len(labels[labels==1])
                     subject_table[table_i,4]=len(labels[labels==2])
 
-                    data_table[subj_t,4+bloc_i]=PC.shape[0]
+                    data_table[subj_t+n_subj*sp,4+bloc_i]=PC.shape[0]
                     #We Apply PCA to our Point Cloud to reduce the dimensionality
                     X =(PC - np.mean(PC, axis=0)).T #X.shape: (42,632)
                     n = X.shape[1]
@@ -212,10 +212,10 @@ if __name__ == "__main__":
 
                     #Now we can use Topology om order to classify trials depending on how much they change the topology of each Point Cloud of motivational States
                     print('intensities for band ', band_dic[i_band], 'and session', bloc_i)
-                    subject_table[table_i,10],random_predictions_matrix,max_acc[bloc_i-1,i_band]=tda_intensity_classifier(subj_dir,space+'/'+band_dic[i_band]+'/session'+str(bloc_i),pca,labels,i_band)
+                    ###subject_table[table_i,10],random_predictions_matrix,max_acc[bloc_i-1,i_band]=tda_intensity_classifier(subj_dir,space+'/'+band_dic[i_band]+'/session'+str(bloc_i),pca,labels,i_band)
                     #knn_intensity_classifier(subj_dir,space+'/'+band_dic[i_band]+'/session'+str(bloc_i),pca,labels,i_band)
 
-                    ##Now we weill plot the Point CLoud in 3 different Perspectives and also the point cloud of each motivational State
+                    #Now we weill plot the Point Cloud in 3 different Perspectives and also the point cloud of each motivational State
                     plt.rcParams['xtick.labelsize']=16
                     plt.rcParams['ytick.labelsize']=16
                     plt.rcParams.update({'font.size': 16})
@@ -409,21 +409,21 @@ if __name__ == "__main__":
             ## We select the band with highet mean accuracy from the silhouette feature vector       
             max_bloc1=np.argmax(max_acc[0,:])
             max_bloc2=np.argmax(max_acc[1,:])
-
+            
             if max_bloc1==3:
                 max_bloc1=-1
-            data_table[subj_t,7]=max_acc[0,max_bloc1]
+            ###data_table[subj_t+n_subj*sp,7]=max_acc[0,max_bloc1]
             if max_bloc2==3:
                 max_bloc2=-1
-            data_table[subj_t,8]=max_acc[1,max_bloc2]
-            subj_t=subj_t+1
+            ###data_table[subj_t+n_subj*sp,8]=max_acc[1,max_bloc2]
+            
             ## We finish complete table for the subject
             subject_table=pd.DataFrame(subject_table,index=subject_table_index,columns=['Clean Channels','N. trials','M0','M1','M2','captured variance after PCA','N. trials w/o Outliers ','M0 w/o Outliers ','M1 w/o Outliers ','M2 w/o Outliers ','test size'])
             subject_table.to_csv(subj_dir+space+'/'+'/subject_table.csv')
 
             print('======TIME======')    
             print((time.time()-t_pca)/60, 'minuts for pca')
-    
+    subj_t=subj_t+1
     #Finishing the general table
     subjects_index=[]
     for subject in subjects:
