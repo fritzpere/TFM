@@ -221,9 +221,13 @@ if __name__ == "__main__":
                     
                     #We reproject the PCA to the original coordinates and save the reprojected and the originals to compare them laters
                     reproj= vh[:3,:].T @ pca.T + mean.reshape((-1,1))
-                    np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/reprojected_means.npy',reproj.mean(axis=1))
-                    np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/original_means.npy',PC.mean(axis=0))
-                    
+                    np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/reprojected_means_m0.npy',reproj[:,labels==0].mean(axis=1))
+                    np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/reprojected_means_m1.npy',reproj[:,labels==1].mean(axis=1))
+                    np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/reprojected_means_m2.npy',reproj[:,labels==2].mean(axis=1))
+                            
+                    np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/original_means_m0.npy',PC[labels==0].mean(axis=0))
+                    np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/original_means_m1.npy',PC[labels==1].mean(axis=0))
+                    np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/original_means_m2.npy',PC[labels==2].mean(axis=0))
 
 
                     #Now we can use Topology om order to classify trials depending on how much they change the topology of each Point Cloud of motivational States
