@@ -58,7 +58,7 @@ def load_data(i_sub,space='both'):
 
 if __name__ == "__main__":
 
-    subjects=list(range(25,36 )) 
+    subjects=list(range(26,36 )) 
 
     bloc_dic={}
     bloc_subj_dic={}
@@ -127,8 +127,8 @@ if __name__ == "__main__":
             print('cleaning and filtering data of',space,'of subject',subject)
             preprocessor=Preprocessor(data_space[sp])
             #filtered_ts_dic=preprocessor.get_filtered_ts_dic()
-            ts_band,labels_original=preprocessor.get_trials_and_labels()
-
+            ts_band,labels_original,invalid_ch=preprocessor.get_trials_and_labels()
+            np.save(subj_dir+'/silent-channels-'+str(subject)+'.npy',invalid_ch)
 
             ## We fill up a table with the number of clean electrodes for each subject.(A table for each subject) (general table for all subjects)
             subject_table[:,0]=preprocessor.N
@@ -233,7 +233,7 @@ if __name__ == "__main__":
                     #Now we can use Topology om order to classify trials depending on how much they change the topology of each Point Cloud of motivational States
                     print('intensities for band ', band_dic[i_band], 'and session', bloc_i)
                     subject_table[table_i,10],random_predictions_matrix,max_acc[bloc_i-1,i_band]=tda_intensity_classifier(subj_dir,space+'/'+band_dic[i_band]+'/session'+str(bloc_i),pca,labels,i_band)
-                    #knn_intensity_classifier(subj_dir,space+'/'+band_dic[i_band]+'/session'+str(bloc_i),pca,labels,i_band)
+
 
                     #Now we weill plot the Point Cloud in 3 different Perspectives and also the point cloud of each motivational State
                     plt.rcParams['xtick.labelsize']=16

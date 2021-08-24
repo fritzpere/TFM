@@ -38,13 +38,14 @@ class Preprocessor:
         #invalid_ch = np.logical_or(np.abs(data[:,:,0,:]).max(axis=1)==0, np.isnan(data[:,0,0,:]))
         #valid_ch_per_block = np.logical_not(invalid_ch)
         #valid_ch=valid_ch_per_block.sum(axis=1)==data.shape[-1]
+        
         valid_ch = np.logical_not(invalid_ch)
         cleaned_data= self.data[valid_ch,:,:,:]
         self.N = valid_ch.sum()
         print('there are',self.N,'clean channels' )
         
         self.data=cleaned_data
-        return
+        return invalid_ch
     
     def get_ts(self):
         """
@@ -147,7 +148,7 @@ class Preprocessor:
         a labels vector and a timeseries per band vector
         '''
         if not bool(self.ts_dic):
-            self.clean_data()
+            invalid_ch=self.clean_data()
             self.get_ts()       
             self.freq_filter()
             
@@ -169,7 +170,7 @@ class Preprocessor:
                     
         labels=np.concatenate((np.zeros(trials[0]),np.ones(trials[1]),np.ones(trials[2])*2),axis=0)         
         #self.tr2bl_ol=self.tr2bl_ol.reshape(-1)
-        return ts_band,labels
+        return ts_band,labels,invalid_ch
 
     def reject_outliers(self,data,labels,PC,m=1):
         '''
