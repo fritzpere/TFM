@@ -35,7 +35,8 @@ for space in spaces:
                     temp=temp1
                 else:
                     temp=np.concatenate((temp1,temp2),axis=0)
-                axes[i][j].violinplot(temp,positions=[-0.6+k*0.4],widths=[0.3])
+                axes[i][j].violinplot(temp1,positions=[-0.6+k*0.8],widths=[0.3])
+                axes[i][j].violinplot(temp1,positions=[-0.2+k*0.8],widths=[0.3])
                 
                 k=k+1
             
