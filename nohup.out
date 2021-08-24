@@ -1014,4 +1014,91 @@ create directory(plot): results/intensities/subject_35/fontSpace/gamma/session1/
 create directory(plot): results/intensities/subject_35/fontSpace/gamma/session2
 intensities for band  gamma and session 2
 create directory(plot): results/intensities/subject_35/fontSpace/gamma/session2/1nn_clf
-create directory(plot): 
+create directory(plot): /home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical left == right == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical bottom == top == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/representations/vector_methods.py:253: RuntimeWarning: invalid value encountered in double_scalars
+  weight  = weights[j] / total_weight
+Main_pipeline.py:226: RuntimeWarning: Mean of empty slice.
+  np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/reprojected_means_m2.npy',reproj[:,labels==2].mean(axis=1))
+/home/fritzpere/.local/lib/python3.8/site-packages/numpy/core/_methods.py:162: RuntimeWarning: invalid value encountered in true_divide
+  ret = um.true_divide(
+Main_pipeline.py:230: RuntimeWarning: Mean of empty slice.
+  np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/original_means_m2.npy',PC[labels==2].mean(axis=0))
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical left == right == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical bottom == top == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/representations/vector_methods.py:253: RuntimeWarning: invalid value encountered in double_scalars
+  weight  = weights[j] / total_weight
+Main_pipeline.py:226: RuntimeWarning: Mean of empty slice.
+  np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/reprojected_means_m2.npy',reproj[:,labels==2].mean(axis=1))
+/home/fritzpere/.local/lib/python3.8/site-packages/numpy/core/_methods.py:162: RuntimeWarning: invalid value encountered in true_divide
+  ret = um.true_divide(
+Main_pipeline.py:230: RuntimeWarning: Mean of empty slice.
+  np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/original_means_m2.npy',PC[labels==2].mean(axis=0))
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical left == right == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical bottom == top == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/representations/vector_methods.py:253: RuntimeWarning: invalid value encountered in double_scalars
+  weight  = weights[j] / total_weight
+Main_pipeline.py:226: RuntimeWarning: Mean of empty slice.
+  np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/reprojected_means_m2.npy',reproj[:,labels==2].mean(axis=1))
+/home/fritzpere/.local/lib/python3.8/site-packages/numpy/core/_methods.py:162: RuntimeWarning: invalid value encountered in true_divide
+  ret = um.true_divide(
+Main_pipeline.py:230: RuntimeWarning: Mean of empty slice.
+  np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/original_means_m2.npy',PC[labels==2].mean(axis=0))
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical left == right == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical bottom == top == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/representations/vector_methods.py:253: RuntimeWarning: invalid value encountered in double_scalars
+  weight  = weights[j] / total_weight
+Main_pipeline.py:226: RuntimeWarning: Mean of empty slice.
+  np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/reprojected_means_m2.npy',reproj[:,labels==2].mean(axis=1))
+/home/fritzpere/.local/lib/python3.8/site-packages/numpy/core/_methods.py:162: RuntimeWarning: invalid value encountered in true_divide
+  ret = um.true_divide(
+Main_pipeline.py:230: RuntimeWarning: Mean of empty slice.
+  np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/original_means_m2.npy',PC[labels==2].mean(axis=0))
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical left == right == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical bottom == top == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/representations/vector_methods.py:253: RuntimeWarning: invalid value encountered in double_scalars
+  weight  = weights[j] / total_weight
+results/intensities/subject_35/fontSpace/gamma/session2/topological_clf
+12.443588360150654 minuts for classification
+create directory(plot): results/intensities/subject_35/fontSpace/beta/session1
+intensities for band  beta and session 1
+create directory(plot): results/intensities/subject_35/fontSpace/beta/session1/1nn_clf
+create directory(plot): results/intensities/subject_35/fontSpace/beta/session1/topological_clf
+14.909125085671743 minuts for classification
+create directory(plot): results/intensities/subject_35/fontSpace/beta/session2
+intensities for band  beta and session 2
+create directory(plot): results/intensities/subject_35/fontSpace/beta/session2/1nn_clf
+create directory(plot): results/intensities/subject_35/fontSpace/beta/session2/topological_clf
+12.769067692756654 minuts for classification
+create directory(plot): results/intensities/subject_35/fontSpace/alpha/session1
+intensities for band  alpha and session 1
+create directory(plot): results/intensities/subject_35/fontSpace/alpha/session1/1nn_clf
+create directory(plot): results/intensities/subject_35/fontSpace/alpha/session1/topological_clf
+13.05870847304662 minuts for classification
+create directory(plot): results/intensities/subject_35/fontSpace/alpha/session2
+intensities for band  alpha and session 2
+create directory(plot): results/intensities/subject_35/fontSpace/alpha/session2/1nn_clf
+create directory(plot): results/intensities/subject_35/fontSpace/alpha/session2/topological_clf
+12.046721223990122 minuts for classification
+create directory(plot): results/intensities/subject_35/fontSpace/noFilter/session1
+intensities for band  noFilter and session 1
+create directory(plot): results/intensities/subject_35/fontSpace/noFilter/session1/1nn_clf
+create directory(plot): results/intensities/subject_35/fontSpace/noFilter/session1/topological_clf
+13.225559429327648 minuts for classification
+create directory(plot): results/intensities/subject_35/fontSpace/noFilter/session2
+intensities for band  noFilter and session 2
+create directory(plot): results/intensities/subject_35/fontSpace/noFilter/session2/1nn_clf
+create directory(plot): results/intensities/subject_35/fontSpace/noFilter/session2/topological_clf
+12.880372794469197 minuts for classification
+======TIME======
+108.17597321271896 minuts for pca
