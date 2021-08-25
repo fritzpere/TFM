@@ -1102,3 +1102,511 @@ create directory(plot): results/intensities/subject_35/fontSpace/noFilter/sessio
 12.880372794469197 minuts for classification
 ======TIME======
 108.17597321271896 minuts for pca
+cleaning and filtering data of electrodeSpace of subject 26
+there are 49 clean channels
+intensities for band  gamma and session 1
+1.4673664927482606 minuts for classification
+intensities for band  gamma and session 2
+4.236254107952118 minuts for classification
+intensities for band  beta and session 1
+1.3707279165585835 minuts for classification
+intensities for band  beta and session 2
+4.531772188345591 minuts for classification
+intensities for band  alpha and session 1
+1.2021238485972086 minuts for classification
+intensities for band  alpha and session 2
+4.323132558663686 minuts for classification
+intensities for band  noFilter and session 1
+1.091584285100301 minuts for classification
+intensities for band  noFilter and session 2
+3.7880192240079245 minuts for classification
+======TIME======
+23.057556756337483 minuts for pca
+cleaning and filtering data of fontSpace of subject 26
+there are 49 clean channels
+intensities for band  gamma and session 1
+1.118260633945465 minuts for classification
+intensities for band  gamma and session 2
+4.607684143384298 minuts for classification
+intensities for band  beta and session 1
+1.2702375650405884 minuts for classification
+intensities for band  beta and session 2
+4.583432078361511 minuts for classification
+intensities for band  alpha and session 1
+1.2604609370231628 minuts for classification
+intensities for band  alpha and session 2
+4.311189405123392 minuts for classification
+intensities for band  noFilter and session 1
+1.1183093865712483 minuts for classification
+intensities for band  noFilter and session 2
+3.746618608633677 minuts for classification
+======TIME======
+23.00019680261612 minuts for pca
+cleaning and filtering data of electrodeSpace of subject 27
+there are 50 clean channels
+intensities for band  gamma and session 1
+16.445885276794435 minuts for classification
+intensities for band  gamma and session 2
+17.347342320283254 minuts for classification
+intensities for band  beta and session 1
+16.639436320463815 minuts for classification
+intensities for band  beta and session 2
+17.176260352134705 minuts for classification
+intensities for band  alpha and session 1
+16.038084216912587 minuts for classification
+intensities for band  alpha and session 2
+16.227847103277842 minuts for classification
+intensities for band  noFilter and session 1
+19.064465749263764 minuts for classification
+intensities for band  noFilter and session 2
+18.85410956144333 minuts for classification
+======TIME======
+138.99149984518687 minuts for pca
+cleaning and filtering data of fontSpace of subject 27
+there are 50 clean channels
+intensities for band  gamma and session 1
+18.653404223918916 minuts for classification
+intensities for band  gamma and session 2
+14.21784287293752 minuts for classification
+intensities for band  beta and session 1
+16.07834197282791 minuts for classification
+intensities for band  beta and session 2
+19.344409279028575 minuts for classification
+intensities for band  alpha and session 1
+15.462754833698273 minuts for classification
+intensities for band  alpha and session 2
+18.302458930015565 minuts for classification
+intensities for band  noFilter and session 1
+18.54283548593521 minuts for classification
+intensities for band  noFilter and session 2
+18.54916874965032 minuts for classification
+======TIME======
+140.3606793642044 minuts for pca
+cleaning and filtering data of electrodeSpace of subject 28
+there are 53 clean channels
+intensities for band  gamma and session 1
+19.315260859330497 minuts for classification
+intensities for band  gamma and session 2
+16.8206858754158 minuts for classification
+intensities for band  beta and session 1
+18.715865981578826 minuts for classification
+intensities for band  beta and session 2
+15.992972338199616 minuts for classification
+intensities for band  alpha and session 1
+19.15036818186442 minuts for classification
+intensities for band  alpha and session 2
+16.730725661913553 minuts for classification
+intensities for band  noFilter and session 1
+17.407634655634563 minuts for classification
+intensities for band  noFilter and session 2
+17.80545164346695 minuts for classification
+======TIME======
+143.16125288804372 minuts for pca
+cleaning and filtering data of fontSpace of subject 28
+there are 53 clean channels
+intensities for band  gamma and session 1
+18.085091829299927 minuts for classification
+intensities for band  gamma and session 2
+16.179086995124816 minuts for classification
+intensities for band  beta and session 1
+19.0410786986351 minuts for classification
+intensities for band  beta and session 2
+15.624884394804637 minuts for classification
+intensities for band  alpha and session 1
+18.88776836792628 minuts for classification
+intensities for band  alpha and session 2
+16.15900760491689 minuts for classification
+intensities for band  noFilter and session 1
+18.13900147676468 minuts for classification
+intensities for band  noFilter and session 2
+17.771447757879894 minuts for classification
+======TIME======
+141.10640493631362 minuts for pca
+cleaning and filtering data of electrodeSpace of subject 29
+there are 36 clean channels
+intensities for band  gamma and session 1
+1.2076359748840333 minuts for classification
+intensities for band  gamma and session 2
+1.1666826645533244 minuts for classification
+intensities for band  beta and session 1
+1.4049810449282327 minuts for classification
+intensities for band  beta and session 2
+1.403586196899414 minuts for classification
+intensities for band  alpha and session 1
+1.410341727733612 minuts for classification
+intensities for band  alpha and session 2
+1.380427086353302 minuts for classification
+intensities for band  noFilter and session 1
+1.2414722124735513 minuts for classification
+intensities for band  noFilter and session 2
+1.237558376789093 minuts for classification
+======TIME======
+11.562131369113922 minuts for pca
+cleaning and filtering data of fontSpace of subject 29
+there are 36 clean channels
+intensities for band  gamma and session 1
+1.2092823147773744 minuts for classification
+intensities for band  gamma and session 2
+1.0994609514872233 minuts for classification
+intensities for band  beta and session 1
+1.317196774482727 minuts for classification
+intensities for band  beta and session 2
+1.3219172437985738 minuts for classification
+intensities for band  alpha and session 1
+1.1227984507878621 minuts for classification
+intensities for band  alpha and session 2
+1.3028756499290466 minuts for classification
+intensities for band  noFilter and session 1
+1.2816903909047446 minuts for classification
+intensities for band  noFilter and session 2
+1.1464741071065268 minuts for classification
+======TIME======
+10.903840072949727 minuts for pca
+cleaning and filtering data of electrodeSpace of subject 30
+there are 48 clean channels
+intensities for band  gamma and session 1
+1.4032023787498473 minuts for classification
+intensities for band  gamma and session 2
+1.4889139970143637 minuts for classification
+intensities for band  beta and session 1
+1.6658061623573304 minuts for classification
+intensities for band  beta and session 2
+1.3748827854792276 minuts for classification
+intensities for band  alpha and session 1
+1.5361976067225138 minuts for classification
+intensities for band  alpha and session 2
+1.4304039120674132 minuts for classification
+intensities for band  noFilter and session 1
+1.4880496780077617 minuts for classification
+intensities for band  noFilter and session 2
+1.26926798025767 minuts for classification
+======TIME======
+13.069810497760773 minuts for pca
+cleaning and filtering data of fontSpace of subject 30
+there are 49 clean channels
+intensities for band  gamma and session 1
+1.4424550175666808 minuts for classification
+intensities for band  gamma and session 2
+1.3516901771227519 minuts for classification
+intensities for band  beta and session 1
+1.5246166467666626 minuts for classification
+intensities for band  beta and session 2
+1.2687264362970987 minuts for classification
+intensities for band  alpha and session 1
+1.2479125261306763 minuts for classification
+intensities for band  alpha and session 2
+1.3464388251304626 minuts for classification
+intensities for band  noFilter and session 1
+1.4125240683555602 minuts for classification
+/home/fritzpere/.local/lib/python3.8/site-packages/sklearn/metrics/_plot/confusion_matrix.py:114: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig, ax = plt.subplots()
+/home/fritzpere/Desktop/TFM/TFM/intensities_pipeline.py:252: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig, axes = plt.subplots(nrows=n_dim, ncols=1, figsize=(24, 12))
+/home/fritzpere/Desktop/TFM/TFM/intensities_pipeline.py:276: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig2, axes2 = plt.subplots(nrows=n_dim, ncols=n_vectors+1, figsize=(60, 30))
+Main_pipeline.py:243: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=[36,16])
+Main_pipeline.py:347: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(18, 8))
+Main_pipeline.py:363: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig, axes = plt.subplots(nrows=2, ncols=3, figsize=(18, 8))
+Main_pipeline.py:398: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig, axes = plt.subplots(nrows=5, ncols=1, figsize=(14, 14))
+Main_pipeline.py:188: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig= plt.figure( figsize=(18, 4))
+/home/fritzpere/Desktop/TFM/TFM/intensities_pipeline.py:214: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  plt.figure(figsize=[16,9])
+/home/fritzpere/Desktop/TFM/TFM/intensities_pipeline.py:231: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  plt.figure(figsize=[16,9])
+Main_pipeline.py:226: RuntimeWarning: Mean of empty slice.
+  np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/reprojected_means_m2.npy',reproj[:,labels==2].mean(axis=1))
+/home/fritzpere/.local/lib/python3.8/site-packages/numpy/core/_methods.py:162: RuntimeWarning: invalid value encountered in true_divide
+  ret = um.true_divide(
+Main_pipeline.py:230: RuntimeWarning: Mean of empty slice.
+  np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/original_means_m2.npy',PC[labels==2].mean(axis=0))
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical left == right == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical bottom == top == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/representations/vector_methods.py:253: RuntimeWarning: invalid value encountered in double_scalars
+  weight  = weights[j] / total_weight
+Main_pipeline.py:226: RuntimeWarning: Mean of empty slice.
+  np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/reprojected_means_m2.npy',reproj[:,labels==2].mean(axis=1))
+/home/fritzpere/.local/lib/python3.8/site-packages/numpy/core/_methods.py:162: RuntimeWarning: invalid value encountered in true_divide
+  ret = um.true_divide(
+Main_pipeline.py:230: RuntimeWarning: Mean of empty slice.
+  np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/original_means_m2.npy',PC[labels==2].mean(axis=0))
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical left == right == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical bottom == top == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/representations/vector_methods.py:253: RuntimeWarning: invalid value encountered in double_scalars
+  weight  = weights[j] / total_weight
+Main_pipeline.py:226: RuntimeWarning: Mean of empty slice.
+  np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/reprojected_means_m2.npy',reproj[:,labels==2].mean(axis=1))
+/home/fritzpere/.local/lib/python3.8/site-packages/numpy/core/_methods.py:162: RuntimeWarning: invalid value encountered in true_divide
+  ret = um.true_divide(
+Main_pipeline.py:230: RuntimeWarning: Mean of empty slice.
+  np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/original_means_m2.npy',PC[labels==2].mean(axis=0))
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical left == right == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical bottom == top == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/representations/vector_methods.py:253: RuntimeWarning: invalid value encountered in double_scalars
+  weight  = weights[j] / total_weight
+Main_pipeline.py:226: RuntimeWarning: Mean of empty slice.
+  np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/reprojected_means_m2.npy',reproj[:,labels==2].mean(axis=1))
+/home/fritzpere/.local/lib/python3.8/site-packages/numpy/core/_methods.py:162: RuntimeWarning: invalid value encountered in true_divide
+  ret = um.true_divide(
+Main_pipeline.py:230: RuntimeWarning: Mean of empty slice.
+  np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/original_means_m2.npy',PC[labels==2].mean(axis=0))
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical left == right == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical bottom == top == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/representations/vector_methods.py:253: RuntimeWarning: invalid value encountered in double_scalars
+  weight  = weights[j] / total_weight
+Main_pipeline.py:226: RuntimeWarning: Mean of empty slice.
+  np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/reprojected_means_m2.npy',reproj[:,labels==2].mean(axis=1))
+/home/fritzpere/.local/lib/python3.8/site-packages/numpy/core/_methods.py:162: RuntimeWarning: invalid value encountered in true_divide
+  ret = um.true_divide(
+Main_pipeline.py:230: RuntimeWarning: Mean of empty slice.
+  np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/original_means_m2.npy',PC[labels==2].mean(axis=0))
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical left == right == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical bottom == top == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/representations/vector_methods.py:253: RuntimeWarning: invalid value encountered in double_scalars
+  weight  = weights[j] / total_weight
+Main_pipeline.py:226: RuntimeWarning: Mean of empty slice.
+  np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/reprojected_means_m2.npy',reproj[:,labels==2].mean(axis=1))
+/home/fritzpere/.local/lib/python3.8/site-packages/numpy/core/_methods.py:162: RuntimeWarning: invalid value encountered in true_divide
+  ret = um.true_divide(
+Main_pipeline.py:230: RuntimeWarning: Mean of empty slice.
+  np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/original_means_m2.npy',PC[labels==2].mean(axis=0))
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical left == right == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical bottom == top == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/representations/vector_methods.py:253: RuntimeWarning: invalid value encountered in double_scalars
+  weight  = weights[j] / total_weight
+Main_pipeline.py:226: RuntimeWarning: Mean of empty slice.
+  np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/reprojected_means_m2.npy',reproj[:,labels==2].mean(axis=1))
+/home/fritzpere/.local/lib/python3.8/site-packages/numpy/core/_methods.py:162: RuntimeWarning: invalid value encountered in true_divide
+  ret = um.true_divide(
+Main_pipeline.py:230: RuntimeWarning: Mean of empty slice.
+  np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/original_means_m2.npy',PC[labels==2].mean(axis=0))
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical left == right == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical bottom == top == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/representations/vector_methods.py:253: RuntimeWarning: invalid value encountered in double_scalars
+  weight  = weights[j] / total_weight
+Main_pipeline.py:226: RuntimeWarning: Mean of empty slice.
+  np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/reprojected_means_m2.npy',reproj[:,labels==2].mean(axis=1))
+/home/fritzpere/.local/lib/python3.8/site-packages/numpy/core/_methods.py:162: RuntimeWarning: invalid value encountered in true_divide
+  ret = um.true_divide(
+Main_pipeline.py:230: RuntimeWarning: Mean of empty slice.
+  np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/original_means_m2.npy',PC[labels==2].mean(axis=0))
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical left == right == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical bottom == top == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/representations/vector_methods.py:253: RuntimeWarning: invalid value encountered in double_scalars
+  weight  = weights[j] / total_weight
+intensities for band  noFilter and session 2
+1.1510367472966512 minuts for classification
+======TIME======
+12.128271249930064 minuts for pca
+cleaning and filtering data of electrodeSpace of subject 31
+there are 45 clean channels
+intensities for band  gamma and session 1
+intensities for band  gamma and session 2
+12.069483466943105 minuts for classification
+intensities for band  beta and session 1
+intensities for band  beta and session 2
+12.423826483885447 minuts for classification
+intensities for band  alpha and session 1
+intensities for band  alpha and session 2
+13.641501824061075 minuts for classification
+intensities for band  noFilter and session 1
+intensities for band  noFilter and session 2
+12.772594531377157 minuts for classification
+======TIME======
+51.82293259302775 minuts for pca
+cleaning and filtering data of fontSpace of subject 31
+there are 45 clean channels
+intensities for band  gamma and session 1
+intensities for band  gamma and session 2
+13.235541872183482 minuts for classification
+intensities for band  beta and session 1
+intensities for band  beta and session 2
+12.940015788873037 minuts for classification
+intensities for band  alpha and session 1
+intensities for band  alpha and session 2
+13.873521995544433 minuts for classification
+intensities for band  noFilter and session 1
+intensities for band  noFilter and session 2
+13.076586715380351 minuts for classification
+======TIME======
+54.042026380697884 minuts for pca
+cleaning and filtering data of electrodeSpace of subject 32
+there are 29 clean channels
+intensities for band  gamma and session 1
+1.7202125986417134 minuts for classification
+intensities for band  gamma and session 2
+0.9036091009775797 minuts for classification
+intensities for band  beta and session 1
+1.568252476056417 minuts for classification
+intensities for band  beta and session 2
+1.4959136605262757 minuts for classification
+intensities for band  alpha and session 1
+1.6003507018089294 minuts for classification
+intensities for band  alpha and session 2
+1.5473284006118775 minuts for classification
+intensities for band  noFilter and session 1
+1.4489065766334535 minuts for classification
+intensities for band  noFilter and session 2
+1.158930734793345 minuts for classification
+======TIME======
+12.812532520294189 minuts for pca
+cleaning and filtering data of fontSpace of subject 32
+there are 29 clean channels
+intensities for band  gamma and session 1
+1.615027618408203 minuts for classification
+intensities for band  gamma and session 2
+0.9239960471789043 minuts for classification
+intensities for band  beta and session 1
+1.4985276659329732 minuts for classification
+intensities for band  beta and session 2
+1.341996475060781 minuts for classification
+intensities for band  alpha and session 1
+1.4720306674639383 minuts for classification
+intensities for band  alpha and session 2
+1.1697068532307944 minuts for classification
+intensities for band  noFilter and session 1
+1.265223213036855 minuts for classification
+intensities for band  noFilter and session 2
+0.7663081288337708 minuts for classification
+======TIME======
+11.413623980681102 minuts for pca
+cleaning and filtering data of electrodeSpace of subject 33
+there are 54 clean channels
+intensities for band  gamma and session 1
+16.25060398976008 minuts for classification
+intensities for band  gamma and session 2
+18.626205849647523 minuts for classification
+intensities for band  beta and session 1
+16.734076050917306 minuts for classification
+intensities for band  beta and session 2
+16.174651805559794 minuts for classification
+intensities for band  alpha and session 1
+16.636951994895934 minuts for classification
+intensities for band  alpha and session 2
+16.997246619065603 minuts for classification
+intensities for band  noFilter and session 1
+19.55781360467275 minuts for classification
+intensities for band  noFilter and session 2
+18.340399956703187 minuts for classification
+======TIME======
+140.56776339213053 minuts for pca
+cleaning and filtering data of fontSpace of subject 33
+there are 54 clean channels
+intensities for band  gamma and session 1
+12.020706407229106 minuts for classification
+intensities for band  gamma and session 2
+18.08702170451482 minuts for classification
+intensities for band  beta and session 1
+16.70678791205088 minuts for classification
+intensities for band  beta and session 2
+16.393592023849486 minuts for classification
+intensities for band  alpha and session 1
+15.037153800328573 minuts for classification
+intensities for band  alpha and session 2
+16.772052657604217 minuts for classification
+intensities for band  noFilter and session 1
+17.53539663553238 minuts for classification
+intensities for band  noFilter and session 2
+16.879726811250052 minuts for classification
+======TIME======
+130.6555775086085 minuts for pca
+cleaning and filtering data of electrodeSpace of subject 34
+there are 42 clean channels
+intensities for band  gamma and session 1
+14.298840475082397 minuts for classification
+intensities for band  gamma and session 2
+19.549510836601257 minuts for classification
+intensities for band  beta and session 1
+16.657195889949797 minuts for classification
+intensities for band  beta and session 2
+18.15426859855652 minuts for classification
+intensities for band  alpha and session 1
+16.377480920155843 minuts for classification
+intensities for band  alpha and session 2
+20.613968861103057 minuts for classification
+intensities for band  noFilter and session 1
+18.363839129606884 minuts for classification
+intensities for band  noFilter and session 2
+18.899727408091227 minuts for classification
+======TIME======
+144.15498185157776 minuts for pca
+cleaning and filtering data of fontSpace of subject 34
+there are 43 clean channels
+intensities for band  gamma and session 1
+13.434009929498037 minuts for classification
+intensities for band  gamma and session 2
+18.807457196712495 minuts for classification
+intensities for band  beta and session 1
+16.604837056001028 minuts for classification
+intensities for band  beta and session 2
+18.78054107427597 minuts for classification
+intensities for band  alpha and session 1
+17.389908889929455 minuts for classification
+intensities for band  alpha and session 2
+20.044246915976206 minuts for classification
+intensities for band  noFilter and session 1
+17.052657413482667 minuts for classification
+intensities for band  noFilter and session 2
+18.560443870226543 minuts for classification
+======TIME======
+141.90655176639558 minuts for pca
+cleaning and filtering data of electrodeSpace of subject 35
+there are 45 clean channels
+intensities for band  gamma and session 1
+14.420112844308218 minuts for classification
+intensities for band  gamma and session 2
+12.299792404969534 minuts for classification
+intensities for band  beta and session 1
+14.92513821919759 minuts for classification
+intensities for band  beta and session 2
+11.968833800156911 minuts for classification
+intensities for band  alpha and session 1
+13.882545753320057 minuts for classification
+intensities for band  alpha and session 2
+11.942774375279745 minuts for classification
+intensities for band  noFilter and session 1
+13.278657551606496 minuts for classification
+intensities for band  noFilter and session 2
+12.347472095489502 minuts for classification
+======TIME======
+106.2470944126447 minuts for pca
+cleaning and filtering data of fontSpace of subject 35
+there are 45 clean channels
+intensities for band  gamma and session 1
+15.447092990080515 minuts for classification
+intensities for band  gamma and session 2
+12.275972159703572 minuts for classification
+intensities for band  beta and session 1
+14.93166408141454 minuts for classification
+intensities for band  beta and session 2
+12.296228396892548 minuts for classification
+intensities for band  alpha and session 1
+13.104326983292898 minuts for classification
+intensities for band  alpha and session 2
+11.832342227300009 minuts for classification
+intensities for band  noFilter and session 1
+13.081245636940002 minuts for classification
+intensities for band  noFilter and session 2
+12.244404272238414 minuts for classification
+======TIME======
+106.37338551680247 minuts for pca
