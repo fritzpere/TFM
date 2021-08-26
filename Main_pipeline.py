@@ -58,7 +58,7 @@ def load_data(i_sub,space='both'):
 
 if __name__ == "__main__":
 
-    subjects=list(range(26,36 )) 
+    subjects=list(range(25,36 )) 
 
     bloc_dic={}
     bloc_subj_dic={}
@@ -87,8 +87,6 @@ if __name__ == "__main__":
     data_table=np.zeros((2*n_subj,9))
     subj_t=0              
     random_predictions_matrix=np.zeros((n_dim,n_vectors+1))
-    before_projection=np.zeros((2,n_subj,2,60))##Cal mirar lo del 60 mirar treball Montse
-    after_projection=np.zeros((2,n_subj,2,60))##Cal mirar lo del 60 mirar treball Montse
     ## For each subject we load the data
     for subject in subjects:
 
@@ -128,8 +126,9 @@ if __name__ == "__main__":
             preprocessor=Preprocessor(data_space[sp])
             #filtered_ts_dic=preprocessor.get_filtered_ts_dic()
             ts_band,labels_original,invalid_ch=preprocessor.get_trials_and_labels()
-            np.save(subj_dir+'/silent-channels-'+str(subject)+'.npy',invalid_ch)
-
+            if sp==0:
+                np.save(subj_dir+'/silent-channels-'+str(subject)+'.npy',invalid_ch)
+            
             ## We fill up a table with the number of clean electrodes for each subject.(A table for each subject) (general table for all subjects)
             subject_table[:,0]=preprocessor.N
              ## We fill up a table with the number of trials in total and for each motivational state. (general table for all subjects)
@@ -233,7 +232,7 @@ if __name__ == "__main__":
                     #Now we can use Topology om order to classify trials depending on how much they change the topology of each Point Cloud of motivational States
                     print('intensities for band ', band_dic[i_band], 'and session', bloc_i)
                     subject_table[table_i,10],random_predictions_matrix,max_acc[bloc_i-1,i_band]=tda_intensity_classifier(subj_dir,space+'/'+band_dic[i_band]+'/session'+str(bloc_i),pca,labels,i_band)
-
+                    
 
                     #Now we weill plot the Point Cloud in 3 different Perspectives and also the point cloud of each motivational State
                     plt.rcParams['xtick.labelsize']=16
@@ -442,7 +441,7 @@ if __name__ == "__main__":
             subject_table.to_csv(subj_dir+space+'/'+'/subject_table.csv')
 
             print('======TIME======')    
-            print((time.time()-t_pca)/60, 'minuts for pca')
+            #print((time.time()-t_pca)/60, 'minuts for pca')
         subj_t=subj_t+1
     #Finishing the general table
     subjects_index=[]
