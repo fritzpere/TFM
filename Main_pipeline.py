@@ -428,11 +428,11 @@ if __name__ == "__main__":
             ## We select the band with highet mean accuracy from the silhouette feature vector       
             max_bloc1=np.argmax(max_acc[0,:])
             max_bloc2=np.argmax(max_acc[1,:])
-            data_table[subj_t+n_subj*sp,8]=band_dic[max_bloc1]
+            data_table[subj_t+n_subj*sp,8]=max_bloc1
             if max_bloc1==3:
                 max_bloc1=-1
             data_table[subj_t+n_subj*sp,7]=max_acc[0,max_bloc1]
-            data_table[subj_t+n_subj*sp,10]=band_dic[max_bloc2]
+            data_table[subj_t+n_subj*sp,10]=126275
             if max_bloc2==3:
                 max_bloc2=-1
             data_table[subj_t+n_subj*sp,9]=max_acc[1,max_bloc2]
@@ -452,5 +452,6 @@ if __name__ == "__main__":
     for subject in subjects:
         subjects_index.append('Subject ' +str(subject)+ ' FontSpace')
     data_table=pd.DataFrame(data_table,index=subjects_index,columns=['Channels','Trials', 'Trials M0', 'Trials M1', 'Trials M2', 'Trials Session 1', 'Trials Session 2','maximum accuracy w/ Silhouette achieved in session 1','frequency band of maximum accuracy in session1','maximum accuracy w/ Silhouette achieved in session 2','frequency band of maximum accuracy in session2'])
+    data_table['frequency band of maximum accuracy in session1','frequency band of maximum accuracy in session2']=table[2].apply(lambda x: band_dic[x])
     data_table.to_csv('results/intensities/data_table.csv')
                                        
