@@ -84,7 +84,7 @@ if __name__ == "__main__":
     feat_vect=[DimensionLandScape(),DimensionSilhouette(),TopologicalDescriptors()]
     n_vectors=len(feat_vect)
     n_subj=len(subjects)
-    data_table=np.zeros((2*n_subj,9))
+    data_table=np.zeros((2*n_subj,11))
     subj_t=0              
     random_predictions_matrix=np.zeros((n_dim,n_vectors+1))
     ## For each subject we load the data
@@ -428,16 +428,18 @@ if __name__ == "__main__":
             ## We select the band with highet mean accuracy from the silhouette feature vector       
             max_bloc1=np.argmax(max_acc[0,:])
             max_bloc2=np.argmax(max_acc[1,:])
-            
+            data_table[subj_t+n_subj*sp,8]=band_dic[max_bloc1]
             if max_bloc1==3:
                 max_bloc1=-1
             data_table[subj_t+n_subj*sp,7]=max_acc[0,max_bloc1]
+            data_table[subj_t+n_subj*sp,10]=band_dic[max_bloc2]
             if max_bloc2==3:
                 max_bloc2=-1
-            data_table[subj_t+n_subj*sp,8]=max_acc[1,max_bloc2]
+            data_table[subj_t+n_subj*sp,9]=max_acc[1,max_bloc2]
             
             ## We finish complete table for the subject
             subject_table=pd.DataFrame(subject_table,index=subject_table_index,columns=['Clean Channels','N. trials','M0','M1','M2','captured variance after PCA','N. trials w/o Outliers ','M0 w/o Outliers ','M1 w/o Outliers ','M2 w/o Outliers ','test size'])
+            
             subject_table.to_csv(subj_dir+space+'/'+'/subject_table.csv')
 
             print('======TIME======')    
@@ -449,6 +451,6 @@ if __name__ == "__main__":
         subjects_index.append('Subject ' +str(subject)+ ' ElectrodeSpace')
     for subject in subjects:
         subjects_index.append('Subject ' +str(subject)+ ' FontSpace')
-    data_table=pd.DataFrame(data_table,index=subjects_index,columns=['Channels','Trials', 'Trials M0', 'Trials M1', 'Trials M2', 'Trials Block 1', 'Trials Block 2','maximum accuracy w/ Silhouette achieved in bloc 1','maximum accuracy w/ Silhouette achieved in bloc 2'])
+    data_table=pd.DataFrame(data_table,index=subjects_index,columns=['Channels','Trials', 'Trials M0', 'Trials M1', 'Trials M2', 'Trials Session 1', 'Trials Session 2','maximum accuracy w/ Silhouette achieved in session 1','frequency band of maximum accuracy in session1','maximum accuracy w/ Silhouette achieved in session 2','frequency band of maximum accuracy in session2'])
     data_table.to_csv('results/intensities/data_table.csv')
                                        
