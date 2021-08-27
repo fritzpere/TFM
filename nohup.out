@@ -766,4 +766,326 @@ create directory(plot): results/intensities/subject_32/fontSpace/noFilter/sessio
 ======TIME======
 create directory: results/intensities/subject_33/
 create directory(plot): results/intensities/subject_33/electrodeSpace
-cleaning and filtering data of 
+cleaning and filtering data of electrodeSpace of subject 33
+there are 54 clean channels
+create directory(plot): results/intensities/subject_33/electrodeSpace/gamma/session1
+intensities for band  gamma and session 1
+create directory(plot): results/intensities/subject_33/electrodeSpace/gamma/session1/1nn_clf
+create directory(plot): results/intensities/subject_33/electrodeSpace/gamma/session1/topological_clf
+16.067062457402546 minuts for classification
+create directory(plot): results/intensities/subject_33/electrodeSpace/gamma/session2
+intensities for band  gamma and session 2
+create directory(plot): results/intensities/subject_33/electrodeSpace/gamma/session2/1nn_clf
+create directory(plot): results/intensities/subject_33/electrodeSpace/gamma/session2/topological_clf
+19.28011025985082 minuts for classification
+create directory(plot): results/intensities/subject_33/electrodeSpace/beta/session1
+intensities for band  beta and session 1
+create directory(plot): results/intensities/subject_33/electrodeSpace/beta/session1/1nn_clf
+create directory(plot): results/intensities/subject_33/electrodeSpace/beta/session1/topological_clf
+16.518662333488464 minuts for classification
+create directory(plot): results/intensities/subject_33/electrodeSpace/beta/session2
+intensities for band  beta and session 2
+create directory(plot): results/intensities/subject_33/electrodeSpace/beta/session2/1nn_clf
+create directory(plot): results/intensities/subject_33/electrodeSpace/beta/session2/topological_clf
+16.747530615329744 minuts for classification
+create directory(plot): results/intensities/subject_33/electrodeSpace/alpha/session1
+intensities for band  alpha and session 1
+create directory(plot): results/intensities/subject_33/electrodeSpace/alpha/session1/1nn_clf
+create directory(plot): results/intensities/subject_33/electrodeSpace/alpha/session1/topological_clf
+16.238285358746847 minuts for classification
+create directory(plot): results/intensities/subject_33/electrodeSpace/alpha/session2
+intensities for band  alpha and session 2
+create directory(plot): results/intensities/subject_33/electrodeSpace/alpha/session2/1nn_clf
+create directory(plot): results/intensities/subject_33/electrodeSpace/alpha/session2/topological_clf
+17.05771778424581 minuts for classification
+create directory(plot): results/intensities/subject_33/electrodeSpace/noFilter/session1
+intensities for band  noFilter and session 1
+create directory(plot): results/intensities/subject_33/electrodeSpace/noFilter/session1/1nn_clf
+create directory(plot): results/intensities/subject_33/electrodeSpace/noFilter/session1/topological_clf
+20.069212452570596 minuts for classification
+create directory(plot): results/intensities/subject_33/electrodeSpace/noFilter/session2
+intensities for band  noFilter and session 2
+create directory(plot): results/intensities/subject_33/electrodeSpace/noFilter/session2/1nn_clf
+create directory(plot): results/intensities/subject_33/electrodeSpace/noFilter/session2/topological_clf
+18.560880386829375 minuts for classification
+======TIME======
+create directory(plot): results/intensities/subject_33/fontSpace
+cleaning and filtering data of fontSpace of subject 33
+there are 54 clean channels
+create directory(plot): results/intensities/subject_33/fontSpace/gamma/session1
+intensities for band  gamma and session 1
+create directory(plot): results/intensities/subject_33/fontSpace/gamma/session1/1nn_clf
+create directory(plot): results/intensities/subject_33/fontSpace/gamma/session1/topological_clf
+12.190043318271638 minuts for classification
+create directory(plot): results/intensities/subject_33/fontSpace/gamma/session2
+intensities for band  gamma and session 2
+create directory(plot): results/intensities/subject_33/fontSpace/gamma/session2/1nn_clf
+create directory(plot): results/intensities/subject_33/fontSpace/gamma/session2/topological_clf
+18.27307540178299 minuts for classification
+create directory(plot): results/intensities/subject_33/fontSpace/beta/session1
+intensities for band  beta and session 1
+create directory(plot): results/intensities/subject_33/fontSpace/beta/session1/1nn_clf
+create directory(plot): results/intensities/subject_33/fontSpace/beta/session1/topological_clf
+16.729128845532735 minuts for classification
+create directory(plot): results/intensities/subject_33/fontSpace/beta/session2
+intensities for band  beta and session 2
+create directory(plot): results/intensities/subject_33/fontSpace/beta/session2/1nn_clf
+create directory(plot): results/intensities/subject_33/fontSpace/beta/session2/topological_clf
+16.429882474740346 minuts for classification
+create directory(plot): results/intensities/subject_33/fontSpace/alpha/session1
+intensities for band  alpha and session 1
+create directory(plot): results/intensities/subject_33/fontSpace/alpha/session1/1nn_clf
+create directory(plot): results/intensities/subject_33/fontSpace/alpha/session1/topological_clf
+15.055862045288086 minuts for classification
+create directory(plot): results/intensities/subject_33/fontSpace/alpha/session2
+intensities for band  alpha and session 2
+create directory(plot): results/intensities/subject_33/fontSpace/alpha/session2/1nn_clf
+create directory(plot): results/intensities/subject_33/fontSpace/alpha/session2/topological_clf
+16.56783592303594 minuts for classification
+create directory(plot): results/intensities/subject_33/fontSpace/noFilter/session1
+intensities for band  noFilter and session 1
+create directory(plot): results/intensities/subject_33/fontSpace/noFilter/session1/1nn_clf
+create directory(plot): results/intensities/subject_33/fontSpace/noFilter/session1/topological_clf
+18.121907981236777 minuts for classification
+create directory(plot): results/intensities/subject_33/fontSpace/noFilter/session2
+intensities for band  noFilter and session 2
+create directory(plot): results/intensities/subject_33/fontSpace/noFilter/session2/1nn_clf
+create directory(plot): results/intensities/subject_33/fontSpace/noFilter/session2/topological_clf
+17.06705422004064 minuts for classification
+======TIME======
+create directory: results/intensities/subject_34/
+create directory(plot): results/intensities/subject_34/electrodeSpace
+cleaning and filtering data of electrodeSpace of subject 34
+there are 42 clean channels
+create directory(plot): results/intensities/subject_34/electrodeSpace/gamma/session1
+intensities for band  gamma and session 1
+create directory(plot): results/intensities/subject_34/electrodeSpace/gamma/session1/1nn_clf
+create directory(plot): results/intensities/subject_34/electrodeSpace/gamma/session1/topological_clf
+14.212597322463989 minuts for classification
+create directory(plot): results/intensities/subject_34/electrodeSpace/gamma/session2
+intensities for band  gamma and session 2
+create directory(plot): results/intensities/subject_34/electrodeSpace/gamma/session2/1nn_clf
+create directory(plot): results/intensities/subject_34/electrodeSpace/gamma/session2/topological_clf
+19.818315744400024 minuts for classification
+create directory(plot): results/intensities/subject_34/electrodeSpace/beta/session1
+intensities for band  beta and session 1
+create directory(plot): results/intensities/subject_34/electrodeSpace/beta/session1/1nn_clf
+create directory(plot): results/intensities/subject_34/electrodeSpace/beta/session1/topological_clf
+16.87051675717036 minuts for classification
+create directory(plot): results/intensities/subject_34/electrodeSpace/beta/session2
+intensities for band  beta and session 2
+create directory(plot): results/intensities/subject_34/electrodeSpace/beta/session2/1nn_clf
+create directory(plot): results/intensities/subject_34/electrodeSpace/beta/session2/topological_clf
+17.97129913965861 minuts for classification
+create directory(plot): results/intensities/subject_34/electrodeSpace/alpha/session1
+intensities for band  alpha and session 1
+create directory(plot): results/intensities/subject_34/electrodeSpace/alpha/session1/1nn_clf
+create directory(plot): results/intensities/subject_34/electrodeSpace/alpha/session1/topological_clf
+16.49672038157781 minuts for classification
+create directory(plot): results/intensities/subject_34/electrodeSpace/alpha/session2
+intensities for band  alpha and session 2
+create directory(plot): results/intensities/subject_34/electrodeSpace/alpha/session2/1nn_clf
+create directory(plot): results/intensities/subject_34/electrodeSpace/alpha/session2/topological_clf
+20.00791413784027 minuts for classification
+create directory(plot): results/intensities/subject_34/electrodeSpace/noFilter/session1
+intensities for band  noFilter and session 1
+create directory(plot): results/intensities/subject_34/electrodeSpace/noFilter/session1/1nn_clf
+create directory(plot): results/intensities/subject_34/electrodeSpace/noFilter/session1/topological_clf
+18.4423574646314 minuts for classification
+create directory(plot): results/intensities/subject_34/electrodeSpace/noFilter/session2
+intensities for band  noFilter and session 2
+create directory(plot): results/intensities/subject_34/electrodeSpace/noFilter/session2/1nn_clf
+create directory(plot): results/intensities/subject_34/electrodeSpace/noFilter/session2/topological_clf
+18.620724737644196 minuts for classification
+======TIME======
+create directory(plot): results/intensities/subject_34/fontSpace
+cleaning and filtering data of fontSpace of subject 34
+there are 43 clean channels
+create directory(plot): results/intensities/subject_34/fontSpace/gamma/session1
+intensities for band  gamma and session 1
+create directory(plot): results/intensities/subject_34/fontSpace/gamma/session1/1nn_clf
+create directory(plot): results/intensities/subject_34/fontSpace/gamma/session1/topological_clf
+13.33420597712199 minuts for classification
+create directory(plot): results/intensities/subject_34/fontSpace/gamma/session2
+intensities for band  gamma and session 2
+create directory(plot): results/intensities/subject_34/fontSpace/gamma/session2/1nn_clf
+create directory(plot): results/intensities/subject_34/fontSpace/gamma/session2/topological_clf
+18.44506590763728 minuts for classification
+create directory(plot): results/intensities/subject_34/fontSpace/beta/session1
+intensities for band  beta and session 1
+create directory(plot): results/intensities/subject_34/fontSpace/beta/session1/1nn_clf
+create directory(plot): results/intensities/subject_34/fontSpace/beta/session1/topological_clf
+16.33381515343984 minuts for classification
+create directory(plot): results/intensities/subject_34/fontSpace/beta/session2
+intensities for band  beta and session 2
+create directory(plot): results/intensities/subject_34/fontSpace/beta/session2/1nn_clf
+create directory(plot): results/intensities/subject_34/fontSpace/beta/session2/topological_clf
+19.104800736904146 minuts for classification
+create directory(plot): results/intensities/subject_34/fontSpace/alpha/session1
+intensities for band  alpha and session 1
+create directory(plot): results/intensities/subject_34/fontSpace/alpha/session1/1nn_clf
+create directory(plot): results/intensities/subject_34/fontSpace/alpha/session1/topological_clf
+17.540021053949992 minuts for classification
+create directory(plot): results/intensities/subject_34/fontSpace/alpha/session2
+intensities for band  alpha and session 2
+create directory(plot): results/intensities/subject_34/fontSpace/alpha/session2/1nn_clf
+create directory(plot): results/intensities/subject_34/fontSpace/alpha/session2/topological_clf
+20.07160545984904 minuts for classification
+create directory(plot): results/intensities/subject_34/fontSpace/noFilter/session1
+intensities for band  noFilter and session 1
+create directory(plot): results/intensities/subject_34/fontSpace/noFilter/session1/1nn_clf
+create directory(plot): results/intensities/subject_34/fontSpace/noFilter/session1/topological_clf
+16.97619258960088 minuts for classification
+create directory(plot): results/intensities/subject_34/fontSpace/noFilter/session2
+intensities for band  noFilter and session 2
+create directory(plot): results/intensities/subject_34/fontSpace/noFilter/session2/1nn_clf
+create directory(plot): results/intensities/subject_34/fontSpace/noFilter/session2/topological_clf
+18.306937030951183 minuts for classification
+======TIME======
+create directory: results/intensities/subject_35/
+create directory(plot): results/intensities/subject_35/electrodeSpace
+cleaning and filtering data of electrodeSpace of subject 35
+there are 45 clean channels
+create directory(plot): results/intensities/subject_35/electrodeSpace/gamma/session1
+intensities for band  gamma and session 1
+create directory(plot): results/intensities/subject_35/electrodeSpace/gamma/session1/1nn_clf
+create directory(plot): results/intensities/subject_35/electrodeSpace/gamma/session1/topological_clf
+14.452788718541463 minuts for classification
+create directory(plot): results/intensities/subject_35/electrodeSpace/gamma/session2
+intensities for band  gamma and session 2
+create directory(plot): results/intensities/subject_35/electrodeSpace/gamma/session2/1nn_clf
+create directory(plot): results/intensities/subject_35/electrodeSpace/gamma/session2/topological_clf
+12.338898265361786 minuts for classification
+create directory(plot): results/intensities/subject_35/electrodeSpace/beta/session1
+intensities for band  beta and session 1
+create directory(plot): results/intensities/subject_35/electrodeSpace/beta/session1/1nn_clf
+create directory(plot): results/intensities/subject_35/electrodeSpace/beta/session1/topological_clf
+15.326396799087524 minuts for classification
+create directory(plot): results/intensities/subject_35/electrodeSpace/beta/session2
+intensities for band  beta and session 2
+create directory(plot): results/intensities/subject_35/electrodeSpace/beta/session2/1nn_clf
+create directory(plot): results/intensities/subject_35/electrodeSpace/beta/session2/topological_clf
+11.964271434148152 minuts for classification
+create directory(plot): results/intensities/subject_35/electrodeSpace/alpha/session1
+intensities for band  alpha and session 1
+create directory(plot): results/intensities/subject_35/electrodeSpace/alpha/session1/1nn_clf
+create directory(plot): results/intensities/subject_35/electrodeSpace/alpha/session1/topological_clf
+14.054586223761241 minuts for classification
+create directory(plot): results/intensities/subject_35/electrodeSpace/alpha/session2
+intensities for band  alpha and session 2
+create directory(plot): results/intensities/subject_35/electrodeSpace/alpha/session2/1nn_clf
+create directory(plot): results/intensities/subject_35/electrodeSpace/alpha/session2/topological_clf
+11.76955462694168 minuts for classification
+create directory(plot): results/intensities/subject_35/electrodeSpace/noFilter/session1
+intensities for band  noFilter and session 1
+create directory(plot): results/intensities/subject_35/electrodeSpace/noFilter/session1/1nn_clf
+create directory(plot): results/intensities/subject_35/electrodeSpace/noFilter/session1/topological_clf
+13.470566312472025 minuts for classification
+create directory(plot): results/intensities/subject_35/electrodeSpace/noFilter/session2
+intensities for band  noFilter and session 2
+create directory(plot): results/intensities/subject_35/electrodeSpace/noFilter/session2/1nn_clf
+create directory(plot): results/intensities/subject_35/electrodeSpace/noFilter/session2/topological_clf
+12.222105979919434 minuts for classification
+======TIME======
+create directory(plot): results/intensities/subject_35/fontSpace
+cleaning and filtering data of fontSpace of subject 35
+there are 45 clean channels
+create directory(plot): results/intensities/subject_35/fontSpace/gamma/session1
+intensities for band  gamma and session 1
+create directory(plot): results/intensities/subject_35/fontSpace/gamma/session1/1nn_clf
+create directory(plot): results/intensities/subject_35/fontSpace/gamma/session1/topological_clf
+15.769065304597218 minuts for classification
+create directory(plot): results/intensities/subject_35/fontSpace/gamma/session2
+intensities for band  gamma and session 2
+create directory(plot): results/intensities/subject_35/fontSpace/gamma/session2/1nn_clf
+create directory(plot): results/intensities/subject_35/fontSpace/gamma/session2/topological_clf
+12.873308300971985 minuts for classification
+create directory(plot): results/intensities/subject_35/fontSpace/beta/session1
+intensities for band  beta and session 1
+create directory(plot): /home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical left == right == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical bottom == top == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/representations/vector_methods.py:253: RuntimeWarning: invalid value encountered in double_scalars
+  weight  = weights[j] / total_weight
+Main_pipeline.py:225: RuntimeWarning: Mean of empty slice.
+  np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/reprojected_means_m2.npy',reproj[:,labels==2].mean(axis=1))
+/home/fritzpere/.local/lib/python3.8/site-packages/numpy/core/_methods.py:162: RuntimeWarning: invalid value encountered in true_divide
+  ret = um.true_divide(
+Main_pipeline.py:229: RuntimeWarning: Mean of empty slice.
+  np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/original_means_m2.npy',PC[labels==2].mean(axis=0))
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical left == right == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical bottom == top == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/representations/vector_methods.py:253: RuntimeWarning: invalid value encountered in double_scalars
+  weight  = weights[j] / total_weight
+Main_pipeline.py:225: RuntimeWarning: Mean of empty slice.
+  np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/reprojected_means_m2.npy',reproj[:,labels==2].mean(axis=1))
+/home/fritzpere/.local/lib/python3.8/site-packages/numpy/core/_methods.py:162: RuntimeWarning: invalid value encountered in true_divide
+  ret = um.true_divide(
+Main_pipeline.py:229: RuntimeWarning: Mean of empty slice.
+  np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/original_means_m2.npy',PC[labels==2].mean(axis=0))
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical left == right == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical bottom == top == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/representations/vector_methods.py:253: RuntimeWarning: invalid value encountered in double_scalars
+  weight  = weights[j] / total_weight
+Main_pipeline.py:225: RuntimeWarning: Mean of empty slice.
+  np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/reprojected_means_m2.npy',reproj[:,labels==2].mean(axis=1))
+/home/fritzpere/.local/lib/python3.8/site-packages/numpy/core/_methods.py:162: RuntimeWarning: invalid value encountered in true_divide
+  ret = um.true_divide(
+Main_pipeline.py:229: RuntimeWarning: Mean of empty slice.
+  np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/original_means_m2.npy',PC[labels==2].mean(axis=0))
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical left == right == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical bottom == top == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/representations/vector_methods.py:253: RuntimeWarning: invalid value encountered in double_scalars
+  weight  = weights[j] / total_weight
+Main_pipeline.py:225: RuntimeWarning: Mean of empty slice.
+  np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/reprojected_means_m2.npy',reproj[:,labels==2].mean(axis=1))
+/home/fritzpere/.local/lib/python3.8/site-packages/numpy/core/_methods.py:162: RuntimeWarning: invalid value encountered in true_divide
+  ret = um.true_divide(
+Main_pipeline.py:229: RuntimeWarning: Mean of empty slice.
+  np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/original_means_m2.npy',PC[labels==2].mean(axis=0))
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical left == right == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical bottom == top == 0.0 results in singular transformations; automatically expanding.
+  axes.axis([axis_start, axis_end, axis_start, infinity + delta/2])
+/home/fritzpere/.local/lib/python3.8/site-packages/gudhi/representations/vector_methods.py:253: RuntimeWarning: invalid value encountered in double_scalars
+  weight  = weights[j] / total_weight
+results/intensities/subject_35/fontSpace/beta/session1/1nn_clf
+create directory(plot): results/intensities/subject_35/fontSpace/beta/session1/topological_clf
+15.313497408231099 minuts for classification
+create directory(plot): results/intensities/subject_35/fontSpace/beta/session2
+intensities for band  beta and session 2
+create directory(plot): results/intensities/subject_35/fontSpace/beta/session2/1nn_clf
+create directory(plot): results/intensities/subject_35/fontSpace/beta/session2/topological_clf
+13.093011927604675 minuts for classification
+create directory(plot): results/intensities/subject_35/fontSpace/alpha/session1
+intensities for band  alpha and session 1
+create directory(plot): results/intensities/subject_35/fontSpace/alpha/session1/1nn_clf
+create directory(plot): results/intensities/subject_35/fontSpace/alpha/session1/topological_clf
+13.476696872711182 minuts for classification
+create directory(plot): results/intensities/subject_35/fontSpace/alpha/session2
+intensities for band  alpha and session 2
+create directory(plot): results/intensities/subject_35/fontSpace/alpha/session2/1nn_clf
+create directory(plot): results/intensities/subject_35/fontSpace/alpha/session2/topological_clf
+12.332361769676208 minuts for classification
+create directory(plot): results/intensities/subject_35/fontSpace/noFilter/session1
+intensities for band  noFilter and session 1
+create directory(plot): results/intensities/subject_35/fontSpace/noFilter/session1/1nn_clf
+create directory(plot): results/intensities/subject_35/fontSpace/noFilter/session1/topological_clf
+13.64355943997701 minuts for classification
+create directory(plot): results/intensities/subject_35/fontSpace/noFilter/session2
+intensities for band  noFilter and session 2
+create directory(plot): results/intensities/subject_35/fontSpace/noFilter/session2/1nn_clf
+create directory(plot): results/intensities/subject_35/fontSpace/noFilter/session2/topological_clf
+12.865450656414032 minuts for classification
+======TIME======
+Traceback (most recent call last):
+  File "Main_pipeline.py", line 455, in <module>
+    data_table['frequency band of maximum accuracy in session1','frequency band of maximum accuracy in session2']=table[2].apply(lambda x: band_dic[x])
+NameError: name 'table' is not defined
