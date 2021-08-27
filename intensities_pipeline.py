@@ -264,7 +264,7 @@ def tda_intensity_classifier(subj_dir,space,PC,labels,i_band):
         axes[i_dim].axis(xmin=-0.6,xmax=1.4,ymin=0,ymax=1.05)
         axes[i_dim].set_ylabel('accuracy '+band,fontsize=16)
         axes[i_dim].set_title('band '+band+' dimension '+dimensions[i_dim],fontsize=24)
-        fig.suptitle('Accuracies for different dimensions and feature vectors of band '+band,fontsize=36)
+        fig.suptitle('Accuracies for different dimensions and metrics of band '+band,fontsize=36)
         plt.setp(axes, xticks=[-0.2, 0.2, 0.6,1], xticklabels=feat_vect_names,yticks=[0, 0.2,0.4, 0.6,0.8,1])
     
     plt.savefig(subj_dir+space+'/topological_clf/accuracies_intensity_'+band+'.png', format=fmt_grph)

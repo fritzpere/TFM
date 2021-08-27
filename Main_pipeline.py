@@ -130,13 +130,13 @@ if __name__ == "__main__":
                 np.save(subj_dir+'/silent-channels-'+str(subject)+'.npy',invalid_ch)
             
             ## We fill up a table with the number of clean electrodes for each subject.(A table for each subject) (general table for all subjects)
-            subject_table[:,0]=preprocessor.N
+            subject_table[:,0]=int(preprocessor.N)
              ## We fill up a table with the number of trials in total and for each motivational state. (general table for all subjects)
-            data_table[subj_t+n_subj*sp,0]=preprocessor.N
-            data_table[subj_t+n_subj*sp,1]=ts_band.shape[0]
-            data_table[subj_t+n_subj*sp,2]=(labels_original==0).sum()
-            data_table[subj_t+n_subj*sp,3]=(labels_original==1).sum()
-            data_table[subj_t+n_subj*sp,4]=(labels_original==2).sum()
+            data_table[subj_t+n_subj*sp,0]=int(preprocessor.N)
+            data_table[subj_t+n_subj*sp,1]=int(ts_band.shape[0])
+            data_table[subj_t+n_subj*sp,2]=int((labels_original==0).sum())
+            data_table[subj_t+n_subj*sp,3]=int((labels_original==1).sum())
+            data_table[subj_t+n_subj*sp,4]=int((labels_original==2).sum())
 
             #We defina which trials correspond to which Session
             sessions=[]
@@ -164,12 +164,12 @@ if __name__ == "__main__":
                     PC=PC_all[temp]
                     labels=labels_all[temp]
 
-                    subject_table[table_i,1]=len(labels)
-                    subject_table[table_i,2]=len(labels[labels==0])
-                    subject_table[table_i,3]=len(labels[labels==1])
-                    subject_table[table_i,4]=len(labels[labels==2])
+                    subject_table[table_i,1]=int(len(labels))
+                    subject_table[table_i,2]=int(len(labels[labels==0]))
+                    subject_table[table_i,3]=int(len(labels[labels==1]))
+                    subject_table[table_i,4]=int(len(labels[labels==2]))
 
-                    data_table[subj_t+n_subj*sp,4+bloc_i]=PC.shape[0]
+                    data_table[subj_t+n_subj*sp,4+bloc_i]=int(PC.shape[0])
                     #We Apply PCA to our Point Cloud to reduce the dimensionality
                     mean=np.mean(PC, axis=0)
                     X =(PC - mean).T #X.shape: (42,632)
@@ -213,10 +213,10 @@ if __name__ == "__main__":
                     
                     
                     #We fill up the table again since we have removed outliers
-                    subject_table[table_i,6]=len(labels)
-                    subject_table[table_i,7]=len(labels[labels==0])
-                    subject_table[table_i,8]=len(labels[labels==1])
-                    subject_table[table_i,9]=len(labels[labels==2])
+                    subject_table[table_i,6]=int(len(labels))
+                    subject_table[table_i,7]=int(len(labels[labels==0]))
+                    subject_table[table_i,8]=int(len(labels[labels==1]))
+                    subject_table[table_i,9]=int(len(labels[labels==2]))
                     
                     #We reproject the PCA to the original coordinates and save the reprojected and the originals to compare them laters
                     reproj= vh[:3,:].T @ pca.T + mean.reshape((-1,1))
@@ -452,6 +452,6 @@ if __name__ == "__main__":
     for subject in subjects:
         subjects_index.append('Subject ' +str(subject)+ ' FontSpace')
     data_table=pd.DataFrame(data_table,index=subjects_index,columns=['Channels','Trials', 'Trials M0', 'Trials M1', 'Trials M2', 'Trials Session 1', 'Trials Session 2','maximum accuracy w/ Silhouette achieved in session 1','frequency band of maximum accuracy in session1','maximum accuracy w/ Silhouette achieved in session 2','frequency band of maximum accuracy in session2'])
-    data_table['frequency band of maximum accuracy in session1','frequency band of maximum accuracy in session2']=table[2].apply(lambda x: band_dic[x])
+    data_table['frequency band of maximum accuracy in session1','frequency band of maximum accuracy in session2']=data_table['frequency band of maximum accuracy in session1','frequency band of maximum accuracy in session2'].apply(lambda x: band_dic[x])
     data_table.to_csv('results/intensities/data_table.csv')
                                        
