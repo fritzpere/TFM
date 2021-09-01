@@ -350,7 +350,7 @@ if __name__ == "__main__":
                     y_max=np.amax(list(map(lambda y: np.amax(list(map(lambda x: x[1][1] if x[1][1]!=np.inf  else 0 ,y))),aux_lis)))*1.2
                     for j in range(3):
                         a=plot_func(persistence[i_band][j],axes=axes[j])
-                        a.set_title('{0} persistence diagramsof \n motivational state {1} and band {2}'.format(space,j,band_dic[i_band]))
+                        a.set_title('{0} persistence diagrams of \n motivational state {1} and band {2}'.format(space,j,band_dic[i_band]))
                         a.set_xlim(-0.05,x_max)
                         a.set_ylim(0,y_max)
                     fig.suptitle('Persistence diagrams of the {0} for\n frequency band {1} and motivational state PCA'.format(space,band_dic[i_band]),fontsize=24)
@@ -388,7 +388,7 @@ if __name__ == "__main__":
                         axes[i_dim][2].set_xlim(-2,1000)
                         axes[i_dim][2].set_ylim(0,y_max*1.1)
                         
-                    fig.suptitle('Persistence Silhouettes of the {0} for\n frequency band {1} and motivational state PCA'.format(space,band_dic[i_band]),fontsize=24)
+                    fig.suptitle('Persistence Silhouettes of the {0} for frequency band {1}\n and motivational state PCA'.format(space,band_dic[i_band]),fontsize=24)
                     fig.tight_layout(pad=0.5)
                     fig.subplots_adjust(top=0.8)
                     plt.savefig(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca_persistence_silhouettes.png')
@@ -414,10 +414,10 @@ if __name__ == "__main__":
                     axes[3].boxplot([vect1[0][3],vect1[1][3],vect1[2][3]],showfliers=False)
                     axes[3].set_title('Birth BoxPlot dimension 1')
                     axes[4].boxplot([vect1[0][4],vect1[1][4],vect1[2][4]],showfliers=False)
-                    axes[4].set_title('Death BoxPlot dimension')
+                    axes[4].set_title('Death BoxPlot dimension 1')
                     fig.suptitle('Descriptors Boxplots of the {0} for\n frequency band {1} and different motivational states'.format(space,band_dic[i_band]),fontsize=24)
                     fig.tight_layout(pad=1.00)
-                    fig.subplots_adjust(top=0.8)
+                    fig.subplots_adjust(top=0.9)
                     plt.savefig(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca_descriptors.png')
                     plt.close(fig)
                     ##We save the number of random classifications we have made for each dimension and Feature vector

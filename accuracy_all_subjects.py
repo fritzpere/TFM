@@ -22,12 +22,12 @@ for band in band_dic.values():
     names.append(band+'2')
 
 for space in spaces:
-    fig, axes = plt.subplots(nrows=3, ncols=4, figsize=(48, 12))
+    fig, axes = plt.subplots(nrows=6, ncols=2, figsize=(20  , 30))
     plt.rcParams['xtick.labelsize']=18
     subj=25
-    for i in range(3):
-        for j in range(4):
-            if j==3 and i==2:
+    for i in range(6):
+        for j in range(2):
+            if j==1 and i==5:
                 break
             perf=np.zeros((4,2,10))
             k=0
@@ -61,24 +61,25 @@ for space in spaces:
     
             axes[i][j].plot([-1,2.5],[0.33]*2,'--k')
             axes[i][j].axis(xmin=-0.8,xmax=2.4,ymin=0,ymax=1.05)
-            axes[i][j].set_ylabel('accuracy',fontsize=16)
+            axes[i][j].set_ylabel('accuracy',fontsize=20)
             axes[i][j].set_title('subject '+str(subj),fontsize=24)
             subj=subj+1
 
             plt.setp(axes,xticks=[-0.6,-0.2,0.2, 0.6,1,1.4,1.8,2.2],xticklabels=names)
     
-    fig.suptitle('Accuracies for different subjects and frequancy bands for topological classifier (Silhouettes)',fontsize=36)
-    fig.subplots_adjust(top=0.75)
+    fig.suptitle('Accuracies for different subjects and frequancy bands\n for topological classifier (Silhouettes)',fontsize=36)
     fig.tight_layout(pad=0.5)
+    fig.subplots_adjust(top=0.9)
+    
     plt.savefig('results/intensities/'+space+'accuracies_all_subjects_topological_clf.png', format=fmt_grph)
     plt.close(fig)
     #Also for 1nn
-    fig, axes = plt.subplots(nrows=3, ncols=4, figsize=(48, 12))
+    fig, axes = plt.subplots(nrows=6, ncols=2, figsize=(20  , 30))
     plt.rcParams['xtick.labelsize']=18
     subj=25
-    for i in range(3):
-        for j in range(4):
-            if j==3 and i==2:
+    for i in range(6):
+        for j in range(2):
+            if j==1 and i==5:
                 break
             perf=np.zeros((4,2,10))
             k=0
@@ -110,14 +111,15 @@ for space in spaces:
                 k=k+1
             axes[i][j].plot([-1,2.5],[0.33]*2,'--k')
             axes[i][j].axis(xmin=-0.8,xmax=2.4,ymin=0,ymax=1.05)
-            axes[i][j].set_ylabel('accuracy',fontsize=16)
+            axes[i][j].set_ylabel('accuracy',fontsize=20)
             axes[i][j].set_title('subject '+str(subj),fontsize=24)
             subj=subj+1
 
             plt.setp(axes,xticks=[-0.6,-0.2,0.2, 0.6,1,1.4,1.8,2.2],xticklabels=names)
 
     fig.suptitle('Accuracies for different subjects and frequancy bands for 1nn classifier',fontsize=36)
-    fig.subplots_adjust(top=0.75)
+    
     fig.tight_layout(pad=0.5)
+    fig.subplots_adjust(top=0.95)
     plt.savefig('results/intensities/'+space+'accuracies_all_subjects_1nn_clf.png', format=fmt_grph)          
                 
