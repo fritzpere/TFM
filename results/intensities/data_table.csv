@@ -1,5 +1,7 @@
 ,Channels,Trials,Trials M0,Trials M1,Trials M2,Trials Session 1,Trials Session 2,maximum accuracy w/ Silhouette achieved in session 1,frequency band of maximum accuracy in session1,maximum accuracy w/ Silhouette achieved in session 2,frequency band of maximum accuracy in session2
-Subject 25 ElectrodeSpace,42.0,1296.0,432.0,432.0,432.0,648.0,648.0,0.8166666666666668,gamma,0.8944444444444444,gamma
-Subject 30 ElectrodeSpace,48.0,1296.0,432.0,432.0,432.0,648.0,648.0,0.8722222222222222,gamma,0.7666666666666666,gamma
-Subject 25 FontSpace,42.0,1296.0,432.0,432.0,432.0,648.0,648.0,0.8944444444444444,gamma,0.8444444444444444,gamma
-Subject 30 FontSpace,49.0,1296.0,432.0,432.0,432.0,648.0,648.0,0.9444444444444443,gamma,0.811111111111111,gamma
+Subject 25 ElectrodeSpace,42.0,1296.0,432.0,432.0,432.0,648.0,648.0,0.40793650793650793,alpha,0.3430769230769231,gamma
+Subject 26 ElectrodeSpace,49.0,1017.0,370.0,323.0,324.0,432.0,585.0,0.359375,gamma,0.6566666666666666,alpha
+Subject 27 ElectrodeSpace,50.0,1296.0,432.0,432.0,432.0,648.0,648.0,0.8240310077519378,noFilter,0.7727999999999999,gamma
+Subject 25 FontSpace,42.0,1296.0,432.0,432.0,432.0,648.0,648.0,0.4698412698412698,alpha,0.33230769230769236,beta
+Subject 26 FontSpace,49.0,1017.0,432.0,324.0,261.0,432.0,585.0,0.3338461538461538,alpha,0.6630434782608694,gamma
+Subject 27 FontSpace,50.0,1296.0,432.0,432.0,432.0,648.0,648.0,0.8953125,gamma,0.7815126050420167,gamma

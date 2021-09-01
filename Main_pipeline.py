@@ -360,6 +360,7 @@ if __name__ == "__main__":
                     plt.close(fig)
                     ##let us compute the persistence Silhouettes for each Motavational state and plot it
                     fig, axes = plt.subplots(nrows=2, ncols=3, figsize=(24, 12))
+                    plt.rcParams['xtick.labelsize']=24
                     for i_dim in range(2):
                         silhouettes=[]
                         for i_motiv in range(3):
@@ -428,13 +429,14 @@ if __name__ == "__main__":
             ## We select the band with highet mean accuracy from the silhouette feature vector       
             max_bloc1=np.argmax(max_acc[0,:])
             max_bloc2=np.argmax(max_acc[1,:])
-            data_table[subj_t+n_subj*sp,8]=max_bloc1
             if max_bloc1==3:
                 max_bloc1=-1
+            data_table[subj_t+n_subj*sp,8]=max_bloc1
             data_table[subj_t+n_subj*sp,7]=max_acc[0,max_bloc1]
-            data_table[subj_t+n_subj*sp,10]=max_bloc2
+        
             if max_bloc2==3:
                 max_bloc2=-1
+            data_table[subj_t+n_subj*sp,10]=max_bloc2
             data_table[subj_t+n_subj*sp,9]=max_acc[1,max_bloc2]
             
             ## We finish complete table for the subject
