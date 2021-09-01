@@ -6,42 +6,42 @@ create directory(plot): results/intensities/subject_25/electrodeSpace/gamma/sess
 intensities for band  gamma and session 1
 create directory(plot): results/intensities/subject_25/electrodeSpace/gamma/session1/1nn_clf
 create directory(plot): results/intensities/subject_25/electrodeSpace/gamma/session1/topological_clf
-1.4868194540341695 minuts for classification
+1.3374249855677287 minuts for classification
 create directory(plot): results/intensities/subject_25/electrodeSpace/gamma/session2
 intensities for band  gamma and session 2
 create directory(plot): results/intensities/subject_25/electrodeSpace/gamma/session2/1nn_clf
 create directory(plot): results/intensities/subject_25/electrodeSpace/gamma/session2/topological_clf
-1.592206072807312 minuts for classification
+1.4153765400250753 minuts for classification
 create directory(plot): results/intensities/subject_25/electrodeSpace/beta/session1
 intensities for band  beta and session 1
 create directory(plot): results/intensities/subject_25/electrodeSpace/beta/session1/1nn_clf
 create directory(plot): results/intensities/subject_25/electrodeSpace/beta/session1/topological_clf
-1.477865958213806 minuts for classification
+1.4168944478034973 minuts for classification
 create directory(plot): results/intensities/subject_25/electrodeSpace/beta/session2
 intensities for band  beta and session 2
 create directory(plot): results/intensities/subject_25/electrodeSpace/beta/session2/1nn_clf
 create directory(plot): results/intensities/subject_25/electrodeSpace/beta/session2/topological_clf
-1.5854537208875021 minuts for classification
+1.5545298735300699 minuts for classification
 create directory(plot): results/intensities/subject_25/electrodeSpace/alpha/session1
 intensities for band  alpha and session 1
 create directory(plot): results/intensities/subject_25/electrodeSpace/alpha/session1/1nn_clf
 create directory(plot): results/intensities/subject_25/electrodeSpace/alpha/session1/topological_clf
-1.2989805022875467 minuts for classification
+1.3395410299301147 minuts for classification
 create directory(plot): results/intensities/subject_25/electrodeSpace/alpha/session2
 intensities for band  alpha and session 2
 create directory(plot): results/intensities/subject_25/electrodeSpace/alpha/session2/1nn_clf
 create directory(plot): results/intensities/subject_25/electrodeSpace/alpha/session2/topological_clf
-1.5977445403734842 minuts for classification
+1.6505663077036539 minuts for classification
 create directory(plot): results/intensities/subject_25/electrodeSpace/noFilter/session1
 intensities for band  noFilter and session 1
 create directory(plot): results/intensities/subject_25/electrodeSpace/noFilter/session1/1nn_clf
 create directory(plot): results/intensities/subject_25/electrodeSpace/noFilter/session1/topological_clf
-1.2670841336250305 minuts for classification
+1.3309634645779929 minuts for classification
 create directory(plot): results/intensities/subject_25/electrodeSpace/noFilter/session2
 intensities for band  noFilter and session 2
 create directory(plot): results/intensities/subject_25/electrodeSpace/noFilter/session2/1nn_clf
 create directory(plot): results/intensities/subject_25/electrodeSpace/noFilter/session2/topological_clf
-1.5598752975463868 minuts for classification
+1.4416802406311036 minuts for classification
 ======TIME======
 create directory(plot): results/intensities/subject_25/fontSpace
 cleaning and filtering data of fontSpace of subject 25
@@ -50,42 +50,42 @@ create directory(plot): results/intensities/subject_25/fontSpace/gamma/session1
 intensities for band  gamma and session 1
 create directory(plot): results/intensities/subject_25/fontSpace/gamma/session1/1nn_clf
 create directory(plot): results/intensities/subject_25/fontSpace/gamma/session1/topological_clf
-1.4679263830184937 minuts for classification
+1.3829335570335388 minuts for classification
 create directory(plot): results/intensities/subject_25/fontSpace/gamma/session2
 intensities for band  gamma and session 2
 create directory(plot): results/intensities/subject_25/fontSpace/gamma/session2/1nn_clf
 create directory(plot): results/intensities/subject_25/fontSpace/gamma/session2/topological_clf
-1.3374077240626017 minuts for classification
+1.4510361552238464 minuts for classification
 create directory(plot): results/intensities/subject_25/fontSpace/beta/session1
 intensities for band  beta and session 1
 create directory(plot): results/intensities/subject_25/fontSpace/beta/session1/1nn_clf
 create directory(plot): results/intensities/subject_25/fontSpace/beta/session1/topological_clf
-1.475215458869934 minuts for classification
+1.4691503842671711 minuts for classification
 create directory(plot): results/intensities/subject_25/fontSpace/beta/session2
 intensities for band  beta and session 2
 create directory(plot): results/intensities/subject_25/fontSpace/beta/session2/1nn_clf
 create directory(plot): results/intensities/subject_25/fontSpace/beta/session2/topological_clf
-1.5302586356798809 minuts for classification
+1.7043375452359517 minuts for classification
 create directory(plot): results/intensities/subject_25/fontSpace/alpha/session1
 intensities for band  alpha and session 1
 create directory(plot): results/intensities/subject_25/fontSpace/alpha/session1/1nn_clf
 create directory(plot): results/intensities/subject_25/fontSpace/alpha/session1/topological_clf
-1.2385880112648011 minuts for classification
+1.2932029684384665 minuts for classification
 create directory(plot): results/intensities/subject_25/fontSpace/alpha/session2
 intensities for band  alpha and session 2
 create directory(plot): results/intensities/subject_25/fontSpace/alpha/session2/1nn_clf
 create directory(plot): results/intensities/subject_25/fontSpace/alpha/session2/topological_clf
-1.5662463744481405 minuts for classification
+1.7270883679389955 minuts for classification
 create directory(plot): results/intensities/subject_25/fontSpace/noFilter/session1
 intensities for band  noFilter and session 1
 create directory(plot): results/intensities/subject_25/fontSpace/noFilter/session1/1nn_clf
 create directory(plot): results/intensities/subject_25/fontSpace/noFilter/session1/topological_clf
-1.2217535853385926 minuts for classification
+1.2896941264470418 minuts for classification
 create directory(plot): results/intensities/subject_25/fontSpace/noFilter/session2
 intensities for band  noFilter and session 2
 create directory(plot): results/intensities/subject_25/fontSpace/noFilter/session2/1nn_clf
 create directory(plot): results/intensities/subject_25/fontSpace/noFilter/session2/topological_clf
-1.3373736580212912 minuts for classification
+1.3573769688606263 minuts for classification
 ======TIME======
 create directory: results/intensities/subject_26/
 create directory(plot): results/intensities/subject_26/electrodeSpace
@@ -95,42 +95,42 @@ create directory(plot): results/intensities/subject_26/electrodeSpace/gamma/sess
 intensities for band  gamma and session 1
 create directory(plot): results/intensities/subject_26/electrodeSpace/gamma/session1/1nn_clf
 create directory(plot): results/intensities/subject_26/electrodeSpace/gamma/session1/topological_clf
-1.4207733551661172 minuts for classification
+1.5214492519696554 minuts for classification
 create directory(plot): results/intensities/subject_26/electrodeSpace/gamma/session2
 intensities for band  gamma and session 2
 create directory(plot): results/intensities/subject_26/electrodeSpace/gamma/session2/1nn_clf
 create directory(plot): results/intensities/subject_26/electrodeSpace/gamma/session2/topological_clf
-3.9144582589467367 minuts for classification
+4.079858028888703 minuts for classification
 create directory(plot): results/intensities/subject_26/electrodeSpace/beta/session1
 intensities for band  beta and session 1
 create directory(plot): results/intensities/subject_26/electrodeSpace/beta/session1/1nn_clf
 create directory(plot): results/intensities/subject_26/electrodeSpace/beta/session1/topological_clf
-1.209898595015208 minuts for classification
+1.2396987557411194 minuts for classification
 create directory(plot): results/intensities/subject_26/electrodeSpace/beta/session2
 intensities for band  beta and session 2
 create directory(plot): results/intensities/subject_26/electrodeSpace/beta/session2/1nn_clf
 create directory(plot): results/intensities/subject_26/electrodeSpace/beta/session2/topological_clf
-4.3602979262669885 minuts for classification
+4.643173734347026 minuts for classification
 create directory(plot): results/intensities/subject_26/electrodeSpace/alpha/session1
 intensities for band  alpha and session 1
 create directory(plot): results/intensities/subject_26/electrodeSpace/alpha/session1/1nn_clf
 create directory(plot): results/intensities/subject_26/electrodeSpace/alpha/session1/topological_clf
-1.1049430131912232 minuts for classification
+1.1694409012794496 minuts for classification
 create directory(plot): results/intensities/subject_26/electrodeSpace/alpha/session2
 intensities for band  alpha and session 2
 create directory(plot): results/intensities/subject_26/electrodeSpace/alpha/session2/1nn_clf
 create directory(plot): results/intensities/subject_26/electrodeSpace/alpha/session2/topological_clf
-4.188678014278412 minuts for classification
+4.453969852129618 minuts for classification
 create directory(plot): results/intensities/subject_26/electrodeSpace/noFilter/session1
 intensities for band  noFilter and session 1
 create directory(plot): results/intensities/subject_26/electrodeSpace/noFilter/session1/1nn_clf
 create directory(plot): results/intensities/subject_26/electrodeSpace/noFilter/session1/topological_clf
-1.1219135681788126 minuts for classification
+1.0999816139539083 minuts for classification
 create directory(plot): results/intensities/subject_26/electrodeSpace/noFilter/session2
 intensities for band  noFilter and session 2
 create directory(plot): results/intensities/subject_26/electrodeSpace/noFilter/session2/1nn_clf
 create directory(plot): results/intensities/subject_26/electrodeSpace/noFilter/session2/topological_clf
-3.6922696232795715 minuts for classification
+3.766739821434021 minuts for classification
 ======TIME======
 create directory(plot): results/intensities/subject_26/fontSpace
 cleaning and filtering data of fontSpace of subject 26
@@ -139,42 +139,42 @@ create directory(plot): results/intensities/subject_26/fontSpace/gamma/session1
 intensities for band  gamma and session 1
 create directory(plot): results/intensities/subject_26/fontSpace/gamma/session1/1nn_clf
 create directory(plot): results/intensities/subject_26/fontSpace/gamma/session1/topological_clf
-1.0614112734794616 minuts for classification
+1.1119937618573508 minuts for classification
 create directory(plot): results/intensities/subject_26/fontSpace/gamma/session2
 intensities for band  gamma and session 2
 create directory(plot): results/intensities/subject_26/fontSpace/gamma/session2/1nn_clf
 create directory(plot): results/intensities/subject_26/fontSpace/gamma/session2/topological_clf
-4.437237612406412 minuts for classification
+4.635182313124338 minuts for classification
 create directory(plot): results/intensities/subject_26/fontSpace/beta/session1
 intensities for band  beta and session 1
 create directory(plot): results/intensities/subject_26/fontSpace/beta/session1/1nn_clf
 create directory(plot): results/intensities/subject_26/fontSpace/beta/session1/topological_clf
-1.264890682697296 minuts for classification
+1.2671443422635396 minuts for classification
 create directory(plot): results/intensities/subject_26/fontSpace/beta/session2
 intensities for band  beta and session 2
 create directory(plot): results/intensities/subject_26/fontSpace/beta/session2/1nn_clf
 create directory(plot): results/intensities/subject_26/fontSpace/beta/session2/topological_clf
-4.639513190587362 minuts for classification
+4.648082331816355 minuts for classification
 create directory(plot): results/intensities/subject_26/fontSpace/alpha/session1
 intensities for band  alpha and session 1
 create directory(plot): results/intensities/subject_26/fontSpace/alpha/session1/1nn_clf
 create directory(plot): results/intensities/subject_26/fontSpace/alpha/session1/topological_clf
-1.2650966922442117 minuts for classification
+1.2741453687349955 minuts for classification
 create directory(plot): results/intensities/subject_26/fontSpace/alpha/session2
 intensities for band  alpha and session 2
 create directory(plot): results/intensities/subject_26/fontSpace/alpha/session2/1nn_clf
 create directory(plot): results/intensities/subject_26/fontSpace/alpha/session2/topological_clf
-4.329078245162964 minuts for classification
+4.32054462035497 minuts for classification
 create directory(plot): results/intensities/subject_26/fontSpace/noFilter/session1
 intensities for band  noFilter and session 1
 create directory(plot): results/intensities/subject_26/fontSpace/noFilter/session1/1nn_clf
 create directory(plot): results/intensities/subject_26/fontSpace/noFilter/session1/topological_clf
-1.2052931865056355 minuts for classification
+1.0596092303593954 minuts for classification
 create directory(plot): results/intensities/subject_26/fontSpace/noFilter/session2
 intensities for band  noFilter and session 2
 create directory(plot): results/intensities/subject_26/fontSpace/noFilter/session2/1nn_clf
 create directory(plot): results/intensities/subject_26/fontSpace/noFilter/session2/topological_clf
-3.745153792699178 minuts for classification
+3.7462438782056173 minuts for classification
 ======TIME======
 create directory: results/intensities/subject_27/
 create directory(plot): results/intensities/subject_27/electrodeSpace
@@ -184,42 +184,42 @@ create directory(plot): results/intensities/subject_27/electrodeSpace/gamma/sess
 intensities for band  gamma and session 1
 create directory(plot): results/intensities/subject_27/electrodeSpace/gamma/session1/1nn_clf
 create directory(plot): results/intensities/subject_27/electrodeSpace/gamma/session1/topological_clf
-16.40743709007899 minuts for classification
+16.225914951165517 minuts for classification
 create directory(plot): results/intensities/subject_27/electrodeSpace/gamma/session2
 intensities for band  gamma and session 2
 create directory(plot): results/intensities/subject_27/electrodeSpace/gamma/session2/1nn_clf
 create directory(plot): results/intensities/subject_27/electrodeSpace/gamma/session2/topological_clf
-17.58248815536499 minuts for classification
+17.42064795891444 minuts for classification
 create directory(plot): results/intensities/subject_27/electrodeSpace/beta/session1
 intensities for band  beta and session 1
 create directory(plot): results/intensities/subject_27/electrodeSpace/beta/session1/1nn_clf
 create directory(plot): results/intensities/subject_27/electrodeSpace/beta/session1/topological_clf
-16.526787253220878 minuts for classification
+16.653038386503855 minuts for classification
 create directory(plot): results/intensities/subject_27/electrodeSpace/beta/session2
 intensities for band  beta and session 2
 create directory(plot): results/intensities/subject_27/electrodeSpace/beta/session2/1nn_clf
 create directory(plot): results/intensities/subject_27/electrodeSpace/beta/session2/topological_clf
-17.432973686854044 minuts for classification
+17.10795268615087 minuts for classification
 create directory(plot): results/intensities/subject_27/electrodeSpace/alpha/session1
 intensities for band  alpha and session 1
 create directory(plot): results/intensities/subject_27/electrodeSpace/alpha/session1/1nn_clf
 create directory(plot): results/intensities/subject_27/electrodeSpace/alpha/session1/topological_clf
-16.23788476785024 minuts for classification
+16.178345731894176 minuts for classification
 create directory(plot): results/intensities/subject_27/electrodeSpace/alpha/session2
 intensities for band  alpha and session 2
 create directory(plot): results/intensities/subject_27/electrodeSpace/alpha/session2/1nn_clf
 create directory(plot): results/intensities/subject_27/electrodeSpace/alpha/session2/topological_clf
-15.872931897640228 minuts for classification
+16.254547743002572 minuts for classification
 create directory(plot): results/intensities/subject_27/electrodeSpace/noFilter/session1
 intensities for band  noFilter and session 1
 create directory(plot): results/intensities/subject_27/electrodeSpace/noFilter/session1/1nn_clf
 create directory(plot): results/intensities/subject_27/electrodeSpace/noFilter/session1/topological_clf
-19.151469194889067 minuts for classification
+19.00307246049245 minuts for classification
 create directory(plot): results/intensities/subject_27/electrodeSpace/noFilter/session2
 intensities for band  noFilter and session 2
 create directory(plot): results/intensities/subject_27/electrodeSpace/noFilter/session2/1nn_clf
 create directory(plot): results/intensities/subject_27/electrodeSpace/noFilter/session2/topological_clf
-18.783541202545166 minuts for classification
+19.127001710732777 minuts for classification
 ======TIME======
 create directory(plot): results/intensities/subject_27/fontSpace
 cleaning and filtering data of fontSpace of subject 27
@@ -228,42 +228,42 @@ create directory(plot): results/intensities/subject_27/fontSpace/gamma/session1
 intensities for band  gamma and session 1
 create directory(plot): results/intensities/subject_27/fontSpace/gamma/session1/1nn_clf
 create directory(plot): results/intensities/subject_27/fontSpace/gamma/session1/topological_clf
-18.924462966124217 minuts for classification
+18.67382060289383 minuts for classification
 create directory(plot): results/intensities/subject_27/fontSpace/gamma/session2
 intensities for band  gamma and session 2
 create directory(plot): results/intensities/subject_27/fontSpace/gamma/session2/1nn_clf
 create directory(plot): results/intensities/subject_27/fontSpace/gamma/session2/topological_clf
-13.908380230267843 minuts for classification
+14.109692299365998 minuts for classification
 create directory(plot): results/intensities/subject_27/fontSpace/beta/session1
 intensities for band  beta and session 1
 create directory(plot): results/intensities/subject_27/fontSpace/beta/session1/1nn_clf
 create directory(plot): results/intensities/subject_27/fontSpace/beta/session1/topological_clf
-15.98005341688792 minuts for classification
+15.913816444079082 minuts for classification
 create directory(plot): results/intensities/subject_27/fontSpace/beta/session2
 intensities for band  beta and session 2
 create directory(plot): results/intensities/subject_27/fontSpace/beta/session2/1nn_clf
 create directory(plot): results/intensities/subject_27/fontSpace/beta/session2/topological_clf
-19.124072547753652 minuts for classification
+19.440363621711732 minuts for classification
 create directory(plot): results/intensities/subject_27/fontSpace/alpha/session1
 intensities for band  alpha and session 1
 create directory(plot): results/intensities/subject_27/fontSpace/alpha/session1/1nn_clf
 create directory(plot): results/intensities/subject_27/fontSpace/alpha/session1/topological_clf
-15.472709512710571 minuts for classification
+15.342805608113606 minuts for classification
 create directory(plot): results/intensities/subject_27/fontSpace/alpha/session2
 intensities for band  alpha and session 2
 create directory(plot): results/intensities/subject_27/fontSpace/alpha/session2/1nn_clf
 create directory(plot): results/intensities/subject_27/fontSpace/alpha/session2/topological_clf
-17.734032066663108 minuts for classification
+17.958102309703825 minuts for classification
 create directory(plot): results/intensities/subject_27/fontSpace/noFilter/session1
 intensities for band  noFilter and session 1
 create directory(plot): results/intensities/subject_27/fontSpace/noFilter/session1/1nn_clf
 create directory(plot): results/intensities/subject_27/fontSpace/noFilter/session1/topological_clf
-18.442651096979777 minuts for classification
+18.541877456506093 minuts for classification
 create directory(plot): results/intensities/subject_27/fontSpace/noFilter/session2
 intensities for band  noFilter and session 2
 create directory(plot): results/intensities/subject_27/fontSpace/noFilter/session2/1nn_clf
 create directory(plot): results/intensities/subject_27/fontSpace/noFilter/session2/topological_clf
-18.088459193706512 minuts for classification
+18.128702557086946 minuts for classification
 ======TIME======
 create directory: results/intensities/subject_28/
 create directory(plot): results/intensities/subject_28/electrodeSpace
@@ -273,42 +273,42 @@ create directory(plot): results/intensities/subject_28/electrodeSpace/gamma/sess
 intensities for band  gamma and session 1
 create directory(plot): results/intensities/subject_28/electrodeSpace/gamma/session1/1nn_clf
 create directory(plot): results/intensities/subject_28/electrodeSpace/gamma/session1/topological_clf
-19.634790841738383 minuts for classification
+19.670407458146414 minuts for classification
 create directory(plot): results/intensities/subject_28/electrodeSpace/gamma/session2
 intensities for band  gamma and session 2
 create directory(plot): results/intensities/subject_28/electrodeSpace/gamma/session2/1nn_clf
 create directory(plot): results/intensities/subject_28/electrodeSpace/gamma/session2/topological_clf
-16.570512783527374 minuts for classification
+16.93458464940389 minuts for classification
 create directory(plot): results/intensities/subject_28/electrodeSpace/beta/session1
 intensities for band  beta and session 1
 create directory(plot): results/intensities/subject_28/electrodeSpace/beta/session1/1nn_clf
 create directory(plot): results/intensities/subject_28/electrodeSpace/beta/session1/topological_clf
-18.675072248776754 minuts for classification
+18.995034476121265 minuts for classification
 create directory(plot): results/intensities/subject_28/electrodeSpace/beta/session2
 intensities for band  beta and session 2
 create directory(plot): results/intensities/subject_28/electrodeSpace/beta/session2/1nn_clf
 create directory(plot): results/intensities/subject_28/electrodeSpace/beta/session2/topological_clf
-15.678709896405538 minuts for classification
+15.928553287188212 minuts for classification
 create directory(plot): results/intensities/subject_28/electrodeSpace/alpha/session1
 intensities for band  alpha and session 1
 create directory(plot): results/intensities/subject_28/electrodeSpace/alpha/session1/1nn_clf
 create directory(plot): results/intensities/subject_28/electrodeSpace/alpha/session1/topological_clf
-19.28521458307902 minuts for classification
+19.682190056641897 minuts for classification
 create directory(plot): results/intensities/subject_28/electrodeSpace/alpha/session2
 intensities for band  alpha and session 2
 create directory(plot): results/intensities/subject_28/electrodeSpace/alpha/session2/1nn_clf
 create directory(plot): results/intensities/subject_28/electrodeSpace/alpha/session2/topological_clf
-16.307658497492472 minuts for classification
+16.867763551076255 minuts for classification
 create directory(plot): results/intensities/subject_28/electrodeSpace/noFilter/session1
 intensities for band  noFilter and session 1
 create directory(plot): results/intensities/subject_28/electrodeSpace/noFilter/session1/1nn_clf
 create directory(plot): results/intensities/subject_28/electrodeSpace/noFilter/session1/topological_clf
-17.917588849862415 minuts for classification
+17.824917030334472 minuts for classification
 create directory(plot): results/intensities/subject_28/electrodeSpace/noFilter/session2
 intensities for band  noFilter and session 2
 create directory(plot): results/intensities/subject_28/electrodeSpace/noFilter/session2/1nn_clf
 create directory(plot): results/intensities/subject_28/electrodeSpace/noFilter/session2/topological_clf
-17.723148620128633 minuts for classification
+17.79518706401189 minuts for classification
 ======TIME======
 create directory(plot): results/intensities/subject_28/fontSpace
 cleaning and filtering data of fontSpace of subject 28
@@ -317,42 +317,42 @@ create directory(plot): results/intensities/subject_28/fontSpace/gamma/session1
 intensities for band  gamma and session 1
 create directory(plot): results/intensities/subject_28/fontSpace/gamma/session1/1nn_clf
 create directory(plot): results/intensities/subject_28/fontSpace/gamma/session1/topological_clf
-18.501889101664226 minuts for classification
+18.20585596561432 minuts for classification
 create directory(plot): results/intensities/subject_28/fontSpace/gamma/session2
 intensities for band  gamma and session 2
 create directory(plot): results/intensities/subject_28/fontSpace/gamma/session2/1nn_clf
 create directory(plot): results/intensities/subject_28/fontSpace/gamma/session2/topological_clf
-15.8869047443072 minuts for classification
+16.17410659790039 minuts for classification
 create directory(plot): results/intensities/subject_28/fontSpace/beta/session1
 intensities for band  beta and session 1
 create directory(plot): results/intensities/subject_28/fontSpace/beta/session1/1nn_clf
 create directory(plot): results/intensities/subject_28/fontSpace/beta/session1/topological_clf
-18.973666417598725 minuts for classification
+18.73687627315521 minuts for classification
 create directory(plot): results/intensities/subject_28/fontSpace/beta/session2
 intensities for band  beta and session 2
 create directory(plot): results/intensities/subject_28/fontSpace/beta/session2/1nn_clf
 create directory(plot): results/intensities/subject_28/fontSpace/beta/session2/topological_clf
-15.26866980791092 minuts for classification
+15.554795837402343 minuts for classification
 create directory(plot): results/intensities/subject_28/fontSpace/alpha/session1
 intensities for band  alpha and session 1
 create directory(plot): results/intensities/subject_28/fontSpace/alpha/session1/1nn_clf
 create directory(plot): results/intensities/subject_28/fontSpace/alpha/session1/topological_clf
-18.995585079987844 minuts for classification
+18.998452055454255 minuts for classification
 create directory(plot): results/intensities/subject_28/fontSpace/alpha/session2
 intensities for band  alpha and session 2
 create directory(plot): results/intensities/subject_28/fontSpace/alpha/session2/1nn_clf
 create directory(plot): results/intensities/subject_28/fontSpace/alpha/session2/topological_clf
-15.902172728379567 minuts for classification
+16.292680279413858 minuts for classification
 create directory(plot): results/intensities/subject_28/fontSpace/noFilter/session1
 intensities for band  noFilter and session 1
 create directory(plot): results/intensities/subject_28/fontSpace/noFilter/session1/1nn_clf
 create directory(plot): results/intensities/subject_28/fontSpace/noFilter/session1/topological_clf
-17.875473189353944 minuts for classification
+17.86992745002111 minuts for classification
 create directory(plot): results/intensities/subject_28/fontSpace/noFilter/session2
 intensities for band  noFilter and session 2
 create directory(plot): results/intensities/subject_28/fontSpace/noFilter/session2/1nn_clf
 create directory(plot): results/intensities/subject_28/fontSpace/noFilter/session2/topological_clf
-18.135414520899456 minuts for classification
+17.807898779710133 minuts for classification
 ======TIME======
 create directory: results/intensities/subject_29/
 create directory(plot): results/intensities/subject_29/electrodeSpace
@@ -362,42 +362,42 @@ create directory(plot): results/intensities/subject_29/electrodeSpace/gamma/sess
 intensities for band  gamma and session 1
 create directory(plot): results/intensities/subject_29/electrodeSpace/gamma/session1/1nn_clf
 create directory(plot): results/intensities/subject_29/electrodeSpace/gamma/session1/topological_clf
-1.1367785414059957 minuts for classification
+1.1822004278500875 minuts for classification
 create directory(plot): results/intensities/subject_29/electrodeSpace/gamma/session2
 intensities for band  gamma and session 2
 create directory(plot): results/intensities/subject_29/electrodeSpace/gamma/session2/1nn_clf
 create directory(plot): results/intensities/subject_29/electrodeSpace/gamma/session2/topological_clf
-1.1495787819226584 minuts for classification
+1.1546823859214783 minuts for classification
 create directory(plot): results/intensities/subject_29/electrodeSpace/beta/session1
 intensities for band  beta and session 1
 create directory(plot): results/intensities/subject_29/electrodeSpace/beta/session1/1nn_clf
 create directory(plot): results/intensities/subject_29/electrodeSpace/beta/session1/topological_clf
-1.2833078344662985 minuts for classification
+1.2900212446848551 minuts for classification
 create directory(plot): results/intensities/subject_29/electrodeSpace/beta/session2
 intensities for band  beta and session 2
 create directory(plot): results/intensities/subject_29/electrodeSpace/beta/session2/1nn_clf
 create directory(plot): results/intensities/subject_29/electrodeSpace/beta/session2/topological_clf
-1.4540991067886353 minuts for classification
+1.433998735745748 minuts for classification
 create directory(plot): results/intensities/subject_29/electrodeSpace/alpha/session1
 intensities for band  alpha and session 1
 create directory(plot): results/intensities/subject_29/electrodeSpace/alpha/session1/1nn_clf
 create directory(plot): results/intensities/subject_29/electrodeSpace/alpha/session1/topological_clf
-1.3993823647499084 minuts for classification
+1.2039348165194192 minuts for classification
 create directory(plot): results/intensities/subject_29/electrodeSpace/alpha/session2
 intensities for band  alpha and session 2
 create directory(plot): results/intensities/subject_29/electrodeSpace/alpha/session2/1nn_clf
 create directory(plot): results/intensities/subject_29/electrodeSpace/alpha/session2/topological_clf
-1.4137775301933289 minuts for classification
+1.4045774777730307 minuts for classification
 create directory(plot): results/intensities/subject_29/electrodeSpace/noFilter/session1
 intensities for band  noFilter and session 1
 create directory(plot): results/intensities/subject_29/electrodeSpace/noFilter/session1/1nn_clf
 create directory(plot): results/intensities/subject_29/electrodeSpace/noFilter/session1/topological_clf
-1.1385372161865235 minuts for classification
+1.143160891532898 minuts for classification
 create directory(plot): results/intensities/subject_29/electrodeSpace/noFilter/session2
 intensities for band  noFilter and session 2
 create directory(plot): results/intensities/subject_29/electrodeSpace/noFilter/session2/1nn_clf
 create directory(plot): results/intensities/subject_29/electrodeSpace/noFilter/session2/topological_clf
-1.2408796509106954 minuts for classification
+1.291215980052948 minuts for classification
 ======TIME======
 create directory(plot): results/intensities/subject_29/fontSpace
 cleaning and filtering data of fontSpace of subject 29
@@ -406,42 +406,42 @@ create directory(plot): results/intensities/subject_29/fontSpace/gamma/session1
 intensities for band  gamma and session 1
 create directory(plot): results/intensities/subject_29/fontSpace/gamma/session1/1nn_clf
 create directory(plot): results/intensities/subject_29/fontSpace/gamma/session1/topological_clf
-1.1459453264872232 minuts for classification
+1.1940253297487895 minuts for classification
 create directory(plot): results/intensities/subject_29/fontSpace/gamma/session2
 intensities for band  gamma and session 2
 create directory(plot): results/intensities/subject_29/fontSpace/gamma/session2/1nn_clf
 create directory(plot): results/intensities/subject_29/fontSpace/gamma/session2/topological_clf
-1.066563864549001 minuts for classification
+1.037788701057434 minuts for classification
 create directory(plot): results/intensities/subject_29/fontSpace/beta/session1
 intensities for band  beta and session 1
 create directory(plot): results/intensities/subject_29/fontSpace/beta/session1/1nn_clf
 create directory(plot): results/intensities/subject_29/fontSpace/beta/session1/topological_clf
-1.5028017520904542 minuts for classification
+1.4107596079508464 minuts for classification
 create directory(plot): results/intensities/subject_29/fontSpace/beta/session2
 intensities for band  beta and session 2
 create directory(plot): results/intensities/subject_29/fontSpace/beta/session2/1nn_clf
 create directory(plot): results/intensities/subject_29/fontSpace/beta/session2/topological_clf
-1.2976007262865703 minuts for classification
+1.28063116868337 minuts for classification
 create directory(plot): results/intensities/subject_29/fontSpace/alpha/session1
 intensities for band  alpha and session 1
 create directory(plot): results/intensities/subject_29/fontSpace/alpha/session1/1nn_clf
 create directory(plot): results/intensities/subject_29/fontSpace/alpha/session1/topological_clf
-1.2350276231765747 minuts for classification
+1.162032183011373 minuts for classification
 create directory(plot): results/intensities/subject_29/fontSpace/alpha/session2
 intensities for band  alpha and session 2
 create directory(plot): results/intensities/subject_29/fontSpace/alpha/session2/1nn_clf
 create directory(plot): results/intensities/subject_29/fontSpace/alpha/session2/topological_clf
-1.2942986090977986 minuts for classification
+1.3178621768951415 minuts for classification
 create directory(plot): results/intensities/subject_29/fontSpace/noFilter/session1
 intensities for band  noFilter and session 1
 create directory(plot): results/intensities/subject_29/fontSpace/noFilter/session1/1nn_clf
 create directory(plot): results/intensities/subject_29/fontSpace/noFilter/session1/topological_clf
-1.2659698645273845 minuts for classification
+1.2602556784947714 minuts for classification
 create directory(plot): results/intensities/subject_29/fontSpace/noFilter/session2
 intensities for band  noFilter and session 2
 create directory(plot): results/intensities/subject_29/fontSpace/noFilter/session2/1nn_clf
 create directory(plot): results/intensities/subject_29/fontSpace/noFilter/session2/topological_clf
-1.1438586155573527 minuts for classification
+1.1344876686731975 minuts for classification
 ======TIME======
 create directory: results/intensities/subject_30/
 create directory(plot): results/intensities/subject_30/electrodeSpace
@@ -451,22 +451,22 @@ create directory(plot): results/intensities/subject_30/electrodeSpace/gamma/sess
 intensities for band  gamma and session 1
 create directory(plot): results/intensities/subject_30/electrodeSpace/gamma/session1/1nn_clf
 create directory(plot): results/intensities/subject_30/electrodeSpace/gamma/session1/topological_clf
-1.4780935923258463 minuts for classification
+1.5072869737943013 minuts for classification
 create directory(plot): results/intensities/subject_30/electrodeSpace/gamma/session2
 intensities for band  gamma and session 2
 create directory(plot): results/intensities/subject_30/electrodeSpace/gamma/session2/1nn_clf
 create directory(plot): results/intensities/subject_30/electrodeSpace/gamma/session2/topological_clf
-1.3482866962750752 minuts for classification
+1.4840269009272258 minuts for classification
 create directory(plot): results/intensities/subject_30/electrodeSpace/beta/session1
 intensities for band  beta and session 1
 create directory(plot): results/intensities/subject_30/electrodeSpace/beta/session1/1nn_clf
 create directory(plot): results/intensities/subject_30/electrodeSpace/beta/session1/topological_clf
-1.623417357603709 minuts for classification
+1.6038230895996093 minuts for classification
 create directory(plot): results/intensities/subject_30/electrodeSpace/beta/session2
 intensities for band  beta and session 2
 create directory(plot): results/intensities/subject_30/electrodeSpace/beta/session2/1nn_clf
 create directory(plot): results/intensities/subject_30/electrodeSpace/beta/session2/topological_clf
-1.535368843873342 minuts for classification
+1.3784407099088034 minuts for classification
 create directory(plot): results/intensities/subject_30/electrodeSpace/alpha/session1
 intensities for band  alpha and session 1
 create directory(plot): results/intensities/subject_30/electrodeSpace/alpha/session1/1nn_clf
@@ -533,22 +533,22 @@ Main_pipeline.py:225: RuntimeWarning: Mean of empty slice.
 Main_pipeline.py:229: RuntimeWarning: Mean of empty slice.
   np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/original_means_m2.npy',PC[labels==2].mean(axis=0))
 create directory(plot): results/intensities/subject_30/electrodeSpace/alpha/session1/topological_clf
-1.294767967859904 minuts for classification
+1.5262370427449545 minuts for classification
 create directory(plot): results/intensities/subject_30/electrodeSpace/alpha/session2
 intensities for band  alpha and session 2
 create directory(plot): results/intensities/subject_30/electrodeSpace/alpha/session2/1nn_clf
 create directory(plot): results/intensities/subject_30/electrodeSpace/alpha/session2/topological_clf
-1.2829414168993631 minuts for classification
+1.3272143205006917 minuts for classification
 create directory(plot): results/intensities/subject_30/electrodeSpace/noFilter/session1
 intensities for band  noFilter and session 1
 create directory(plot): results/intensities/subject_30/electrodeSpace/noFilter/session1/1nn_clf
 create directory(plot): results/intensities/subject_30/electrodeSpace/noFilter/session1/topological_clf
-1.4068024675051372 minuts for classification
+1.501955473423004 minuts for classification
 create directory(plot): results/intensities/subject_30/electrodeSpace/noFilter/session2
 intensities for band  noFilter and session 2
 create directory(plot): results/intensities/subject_30/electrodeSpace/noFilter/session2/1nn_clf
 create directory(plot): results/intensities/subject_30/electrodeSpace/noFilter/session2/topological_clf
-1.3926737666130067 minuts for classification
+1.3049287478129068 minuts for classification
 ======TIME======
 create directory(plot): results/intensities/subject_30/fontSpace
 cleaning and filtering data of fontSpace of subject 30
@@ -557,42 +557,42 @@ create directory(plot): results/intensities/subject_30/fontSpace/gamma/session1
 intensities for band  gamma and session 1
 create directory(plot): results/intensities/subject_30/fontSpace/gamma/session1/1nn_clf
 create directory(plot): results/intensities/subject_30/fontSpace/gamma/session1/topological_clf
-1.374612311522166 minuts for classification
+1.474424163500468 minuts for classification
 create directory(plot): results/intensities/subject_30/fontSpace/gamma/session2
 intensities for band  gamma and session 2
 create directory(plot): results/intensities/subject_30/fontSpace/gamma/session2/1nn_clf
 create directory(plot): results/intensities/subject_30/fontSpace/gamma/session2/topological_clf
-1.416943939526876 minuts for classification
+1.3260220289230347 minuts for classification
 create directory(plot): results/intensities/subject_30/fontSpace/beta/session1
 intensities for band  beta and session 1
 create directory(plot): results/intensities/subject_30/fontSpace/beta/session1/1nn_clf
 create directory(plot): results/intensities/subject_30/fontSpace/beta/session1/topological_clf
-1.2631609678268432 minuts for classification
+1.47203369140625 minuts for classification
 create directory(plot): results/intensities/subject_30/fontSpace/beta/session2
 intensities for band  beta and session 2
 create directory(plot): results/intensities/subject_30/fontSpace/beta/session2/1nn_clf
 create directory(plot): results/intensities/subject_30/fontSpace/beta/session2/topological_clf
-1.2480324149131774 minuts for classification
+1.2629186550776164 minuts for classification
 create directory(plot): results/intensities/subject_30/fontSpace/alpha/session1
 intensities for band  alpha and session 1
 create directory(plot): results/intensities/subject_30/fontSpace/alpha/session1/1nn_clf
 create directory(plot): results/intensities/subject_30/fontSpace/alpha/session1/topological_clf
-1.2456274350484213 minuts for classification
+1.4292777935663858 minuts for classification
 create directory(plot): results/intensities/subject_30/fontSpace/alpha/session2
 intensities for band  alpha and session 2
 create directory(plot): results/intensities/subject_30/fontSpace/alpha/session2/1nn_clf
 create directory(plot): results/intensities/subject_30/fontSpace/alpha/session2/topological_clf
-1.3294933358828227 minuts for classification
+1.3616092284520467 minuts for classification
 create directory(plot): results/intensities/subject_30/fontSpace/noFilter/session1
 intensities for band  noFilter and session 1
 create directory(plot): results/intensities/subject_30/fontSpace/noFilter/session1/1nn_clf
 create directory(plot): results/intensities/subject_30/fontSpace/noFilter/session1/topological_clf
-1.43666383822759 minuts for classification
+1.3757020990053812 minuts for classification
 create directory(plot): results/intensities/subject_30/fontSpace/noFilter/session2
 intensities for band  noFilter and session 2
 create directory(plot): results/intensities/subject_30/fontSpace/noFilter/session2/1nn_clf
 create directory(plot): results/intensities/subject_30/fontSpace/noFilter/session2/topological_clf
-1.212855370839437 minuts for classification
+1.1367928345998128 minuts for classification
 ======TIME======
 create directory: results/intensities/subject_31/
 create directory(plot): results/intensities/subject_31/electrodeSpace
@@ -606,7 +606,7 @@ create directory(plot): results/intensities/subject_31/electrodeSpace/gamma/sess
 intensities for band  gamma and session 2
 create directory(plot): results/intensities/subject_31/electrodeSpace/gamma/session2/1nn_clf
 create directory(plot): results/intensities/subject_31/electrodeSpace/gamma/session2/topological_clf
-12.154446450869242 minuts for classification
+12.240727957089742 minuts for classification
 create directory(plot): results/intensities/subject_31/electrodeSpace/beta/session1
 intensities for band  beta and session 1
 create directory(plot): results/intensities/subject_31/electrodeSpace/beta/session1/1nn_clf
@@ -615,7 +615,7 @@ create directory(plot): results/intensities/subject_31/electrodeSpace/beta/sessi
 intensities for band  beta and session 2
 create directory(plot): results/intensities/subject_31/electrodeSpace/beta/session2/1nn_clf
 create directory(plot): results/intensities/subject_31/electrodeSpace/beta/session2/topological_clf
-12.341551268100739 minuts for classification
+12.31526734828949 minuts for classification
 create directory(plot): results/intensities/subject_31/electrodeSpace/alpha/session1
 intensities for band  alpha and session 1
 create directory(plot): results/intensities/subject_31/electrodeSpace/alpha/session1/1nn_clf
@@ -624,7 +624,7 @@ create directory(plot): results/intensities/subject_31/electrodeSpace/alpha/sess
 intensities for band  alpha and session 2
 create directory(plot): results/intensities/subject_31/electrodeSpace/alpha/session2/1nn_clf
 create directory(plot): results/intensities/subject_31/electrodeSpace/alpha/session2/topological_clf
-14.092093062400817 minuts for classification
+13.418629431724549 minuts for classification
 create directory(plot): results/intensities/subject_31/electrodeSpace/noFilter/session1
 intensities for band  noFilter and session 1
 create directory(plot): results/intensities/subject_31/electrodeSpace/noFilter/session1/1nn_clf
@@ -633,7 +633,7 @@ create directory(plot): results/intensities/subject_31/electrodeSpace/noFilter/s
 intensities for band  noFilter and session 2
 create directory(plot): results/intensities/subject_31/electrodeSpace/noFilter/session2/1nn_clf
 create directory(plot): results/intensities/subject_31/electrodeSpace/noFilter/session2/topological_clf
-12.705359319845835 minuts for classification
+12.634998043378195 minuts for classification
 ======TIME======
 create directory(plot): results/intensities/subject_31/fontSpace
 cleaning and filtering data of fontSpace of subject 31
@@ -646,7 +646,7 @@ create directory(plot): results/intensities/subject_31/fontSpace/gamma/session2
 intensities for band  gamma and session 2
 create directory(plot): results/intensities/subject_31/fontSpace/gamma/session2/1nn_clf
 create directory(plot): results/intensities/subject_31/fontSpace/gamma/session2/topological_clf
-13.413973617553712 minuts for classification
+13.21915598710378 minuts for classification
 create directory(plot): results/intensities/subject_31/fontSpace/beta/session1
 intensities for band  beta and session 1
 create directory(plot): results/intensities/subject_31/fontSpace/beta/session1/1nn_clf
@@ -655,7 +655,7 @@ create directory(plot): results/intensities/subject_31/fontSpace/beta/session2
 intensities for band  beta and session 2
 create directory(plot): results/intensities/subject_31/fontSpace/beta/session2/1nn_clf
 create directory(plot): results/intensities/subject_31/fontSpace/beta/session2/topological_clf
-13.050262383619945 minuts for classification
+13.036456473668416 minuts for classification
 create directory(plot): results/intensities/subject_31/fontSpace/alpha/session1
 intensities for band  alpha and session 1
 create directory(plot): results/intensities/subject_31/fontSpace/alpha/session1/1nn_clf
@@ -664,7 +664,7 @@ create directory(plot): results/intensities/subject_31/fontSpace/alpha/session2
 intensities for band  alpha and session 2
 create directory(plot): results/intensities/subject_31/fontSpace/alpha/session2/1nn_clf
 create directory(plot): results/intensities/subject_31/fontSpace/alpha/session2/topological_clf
-14.072211070855458 minuts for classification
+14.23614974419276 minuts for classification
 create directory(plot): results/intensities/subject_31/fontSpace/noFilter/session1
 intensities for band  noFilter and session 1
 create directory(plot): results/intensities/subject_31/fontSpace/noFilter/session1/1nn_clf
@@ -673,7 +673,7 @@ create directory(plot): results/intensities/subject_31/fontSpace/noFilter/sessio
 intensities for band  noFilter and session 2
 create directory(plot): results/intensities/subject_31/fontSpace/noFilter/session2/1nn_clf
 create directory(plot): results/intensities/subject_31/fontSpace/noFilter/session2/topological_clf
-13.234091087182362 minuts for classification
+13.1419619957606 minuts for classification
 ======TIME======
 create directory: results/intensities/subject_32/
 create directory(plot): results/intensities/subject_32/electrodeSpace
@@ -683,42 +683,42 @@ create directory(plot): results/intensities/subject_32/electrodeSpace/gamma/sess
 intensities for band  gamma and session 1
 create directory(plot): results/intensities/subject_32/electrodeSpace/gamma/session1/1nn_clf
 create directory(plot): results/intensities/subject_32/electrodeSpace/gamma/session1/topological_clf
-1.6953148563702902 minuts for classification
+1.6779875040054322 minuts for classification
 create directory(plot): results/intensities/subject_32/electrodeSpace/gamma/session2
 intensities for band  gamma and session 2
 create directory(plot): results/intensities/subject_32/electrodeSpace/gamma/session2/1nn_clf
 create directory(plot): results/intensities/subject_32/electrodeSpace/gamma/session2/topological_clf
-1.0071659127871195 minuts for classification
+0.9185534596443177 minuts for classification
 create directory(plot): results/intensities/subject_32/electrodeSpace/beta/session1
 intensities for band  beta and session 1
 create directory(plot): results/intensities/subject_32/electrodeSpace/beta/session1/1nn_clf
 create directory(plot): results/intensities/subject_32/electrodeSpace/beta/session1/topological_clf
-1.4438454747200011 minuts for classification
+1.6230286876360576 minuts for classification
 create directory(plot): results/intensities/subject_32/electrodeSpace/beta/session2
 intensities for band  beta and session 2
 create directory(plot): results/intensities/subject_32/electrodeSpace/beta/session2/1nn_clf
 create directory(plot): results/intensities/subject_32/electrodeSpace/beta/session2/topological_clf
-1.3534521857897441 minuts for classification
+1.4019542495409647 minuts for classification
 create directory(plot): results/intensities/subject_32/electrodeSpace/alpha/session1
 intensities for band  alpha and session 1
 create directory(plot): results/intensities/subject_32/electrodeSpace/alpha/session1/1nn_clf
 create directory(plot): results/intensities/subject_32/electrodeSpace/alpha/session1/topological_clf
-1.7237477580706277 minuts for classification
+1.671139927705129 minuts for classification
 create directory(plot): results/intensities/subject_32/electrodeSpace/alpha/session2
 intensities for band  alpha and session 2
 create directory(plot): results/intensities/subject_32/electrodeSpace/alpha/session2/1nn_clf
 create directory(plot): results/intensities/subject_32/electrodeSpace/alpha/session2/topological_clf
-1.4987363417943318 minuts for classification
+1.5271597226460776 minuts for classification
 create directory(plot): results/intensities/subject_32/electrodeSpace/noFilter/session1
 intensities for band  noFilter and session 1
 create directory(plot): results/intensities/subject_32/electrodeSpace/noFilter/session1/1nn_clf
 create directory(plot): results/intensities/subject_32/electrodeSpace/noFilter/session1/topological_clf
-1.272586699326833 minuts for classification
+1.2698638916015625 minuts for classification
 create directory(plot): results/intensities/subject_32/electrodeSpace/noFilter/session2
 intensities for band  noFilter and session 2
 create directory(plot): results/intensities/subject_32/electrodeSpace/noFilter/session2/1nn_clf
 create directory(plot): results/intensities/subject_32/electrodeSpace/noFilter/session2/topological_clf
-1.3058249553044636 minuts for classification
+1.2615223407745362 minuts for classification
 ======TIME======
 create directory(plot): results/intensities/subject_32/fontSpace
 cleaning and filtering data of fontSpace of subject 32
@@ -727,42 +727,42 @@ create directory(plot): results/intensities/subject_32/fontSpace/gamma/session1
 intensities for band  gamma and session 1
 create directory(plot): results/intensities/subject_32/fontSpace/gamma/session1/1nn_clf
 create directory(plot): results/intensities/subject_32/fontSpace/gamma/session1/topological_clf
-1.7483048637708027 minuts for classification
+1.6813745141029357 minuts for classification
 create directory(plot): results/intensities/subject_32/fontSpace/gamma/session2
 intensities for band  gamma and session 2
 create directory(plot): results/intensities/subject_32/fontSpace/gamma/session2/1nn_clf
 create directory(plot): results/intensities/subject_32/fontSpace/gamma/session2/topological_clf
-0.9595349391301473 minuts for classification
+0.892213237285614 minuts for classification
 create directory(plot): results/intensities/subject_32/fontSpace/beta/session1
 intensities for band  beta and session 1
 create directory(plot): results/intensities/subject_32/fontSpace/beta/session1/1nn_clf
 create directory(plot): results/intensities/subject_32/fontSpace/beta/session1/topological_clf
-1.743626352151235 minuts for classification
+1.650549348195394 minuts for classification
 create directory(plot): results/intensities/subject_32/fontSpace/beta/session2
 intensities for band  beta and session 2
 create directory(plot): results/intensities/subject_32/fontSpace/beta/session2/1nn_clf
 create directory(plot): results/intensities/subject_32/fontSpace/beta/session2/topological_clf
-1.3078139344851176 minuts for classification
+1.2857863028844199 minuts for classification
 create directory(plot): results/intensities/subject_32/fontSpace/alpha/session1
 intensities for band  alpha and session 1
 create directory(plot): results/intensities/subject_32/fontSpace/alpha/session1/1nn_clf
 create directory(plot): results/intensities/subject_32/fontSpace/alpha/session1/topological_clf
-1.5632048090298971 minuts for classification
+1.275184651215871 minuts for classification
 create directory(plot): results/intensities/subject_32/fontSpace/alpha/session2
 intensities for band  alpha and session 2
 create directory(plot): results/intensities/subject_32/fontSpace/alpha/session2/1nn_clf
 create directory(plot): results/intensities/subject_32/fontSpace/alpha/session2/topological_clf
-1.2292757908503213 minuts for classification
+1.1918599208196003 minuts for classification
 create directory(plot): results/intensities/subject_32/fontSpace/noFilter/session1
 intensities for band  noFilter and session 1
 create directory(plot): results/intensities/subject_32/fontSpace/noFilter/session1/1nn_clf
 create directory(plot): results/intensities/subject_32/fontSpace/noFilter/session1/topological_clf
-1.3331605275472005 minuts for classification
+1.224847932656606 minuts for classification
 create directory(plot): results/intensities/subject_32/fontSpace/noFilter/session2
 intensities for band  noFilter and session 2
 create directory(plot): results/intensities/subject_32/fontSpace/noFilter/session2/1nn_clf
 create directory(plot): results/intensities/subject_32/fontSpace/noFilter/session2/topological_clf
-0.915898076693217 minuts for classification
+0.7471062461535136 minuts for classification
 ======TIME======
 create directory: results/intensities/subject_33/
 create directory(plot): results/intensities/subject_33/electrodeSpace
@@ -772,42 +772,42 @@ create directory(plot): results/intensities/subject_33/electrodeSpace/gamma/sess
 intensities for band  gamma and session 1
 create directory(plot): results/intensities/subject_33/electrodeSpace/gamma/session1/1nn_clf
 create directory(plot): results/intensities/subject_33/electrodeSpace/gamma/session1/topological_clf
-16.067062457402546 minuts for classification
+15.963798590501149 minuts for classification
 create directory(plot): results/intensities/subject_33/electrodeSpace/gamma/session2
 intensities for band  gamma and session 2
 create directory(plot): results/intensities/subject_33/electrodeSpace/gamma/session2/1nn_clf
 create directory(plot): results/intensities/subject_33/electrodeSpace/gamma/session2/topological_clf
-19.28011025985082 minuts for classification
+18.531916522979735 minuts for classification
 create directory(plot): results/intensities/subject_33/electrodeSpace/beta/session1
 intensities for band  beta and session 1
 create directory(plot): results/intensities/subject_33/electrodeSpace/beta/session1/1nn_clf
 create directory(plot): results/intensities/subject_33/electrodeSpace/beta/session1/topological_clf
-16.518662333488464 minuts for classification
+16.425348460674286 minuts for classification
 create directory(plot): results/intensities/subject_33/electrodeSpace/beta/session2
 intensities for band  beta and session 2
 create directory(plot): results/intensities/subject_33/electrodeSpace/beta/session2/1nn_clf
 create directory(plot): results/intensities/subject_33/electrodeSpace/beta/session2/topological_clf
-16.747530615329744 minuts for classification
+16.377574487527212 minuts for classification
 create directory(plot): results/intensities/subject_33/electrodeSpace/alpha/session1
 intensities for band  alpha and session 1
 create directory(plot): results/intensities/subject_33/electrodeSpace/alpha/session1/1nn_clf
 create directory(plot): results/intensities/subject_33/electrodeSpace/alpha/session1/topological_clf
-16.238285358746847 minuts for classification
+16.088929569721223 minuts for classification
 create directory(plot): results/intensities/subject_33/electrodeSpace/alpha/session2
 intensities for band  alpha and session 2
 create directory(plot): results/intensities/subject_33/electrodeSpace/alpha/session2/1nn_clf
 create directory(plot): results/intensities/subject_33/electrodeSpace/alpha/session2/topological_clf
-17.05771778424581 minuts for classification
+17.040541923046113 minuts for classification
 create directory(plot): results/intensities/subject_33/electrodeSpace/noFilter/session1
 intensities for band  noFilter and session 1
 create directory(plot): results/intensities/subject_33/electrodeSpace/noFilter/session1/1nn_clf
 create directory(plot): results/intensities/subject_33/electrodeSpace/noFilter/session1/topological_clf
-20.069212452570596 minuts for classification
+19.465753761927285 minuts for classification
 create directory(plot): results/intensities/subject_33/electrodeSpace/noFilter/session2
 intensities for band  noFilter and session 2
 create directory(plot): results/intensities/subject_33/electrodeSpace/noFilter/session2/1nn_clf
 create directory(plot): results/intensities/subject_33/electrodeSpace/noFilter/session2/topological_clf
-18.560880386829375 minuts for classification
+18.69542131026586 minuts for classification
 ======TIME======
 create directory(plot): results/intensities/subject_33/fontSpace
 cleaning and filtering data of fontSpace of subject 33
@@ -816,42 +816,42 @@ create directory(plot): results/intensities/subject_33/fontSpace/gamma/session1
 intensities for band  gamma and session 1
 create directory(plot): results/intensities/subject_33/fontSpace/gamma/session1/1nn_clf
 create directory(plot): results/intensities/subject_33/fontSpace/gamma/session1/topological_clf
-12.190043318271638 minuts for classification
+12.029180749257405 minuts for classification
 create directory(plot): results/intensities/subject_33/fontSpace/gamma/session2
 intensities for band  gamma and session 2
 create directory(plot): results/intensities/subject_33/fontSpace/gamma/session2/1nn_clf
 create directory(plot): results/intensities/subject_33/fontSpace/gamma/session2/topological_clf
-18.27307540178299 minuts for classification
+17.984629170099893 minuts for classification
 create directory(plot): results/intensities/subject_33/fontSpace/beta/session1
 intensities for band  beta and session 1
 create directory(plot): results/intensities/subject_33/fontSpace/beta/session1/1nn_clf
 create directory(plot): results/intensities/subject_33/fontSpace/beta/session1/topological_clf
-16.729128845532735 minuts for classification
+16.91337693532308 minuts for classification
 create directory(plot): results/intensities/subject_33/fontSpace/beta/session2
 intensities for band  beta and session 2
 create directory(plot): results/intensities/subject_33/fontSpace/beta/session2/1nn_clf
 create directory(plot): results/intensities/subject_33/fontSpace/beta/session2/topological_clf
-16.429882474740346 minuts for classification
+16.253872525691985 minuts for classification
 create directory(plot): results/intensities/subject_33/fontSpace/alpha/session1
 intensities for band  alpha and session 1
 create directory(plot): results/intensities/subject_33/fontSpace/alpha/session1/1nn_clf
 create directory(plot): results/intensities/subject_33/fontSpace/alpha/session1/topological_clf
-15.055862045288086 minuts for classification
+15.084592974185943 minuts for classification
 create directory(plot): results/intensities/subject_33/fontSpace/alpha/session2
 intensities for band  alpha and session 2
 create directory(plot): results/intensities/subject_33/fontSpace/alpha/session2/1nn_clf
 create directory(plot): results/intensities/subject_33/fontSpace/alpha/session2/topological_clf
-16.56783592303594 minuts for classification
+16.511129605770112 minuts for classification
 create directory(plot): results/intensities/subject_33/fontSpace/noFilter/session1
 intensities for band  noFilter and session 1
 create directory(plot): results/intensities/subject_33/fontSpace/noFilter/session1/1nn_clf
 create directory(plot): results/intensities/subject_33/fontSpace/noFilter/session1/topological_clf
-18.121907981236777 minuts for classification
+17.778199295202892 minuts for classification
 create directory(plot): results/intensities/subject_33/fontSpace/noFilter/session2
 intensities for band  noFilter and session 2
 create directory(plot): results/intensities/subject_33/fontSpace/noFilter/session2/1nn_clf
 create directory(plot): results/intensities/subject_33/fontSpace/noFilter/session2/topological_clf
-17.06705422004064 minuts for classification
+16.772539826234183 minuts for classification
 ======TIME======
 create directory: results/intensities/subject_34/
 create directory(plot): results/intensities/subject_34/electrodeSpace
@@ -861,42 +861,42 @@ create directory(plot): results/intensities/subject_34/electrodeSpace/gamma/sess
 intensities for band  gamma and session 1
 create directory(plot): results/intensities/subject_34/electrodeSpace/gamma/session1/1nn_clf
 create directory(plot): results/intensities/subject_34/electrodeSpace/gamma/session1/topological_clf
-14.212597322463989 minuts for classification
+14.553153145313264 minuts for classification
 create directory(plot): results/intensities/subject_34/electrodeSpace/gamma/session2
 intensities for band  gamma and session 2
 create directory(plot): results/intensities/subject_34/electrodeSpace/gamma/session2/1nn_clf
 create directory(plot): results/intensities/subject_34/electrodeSpace/gamma/session2/topological_clf
-19.818315744400024 minuts for classification
+19.54489837884903 minuts for classification
 create directory(plot): results/intensities/subject_34/electrodeSpace/beta/session1
 intensities for band  beta and session 1
 create directory(plot): results/intensities/subject_34/electrodeSpace/beta/session1/1nn_clf
 create directory(plot): results/intensities/subject_34/electrodeSpace/beta/session1/topological_clf
-16.87051675717036 minuts for classification
+16.63065767288208 minuts for classification
 create directory(plot): results/intensities/subject_34/electrodeSpace/beta/session2
 intensities for band  beta and session 2
 create directory(plot): results/intensities/subject_34/electrodeSpace/beta/session2/1nn_clf
 create directory(plot): results/intensities/subject_34/electrodeSpace/beta/session2/topological_clf
-17.97129913965861 minuts for classification
+18.028833210468292 minuts for classification
 create directory(plot): results/intensities/subject_34/electrodeSpace/alpha/session1
 intensities for band  alpha and session 1
 create directory(plot): results/intensities/subject_34/electrodeSpace/alpha/session1/1nn_clf
 create directory(plot): results/intensities/subject_34/electrodeSpace/alpha/session1/topological_clf
-16.49672038157781 minuts for classification
+15.962555960814159 minuts for classification
 create directory(plot): results/intensities/subject_34/electrodeSpace/alpha/session2
 intensities for band  alpha and session 2
 create directory(plot): results/intensities/subject_34/electrodeSpace/alpha/session2/1nn_clf
 create directory(plot): results/intensities/subject_34/electrodeSpace/alpha/session2/topological_clf
-20.00791413784027 minuts for classification
+20.30763477484385 minuts for classification
 create directory(plot): results/intensities/subject_34/electrodeSpace/noFilter/session1
 intensities for band  noFilter and session 1
 create directory(plot): results/intensities/subject_34/electrodeSpace/noFilter/session1/1nn_clf
 create directory(plot): results/intensities/subject_34/electrodeSpace/noFilter/session1/topological_clf
-18.4423574646314 minuts for classification
+18.25140487353007 minuts for classification
 create directory(plot): results/intensities/subject_34/electrodeSpace/noFilter/session2
 intensities for band  noFilter and session 2
 create directory(plot): results/intensities/subject_34/electrodeSpace/noFilter/session2/1nn_clf
 create directory(plot): results/intensities/subject_34/electrodeSpace/noFilter/session2/topological_clf
-18.620724737644196 minuts for classification
+18.51684896151225 minuts for classification
 ======TIME======
 create directory(plot): results/intensities/subject_34/fontSpace
 cleaning and filtering data of fontSpace of subject 34
@@ -905,42 +905,42 @@ create directory(plot): results/intensities/subject_34/fontSpace/gamma/session1
 intensities for band  gamma and session 1
 create directory(plot): results/intensities/subject_34/fontSpace/gamma/session1/1nn_clf
 create directory(plot): results/intensities/subject_34/fontSpace/gamma/session1/topological_clf
-13.33420597712199 minuts for classification
+13.227509168783824 minuts for classification
 create directory(plot): results/intensities/subject_34/fontSpace/gamma/session2
 intensities for band  gamma and session 2
 create directory(plot): results/intensities/subject_34/fontSpace/gamma/session2/1nn_clf
 create directory(plot): results/intensities/subject_34/fontSpace/gamma/session2/topological_clf
-18.44506590763728 minuts for classification
+18.30477501153946 minuts for classification
 create directory(plot): results/intensities/subject_34/fontSpace/beta/session1
 intensities for band  beta and session 1
 create directory(plot): results/intensities/subject_34/fontSpace/beta/session1/1nn_clf
 create directory(plot): results/intensities/subject_34/fontSpace/beta/session1/topological_clf
-16.33381515343984 minuts for classification
+16.154865976174673 minuts for classification
 create directory(plot): results/intensities/subject_34/fontSpace/beta/session2
 intensities for band  beta and session 2
 create directory(plot): results/intensities/subject_34/fontSpace/beta/session2/1nn_clf
 create directory(plot): results/intensities/subject_34/fontSpace/beta/session2/topological_clf
-19.104800736904146 minuts for classification
+19.19028239250183 minuts for classification
 create directory(plot): results/intensities/subject_34/fontSpace/alpha/session1
 intensities for band  alpha and session 1
 create directory(plot): results/intensities/subject_34/fontSpace/alpha/session1/1nn_clf
 create directory(plot): results/intensities/subject_34/fontSpace/alpha/session1/topological_clf
-17.540021053949992 minuts for classification
+17.207853841781617 minuts for classification
 create directory(plot): results/intensities/subject_34/fontSpace/alpha/session2
 intensities for band  alpha and session 2
 create directory(plot): results/intensities/subject_34/fontSpace/alpha/session2/1nn_clf
 create directory(plot): results/intensities/subject_34/fontSpace/alpha/session2/topological_clf
-20.07160545984904 minuts for classification
+20.421671883265176 minuts for classification
 create directory(plot): results/intensities/subject_34/fontSpace/noFilter/session1
 intensities for band  noFilter and session 1
 create directory(plot): results/intensities/subject_34/fontSpace/noFilter/session1/1nn_clf
 create directory(plot): results/intensities/subject_34/fontSpace/noFilter/session1/topological_clf
-16.97619258960088 minuts for classification
+16.732867308457692 minuts for classification
 create directory(plot): results/intensities/subject_34/fontSpace/noFilter/session2
 intensities for band  noFilter and session 2
 create directory(plot): results/intensities/subject_34/fontSpace/noFilter/session2/1nn_clf
 create directory(plot): results/intensities/subject_34/fontSpace/noFilter/session2/topological_clf
-18.306937030951183 minuts for classification
+18.110493393739066 minuts for classification
 ======TIME======
 create directory: results/intensities/subject_35/
 create directory(plot): results/intensities/subject_35/electrodeSpace
@@ -950,42 +950,42 @@ create directory(plot): results/intensities/subject_35/electrodeSpace/gamma/sess
 intensities for band  gamma and session 1
 create directory(plot): results/intensities/subject_35/electrodeSpace/gamma/session1/1nn_clf
 create directory(plot): results/intensities/subject_35/electrodeSpace/gamma/session1/topological_clf
-14.452788718541463 minuts for classification
+14.305128264427186 minuts for classification
 create directory(plot): results/intensities/subject_35/electrodeSpace/gamma/session2
 intensities for band  gamma and session 2
 create directory(plot): results/intensities/subject_35/electrodeSpace/gamma/session2/1nn_clf
 create directory(plot): results/intensities/subject_35/electrodeSpace/gamma/session2/topological_clf
-12.338898265361786 minuts for classification
+12.461176498730977 minuts for classification
 create directory(plot): results/intensities/subject_35/electrodeSpace/beta/session1
 intensities for band  beta and session 1
 create directory(plot): results/intensities/subject_35/electrodeSpace/beta/session1/1nn_clf
 create directory(plot): results/intensities/subject_35/electrodeSpace/beta/session1/topological_clf
-15.326396799087524 minuts for classification
+15.148329087098439 minuts for classification
 create directory(plot): results/intensities/subject_35/electrodeSpace/beta/session2
 intensities for band  beta and session 2
 create directory(plot): results/intensities/subject_35/electrodeSpace/beta/session2/1nn_clf
 create directory(plot): results/intensities/subject_35/electrodeSpace/beta/session2/topological_clf
-11.964271434148152 minuts for classification
+12.022018464406331 minuts for classification
 create directory(plot): results/intensities/subject_35/electrodeSpace/alpha/session1
 intensities for band  alpha and session 1
 create directory(plot): results/intensities/subject_35/electrodeSpace/alpha/session1/1nn_clf
 create directory(plot): results/intensities/subject_35/electrodeSpace/alpha/session1/topological_clf
-14.054586223761241 minuts for classification
+14.03366506099701 minuts for classification
 create directory(plot): results/intensities/subject_35/electrodeSpace/alpha/session2
 intensities for band  alpha and session 2
 create directory(plot): results/intensities/subject_35/electrodeSpace/alpha/session2/1nn_clf
 create directory(plot): results/intensities/subject_35/electrodeSpace/alpha/session2/topological_clf
-11.76955462694168 minuts for classification
+11.793147850036622 minuts for classification
 create directory(plot): results/intensities/subject_35/electrodeSpace/noFilter/session1
 intensities for band  noFilter and session 1
 create directory(plot): results/intensities/subject_35/electrodeSpace/noFilter/session1/1nn_clf
 create directory(plot): results/intensities/subject_35/electrodeSpace/noFilter/session1/topological_clf
-13.470566312472025 minuts for classification
+13.419285440444947 minuts for classification
 create directory(plot): results/intensities/subject_35/electrodeSpace/noFilter/session2
 intensities for band  noFilter and session 2
 create directory(plot): results/intensities/subject_35/electrodeSpace/noFilter/session2/1nn_clf
 create directory(plot): results/intensities/subject_35/electrodeSpace/noFilter/session2/topological_clf
-12.222105979919434 minuts for classification
+12.27475251754125 minuts for classification
 ======TIME======
 create directory(plot): results/intensities/subject_35/fontSpace
 cleaning and filtering data of fontSpace of subject 35
@@ -994,12 +994,12 @@ create directory(plot): results/intensities/subject_35/fontSpace/gamma/session1
 intensities for band  gamma and session 1
 create directory(plot): results/intensities/subject_35/fontSpace/gamma/session1/1nn_clf
 create directory(plot): results/intensities/subject_35/fontSpace/gamma/session1/topological_clf
-15.769065304597218 minuts for classification
+15.565542805194855 minuts for classification
 create directory(plot): results/intensities/subject_35/fontSpace/gamma/session2
 intensities for band  gamma and session 2
 create directory(plot): results/intensities/subject_35/fontSpace/gamma/session2/1nn_clf
 create directory(plot): results/intensities/subject_35/fontSpace/gamma/session2/topological_clf
-12.873308300971985 minuts for classification
+12.333512008190155 minuts for classification
 create directory(plot): results/intensities/subject_35/fontSpace/beta/session1
 intensities for band  beta and session 1
 create directory(plot): /home/fritzpere/.local/lib/python3.8/site-packages/gudhi/persistence_graphical_tools.py:369: UserWarning: Attempting to set identical left == right == 0.0 results in singular transformations; automatically expanding.
@@ -1058,34 +1058,39 @@ Main_pipeline.py:229: RuntimeWarning: Mean of empty slice.
   weight  = weights[j] / total_weight
 results/intensities/subject_35/fontSpace/beta/session1/1nn_clf
 create directory(plot): results/intensities/subject_35/fontSpace/beta/session1/topological_clf
-15.313497408231099 minuts for classification
+14.783546121915181 minuts for classification
 create directory(plot): results/intensities/subject_35/fontSpace/beta/session2
 intensities for band  beta and session 2
 create directory(plot): results/intensities/subject_35/fontSpace/beta/session2/1nn_clf
 create directory(plot): results/intensities/subject_35/fontSpace/beta/session2/topological_clf
-13.093011927604675 minuts for classification
+12.654090487957001 minuts for classification
 create directory(plot): results/intensities/subject_35/fontSpace/alpha/session1
 intensities for band  alpha and session 1
 create directory(plot): results/intensities/subject_35/fontSpace/alpha/session1/1nn_clf
 create directory(plot): results/intensities/subject_35/fontSpace/alpha/session1/topological_clf
-13.476696872711182 minuts for classification
+13.05212185382843 minuts for classification
 create directory(plot): results/intensities/subject_35/fontSpace/alpha/session2
 intensities for band  alpha and session 2
 create directory(plot): results/intensities/subject_35/fontSpace/alpha/session2/1nn_clf
 create directory(plot): results/intensities/subject_35/fontSpace/alpha/session2/topological_clf
-12.332361769676208 minuts for classification
+11.926331126689911 minuts for classification
 create directory(plot): results/intensities/subject_35/fontSpace/noFilter/session1
 intensities for band  noFilter and session 1
 create directory(plot): results/intensities/subject_35/fontSpace/noFilter/session1/1nn_clf
 create directory(plot): results/intensities/subject_35/fontSpace/noFilter/session1/topological_clf
-13.64355943997701 minuts for classification
+13.06290906270345 minuts for classification
 create directory(plot): results/intensities/subject_35/fontSpace/noFilter/session2
 intensities for band  noFilter and session 2
 create directory(plot): results/intensities/subject_35/fontSpace/noFilter/session2/1nn_clf
 create directory(plot): results/intensities/subject_35/fontSpace/noFilter/session2/topological_clf
-12.865450656414032 minuts for classification
+12.586987249056499 minuts for classification
 ======TIME======
 Traceback (most recent call last):
   File "Main_pipeline.py", line 455, in <module>
-    data_table['frequency band of maximum accuracy in session1','frequency band of maximum accuracy in session2']=table[2].apply(lambda x: band_dic[x])
-NameError: name 'table' is not defined
+    data_table['frequency band of maximum accuracy in session1']=data_table['frequency band of maximum accuracy in session1'].apply(lambda x: band_dic[x])
+  File "/home/fritzpere/.local/lib/python3.8/site-packages/pandas/core/series.py", line 4138, in apply
+    mapped = lib.map_infer(values, f, convert=convert_dtype)
+  File "pandas/_libs/lib.pyx", line 2467, in pandas._libs.lib.map_infer
+  File "Main_pipeline.py", line 455, in <lambda>
+    data_table['frequency band of maximum accuracy in session1']=data_table['frequency band of maximum accuracy in session1'].apply(lambda x: band_dic[x])
+KeyError: 3.0
