@@ -436,12 +436,12 @@ if __name__ == "__main__":
             if max_bloc1==3:
                 max_bloc1=-1
             data_table[subj_t+n_subj*sp,8]=max_bloc1
-            data_table[subj_t+n_subj*sp,7]=max_acc[0,max_bloc1]
+            data_table[subj_t+n_subj*sp,7]=round(max_acc[0,max_bloc1],4)
         
             if max_bloc2==3:
                 max_bloc2=-1
             data_table[subj_t+n_subj*sp,10]=max_bloc2
-            data_table[subj_t+n_subj*sp,9]=max_acc[1,max_bloc2]
+            data_table[subj_t+n_subj*sp,9]=round(max_acc[1,max_bloc2],4)
             
             ## We finish complete table for the subject
             subject_table=pd.DataFrame(subject_table,index=subject_table_index,columns=['Clean Channels','N. trials','M0','M1','M2','captured variance after PCA','N. trials w/o Outliers ','M0 w/o Outliers ','M1 w/o Outliers ','M2 w/o Outliers ','test size'])
@@ -458,8 +458,8 @@ if __name__ == "__main__":
     for subject in subjects:
         subjects_index.append('Subject ' +str(subject)+ ' FontSpace')
     data_table=pd.DataFrame(data_table,index=subjects_index,columns=['Channels','Trials', 'Trials M0', 'Trials M1', 'Trials M2', 'Trials Session 1', 'Trials Session 2','maximum accuracy w/ Silhouette achieved in session 1','frequency band of maximum accuracy in session1','maximum accuracy w/ Silhouette achieved in session 2','frequency band of maximum accuracy in session2'])
-    data_table['frequency band of maximum accuracy in session1']=data_table['frequency band of maximum accuracy in session1'].apply(lambda x: band_dic[x])
-    data_table['frequency band of maximum accuracy in session2']=data_table['frequency band of maximum accuracy in session2'].apply(lambda x: band_dic[x])
+    data_table['band of max accuracy in session1']=data_table['frequency band of maximum accuracy in session1'].apply(lambda x: band_dic[x])
+    data_table['band of max accuracy in session2']=data_table['frequency band of maximum accuracy in session2'].apply(lambda x: band_dic[x])
     data_table.to_csv('results/intensities/data_table.csv')
                                        
 
