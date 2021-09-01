@@ -247,8 +247,8 @@ def tda_intensity_classifier(subj_dir,space,PC,labels,i_band):
     np.save(subj_dir+space+'/topological_clf/'+band+'conf_matrix_intensity.npy',topo_conf_matrix)
     fmt_grph = 'png'
     cmapcolours = ['Blues','Greens','Oranges','Reds']
-    plt.rcParams['xtick.labelsize']=16 
-    plt.rcParams['ytick.labelsize']=8
+    plt.rcParams['xtick.labelsize']=24 
+    plt.rcParams['ytick.labelsize']=20
     fig, axes = plt.subplots(nrows=n_dim, ncols=1, figsize=(24, 12))
 
     for i_dim in range(n_dim): 
