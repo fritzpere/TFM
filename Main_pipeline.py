@@ -359,7 +359,7 @@ if __name__ == "__main__":
                     plt.savefig(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca_persistence_diagram.png')
                     plt.close(fig)
                     ##let us compute the persistence Silhouettes for each Motavational state and plot it
-                    fig, axes = plt.subplots(nrows=2, ncols=3, figsize=(18, 8))
+                    fig, axes = plt.subplots(nrows=2, ncols=3, figsize=(24, 12))
                     for i_dim in range(2):
                         silhouettes=[]
                         for i_motiv in range(3):
@@ -388,8 +388,8 @@ if __name__ == "__main__":
                         axes[i_dim][2].set_xlim(-2,1000)
                         axes[i_dim][2].set_ylim(0,y_max*1.1)
                         
-                    fig.suptitle('Persistence Silhouettes of the {0} for frequency band {1}\n and motivational state PCA'.format(space,band_dic[i_band]),fontsize=24)
-                    fig.tight_layout(pad=0.5)
+                    fig.suptitle('Persistence Silhouettes\nof the {0} for frequency band {1}\n and motivational state PCA'.format(space,band_dic[i_band]),fontsize=24)
+                    fig.tight_layout(pad=0.75)
                     fig.subplots_adjust(top=0.8)
                     plt.savefig(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca_persistence_silhouettes.png')
                     plt.close(fig)
