@@ -1,23 +1,3 @@
 ,Channels,Trials,Trials M0,Trials M1,Trials M2,Trials Session 1,Trials Session 2,max accuracy w/ Silhouette session 1,band of max accuracy in session1,max accuracy w/ Silhouette session 2,band of max accuracy in session2
 Subject 25 ElectrodeSpace,42.0,1296.0,432.0,432.0,432.0,648.0,648.0,0.4079,alpha,0.3431,gamma
-Subject 26 ElectrodeSpace,49.0,1017.0,370.0,323.0,324.0,432.0,585.0,0.3594,gamma,0.6567,alpha
-Subject 27 ElectrodeSpace,50.0,1296.0,432.0,432.0,432.0,648.0,648.0,0.824,noFilter,0.7728,gamma
-Subject 28 ElectrodeSpace,53.0,1296.0,432.0,432.0,432.0,648.0,648.0,0.7828,gamma,0.7359,noFilter
-Subject 29 ElectrodeSpace,36.0,1080.0,432.0,216.0,432.0,432.0,648.0,0.3435,gamma,0.3262,alpha
-Subject 30 ElectrodeSpace,48.0,1296.0,432.0,432.0,432.0,648.0,648.0,0.3692,noFilter,0.3234,noFilter
-Subject 31 ElectrodeSpace,45.0,1080.0,432.0,432.0,216.0,432.0,648.0,0.0,alpha,0.7101,noFilter
-Subject 32 ElectrodeSpace,29.0,1296.0,432.0,432.0,432.0,648.0,648.0,0.3492,alpha,0.5206,beta
-Subject 33 ElectrodeSpace,54.0,1296.0,432.0,432.0,432.0,648.0,648.0,0.8,gamma,0.7087,gamma
-Subject 34 ElectrodeSpace,42.0,1296.0,432.0,432.0,432.0,648.0,648.0,0.7487,gamma,0.7484,noFilter
-Subject 35 ElectrodeSpace,45.0,1296.0,432.0,432.0,432.0,648.0,648.0,0.7123,gamma,0.759,gamma
 Subject 25 FontSpace,42.0,1296.0,432.0,432.0,432.0,648.0,648.0,0.4698,alpha,0.3323,beta
-Subject 26 FontSpace,49.0,1017.0,432.0,324.0,261.0,432.0,585.0,0.3338,alpha,0.663,gamma
-Subject 27 FontSpace,50.0,1296.0,432.0,432.0,432.0,648.0,648.0,0.8961,gamma,0.7672,gamma
-Subject 28 FontSpace,53.0,1296.0,432.0,432.0,432.0,648.0,648.0,0.7802,gamma,0.7125,noFilter
-Subject 29 FontSpace,36.0,1080.0,432.0,216.0,432.0,432.0,648.0,0.3468,alpha,0.3169,alpha
-Subject 30 FontSpace,49.0,1296.0,432.0,432.0,432.0,648.0,648.0,0.3385,gamma,0.3381,noFilter
-Subject 31 FontSpace,45.0,1080.0,432.0,432.0,216.0,432.0,648.0,0.0,alpha,0.7261,gamma
-Subject 32 FontSpace,29.0,1296.0,432.0,432.0,432.0,648.0,648.0,0.3215,noFilter,0.5217,alpha
-Subject 33 FontSpace,54.0,1296.0,432.0,432.0,432.0,648.0,648.0,0.9517,gamma,0.7352,gamma
-Subject 34 FontSpace,43.0,1296.0,432.0,432.0,432.0,648.0,648.0,0.7915,gamma,0.7488,gamma
-Subject 35 FontSpace,45.0,1296.0,432.0,432.0,432.0,648.0,648.0,0.7764,gamma,0.7636,beta

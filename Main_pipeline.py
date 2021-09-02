@@ -12,6 +12,7 @@ from intensities_pipeline import *
 from knn_pipeline import *
 import scipy.io as sio
 import os
+import dataframe_image as dfi
 import time  
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -453,8 +454,10 @@ if __name__ == "__main__":
         subjects_index.append('Subject ' +str(subject)+ ' ElectrodeSpace')
     for subject in subjects:
         subjects_index.append('Subject ' +str(subject)+ ' FontSpace')
-    data_table=pd.DataFrame(data_table,index=subjects_index,columns=['Channels','Trials', 'Trials M0', 'Trials M1', 'Trials M2', 'Trials Session 1', 'Trials Session 2','maximum accuracy w/ Silhouette achieved in session 1','frequency band of maximum accuracy in session1','maximum accuracy w/ Silhouette achieved in session 2','frequency band of maximum accuracy in session2'])
-    data_table['frequency band of maximum accuracy in session1']=data_table['frequency band of maximum accuracy in session1'].apply(lambda x: band_dic[x])
-    data_table['frequency band of maximum accuracy in session2']=data_table['frequency band of maximum accuracy in session2'].apply(lambda x: band_dic[x])
+    data_table=pd.DataFrame(data_table,index=subjects_index,columns=['Channels','Trials', 'Trials M0', 'Trials M1', 'Trials M2', 'Trials Session 1', 'Trials Session 2','max accuracy w/ Silhouette session 1','band of max accuracy in session1','max accuracy w/ Silhouette session 2','band of max accuracy in session2'])
+    data_table['band of max accuracy in session1']=data_table['band of max accuracy in session1'].apply(lambda x: band_dic[x])
+    data_table['band of max accuracy in session2']=data_table['band of max accuracy in session2'].apply(lambda x: band_dic[x])
     data_table.to_csv('results/intensities/data_table.csv')
+    dfi.export(data_table, 'data_table_subjects.png')
+
                                        

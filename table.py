@@ -461,6 +461,7 @@ if __name__ == "__main__":
     data_table['band of max accuracy in session1']=data_table['band of max accuracy in session1'].apply(lambda x: band_dic[x])
     data_table['band of max accuracy in session2']=data_table['band of max accuracy in session2'].apply(lambda x: band_dic[x])
     data_table.to_csv('results/intensities/data_table.csv')
-                                       
+    import dataframe_image as dfi
+    dfi.export(data_table, 'dataframe.png')
 
 
