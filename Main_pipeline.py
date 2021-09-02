@@ -6,10 +6,9 @@ Created on Wed Feb 10 10:51:44 2021
 @author: fritz
 """
 
-from preprocess_data import *
-from TDApipeline import *
-from intensities_pipeline import *
-from knn_pipeline import *
+from utils.preprocess_data import *
+from utils.TDApipeline import *
+from utils.intensities_pipeline import *
 import scipy.io as sio
 import os
 import dataframe_image as dfi

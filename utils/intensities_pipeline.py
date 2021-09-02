@@ -7,7 +7,7 @@ Created on Fri May 28 16:39:25 2021
 """
 import numpy as np
 import sklearn.model_selection as skms
-from TDApipeline import *
+from utils.TDApipeline import *
 from collections import defaultdict
 import sklearn.metrics as skm
 import sklearn.neighbors as sklnn

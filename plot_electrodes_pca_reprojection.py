@@ -7,7 +7,7 @@ import numpy as np
 import re
 from scipy.interpolate import griddata
 
-with open('ActiCap64_LM.lay') as f:
+with open('data/ActiCap64_LM.lay') as f:
     content = f.readlines()
 
 content = [x.strip() for x in content]
