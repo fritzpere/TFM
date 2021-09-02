@@ -1,4 +1,8 @@
-,Channels,Trials,Trials M0,Trials M1,Trials M2,Trials Session 1,Trials Session 2,max accuracy w/ Silhouette session 1,band of max accuracy in session1,max accuracy w/ Silhouette session 2,band of max accuracy in session2
+,Channels,Trials,Trials M0,Trials M1,Trials M2,Trials Session 1,Trials Session 2,"max accuracy
+ w/ Silhouette session 1","band of max
+accuracy in session1","max accuracy
+w/ Silhouette session 2","band of max
+accuracy in session2"
 Subject 25 ElectrodeSpace,42.0,1296.0,432.0,432.0,432.0,648.0,648.0,0.4079,alpha,0.3431,gamma
 Subject 26 ElectrodeSpace,49.0,1017.0,370.0,323.0,324.0,432.0,585.0,0.3594,gamma,0.6567,alpha
 Subject 27 ElectrodeSpace,50.0,1296.0,432.0,432.0,432.0,648.0,648.0,0.824,noFilter,0.7728,gamma
