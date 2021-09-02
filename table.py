@@ -457,9 +457,9 @@ if __name__ == "__main__":
         subjects_index.append('Subject ' +str(subject)+ ' ElectrodeSpace')
     for subject in subjects:
         subjects_index.append('Subject ' +str(subject)+ ' FontSpace')
-    data_table=pd.DataFrame(data_table,index=subjects_index,columns=['Channels','Trials', 'Trials M0', 'Trials M1', 'Trials M2', 'Trials Session 1', 'Trials Session 2','max accuracy w/ Silhouette session 1','band of max accuracy in session1','max accuracy w/ Silhouette session 2','band of max accuracy in session2'])
-    data_table['band of max accuracy in session1']=data_table['band of max accuracy in session1'].apply(lambda x: band_dic[x])
-    data_table['band of max accuracy in session2']=data_table['band of max accuracy in session2'].apply(lambda x: band_dic[x])
+    data_table=pd.DataFrame(data_table,index=subjects_index,columns=['Channels','Trials', 'Trials M0', 'Trials M1', 'Trials M2', 'Trials Session 1', 'Trials Session 2','max accuracy\n w/ Silhouette session 1','band of max\naccuracy in session1','max accuracy\nw/ Silhouette session 2','band of max\naccuracy in session2'])
+    data_table['band of max\naccuracy in session1']=data_table['band of max\naccuracy in session1'].apply(lambda x: band_dic[x])
+    data_table['band of max\naccuracy in session2']=data_table['band of max\naccuracy in session2'].apply(lambda x: band_dic[x])
     data_table.to_csv('results/intensities/data_table.csv')
     import dataframe_image as dfi
     dfi.export(data_table, 'dataframe.png')
