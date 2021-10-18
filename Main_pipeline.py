@@ -6,12 +6,12 @@ Created on Wed Feb 10 10:51:44 2021
 @author: fritz
 """
 
-from preprocess_data import *
-from TDApipeline import *
-from intensities_pipeline import *
-from knn_pipeline import *
+from utils.preprocess_data import *
+from utils.TDApipeline import *
+from utils.intensities_pipeline import *
 import scipy.io as sio
 import os
+import dataframe_image as dfi
 import time  
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -84,11 +84,9 @@ if __name__ == "__main__":
     feat_vect=[DimensionLandScape(),DimensionSilhouette(),TopologicalDescriptors()]
     n_vectors=len(feat_vect)
     n_subj=len(subjects)
-    data_table=np.zeros((2*n_subj,9))
+    data_table=np.zeros((2*n_subj,11))
     subj_t=0              
     random_predictions_matrix=np.zeros((n_dim,n_vectors+1))
-    before_projection=np.zeros((2,n_subj,2,60))##Cal mirar lo del 60 mirar treball Montse
-    after_projection=np.zeros((2,n_subj,2,60))##Cal mirar lo del 60 mirar treball Montse
     ## For each subject we load the data
     for subject in subjects:
 
@@ -127,17 +125,18 @@ if __name__ == "__main__":
             print('cleaning and filtering data of',space,'of subject',subject)
             preprocessor=Preprocessor(data_space[sp])
             #filtered_ts_dic=preprocessor.get_filtered_ts_dic()
-            ts_band,labels_original=preprocessor.get_trials_and_labels()
-
-
+            ts_band,labels_original,invalid_ch=preprocessor.get_trials_and_labels()
+            if sp==0:
+                np.save(subj_dir+'/silent-channels-'+str(subject)+'.npy',invalid_ch)
+            
             ## We fill up a table with the number of clean electrodes for each subject.(A table for each subject) (general table for all subjects)
-            subject_table[:,0]=preprocessor.N
+            subject_table[:,0]=int(preprocessor.N)
              ## We fill up a table with the number of trials in total and for each motivational state. (general table for all subjects)
-            data_table[subj_t+n_subj*sp,0]=preprocessor.N
-            data_table[subj_t+n_subj*sp,1]=ts_band.shape[0]
-            data_table[subj_t+n_subj*sp,2]=(labels_original==0).sum()
-            data_table[subj_t+n_subj*sp,3]=(labels_original==1).sum()
-            data_table[subj_t+n_subj*sp,4]=(labels_original==2).sum()
+            data_table[subj_t+n_subj*sp,0]=int(preprocessor.N)
+            data_table[subj_t+n_subj*sp,1]=int(ts_band.shape[0])
+            data_table[subj_t+n_subj*sp,2]=int((labels_original==0).sum())
+            data_table[subj_t+n_subj*sp,3]=int((labels_original==1).sum())
+            data_table[subj_t+n_subj*sp,4]=int((labels_original==2).sum())
 
             #We defina which trials correspond to which Session
             sessions=[]
@@ -165,12 +164,12 @@ if __name__ == "__main__":
                     PC=PC_all[temp]
                     labels=labels_all[temp]
 
-                    subject_table[table_i,1]=len(labels)
-                    subject_table[table_i,2]=len(labels[labels==0])
-                    subject_table[table_i,3]=len(labels[labels==1])
-                    subject_table[table_i,4]=len(labels[labels==2])
+                    subject_table[table_i,1]=int(len(labels))
+                    subject_table[table_i,2]=int(len(labels[labels==0]))
+                    subject_table[table_i,3]=int(len(labels[labels==1]))
+                    subject_table[table_i,4]=int(len(labels[labels==2]))
 
-                    data_table[subj_t+n_subj*sp,4+bloc_i]=PC.shape[0]
+                    data_table[subj_t+n_subj*sp,4+bloc_i]=int(PC.shape[0])
                     #We Apply PCA to our Point Cloud to reduce the dimensionality
                     mean=np.mean(PC, axis=0)
                     X =(PC - mean).T #X.shape: (42,632)
@@ -214,22 +213,26 @@ if __name__ == "__main__":
                     
                     
                     #We fill up the table again since we have removed outliers
-                    subject_table[table_i,6]=len(labels)
-                    subject_table[table_i,7]=len(labels[labels==0])
-                    subject_table[table_i,8]=len(labels[labels==1])
-                    subject_table[table_i,9]=len(labels[labels==2])
+                    subject_table[table_i,6]=int(len(labels))
+                    subject_table[table_i,7]=int(len(labels[labels==0]))
+                    subject_table[table_i,8]=int(len(labels[labels==1]))
+                    subject_table[table_i,9]=int(len(labels[labels==2]))
                     
                     #We reproject the PCA to the original coordinates and save the reprojected and the originals to compare them laters
                     reproj= vh[:3,:].T @ pca.T + mean.reshape((-1,1))
-                    np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/reprojected_means.npy',reproj.mean(axis=1))
-                    np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/original_means.npy',PC.mean(axis=0))
-                    
+                    np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/reprojected_means_m0.npy',reproj[:,labels==0].mean(axis=1))
+                    np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/reprojected_means_m1.npy',reproj[:,labels==1].mean(axis=1))
+                    np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/reprojected_means_m2.npy',reproj[:,labels==2].mean(axis=1))
+                            
+                    np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/original_means_m0.npy',PC[labels==0].mean(axis=0))
+                    np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/original_means_m1.npy',PC[labels==1].mean(axis=0))
+                    np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/original_means_m2.npy',PC[labels==2].mean(axis=0))
 
 
                     #Now we can use Topology om order to classify trials depending on how much they change the topology of each Point Cloud of motivational States
                     print('intensities for band ', band_dic[i_band], 'and session', bloc_i)
                     subject_table[table_i,10],random_predictions_matrix,max_acc[bloc_i-1,i_band]=tda_intensity_classifier(subj_dir,space+'/'+band_dic[i_band]+'/session'+str(bloc_i),pca,labels,i_band)
-                    #knn_intensity_classifier(subj_dir,space+'/'+band_dic[i_band]+'/session'+str(bloc_i),pca,labels,i_band)
+                    
 
                     #Now we weill plot the Point Cloud in 3 different Perspectives and also the point cloud of each motivational State
                     plt.rcParams['xtick.labelsize']=16
@@ -347,7 +350,7 @@ if __name__ == "__main__":
                     y_max=np.amax(list(map(lambda y: np.amax(list(map(lambda x: x[1][1] if x[1][1]!=np.inf  else 0 ,y))),aux_lis)))*1.2
                     for j in range(3):
                         a=plot_func(persistence[i_band][j],axes=axes[j])
-                        a.set_title('{0} persistence diagramsof \n motivational state {1} and band {2}'.format(space,j,band_dic[i_band]))
+                        a.set_title('{0} persistence diagrams of \n motivational state {1} and band {2}'.format(space,j,band_dic[i_band]))
                         a.set_xlim(-0.05,x_max)
                         a.set_ylim(0,y_max)
                     fig.suptitle('Persistence diagrams of the {0} for\n frequency band {1} and motivational state PCA'.format(space,band_dic[i_band]),fontsize=24)
@@ -356,7 +359,8 @@ if __name__ == "__main__":
                     plt.savefig(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca_persistence_diagram.png')
                     plt.close(fig)
                     ##let us compute the persistence Silhouettes for each Motavational state and plot it
-                    fig, axes = plt.subplots(nrows=2, ncols=3, figsize=(18, 8))
+                    fig, axes = plt.subplots(nrows=2, ncols=3, figsize=(24, 12))
+                    plt.rcParams['xtick.labelsize']=24
                     for i_dim in range(2):
                         silhouettes=[]
                         for i_motiv in range(3):
@@ -385,8 +389,8 @@ if __name__ == "__main__":
                         axes[i_dim][2].set_xlim(-2,1000)
                         axes[i_dim][2].set_ylim(0,y_max*1.1)
                         
-                    fig.suptitle('Persistence Silhouettes of the {0} for\n frequency band {1} and motivational state PCA'.format(space,band_dic[i_band]),fontsize=24)
-                    fig.tight_layout(pad=0.5)
+                    fig.suptitle('Persistence Silhouettes\nof the {0} for frequency band {1}\n and motivational state PCA'.format(space,band_dic[i_band]),fontsize=24)
+                    fig.tight_layout(pad=0.75)
                     fig.subplots_adjust(top=0.8)
                     plt.savefig(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca_persistence_silhouettes.png')
                     plt.close(fig)
@@ -411,10 +415,10 @@ if __name__ == "__main__":
                     axes[3].boxplot([vect1[0][3],vect1[1][3],vect1[2][3]],showfliers=False)
                     axes[3].set_title('Birth BoxPlot dimension 1')
                     axes[4].boxplot([vect1[0][4],vect1[1][4],vect1[2][4]],showfliers=False)
-                    axes[4].set_title('Death BoxPlot dimension')
+                    axes[4].set_title('Death BoxPlot dimension 1')
                     fig.suptitle('Descriptors Boxplots of the {0} for\n frequency band {1} and different motivational states'.format(space,band_dic[i_band]),fontsize=24)
                     fig.tight_layout(pad=1.00)
-                    fig.subplots_adjust(top=0.8)
+                    fig.subplots_adjust(top=0.9)
                     plt.savefig(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca_descriptors.png')
                     plt.close(fig)
                     ##We save the number of random classifications we have made for each dimension and Feature vector
@@ -425,20 +429,23 @@ if __name__ == "__main__":
             ## We select the band with highet mean accuracy from the silhouette feature vector       
             max_bloc1=np.argmax(max_acc[0,:])
             max_bloc2=np.argmax(max_acc[1,:])
-            
             if max_bloc1==3:
                 max_bloc1=-1
+            data_table[subj_t+n_subj*sp,8]=max_bloc1
             data_table[subj_t+n_subj*sp,7]=max_acc[0,max_bloc1]
+        
             if max_bloc2==3:
                 max_bloc2=-1
-            data_table[subj_t+n_subj*sp,8]=max_acc[1,max_bloc2]
+            data_table[subj_t+n_subj*sp,10]=max_bloc2
+            data_table[subj_t+n_subj*sp,9]=max_acc[1,max_bloc2]
             
             ## We finish complete table for the subject
             subject_table=pd.DataFrame(subject_table,index=subject_table_index,columns=['Clean Channels','N. trials','M0','M1','M2','captured variance after PCA','N. trials w/o Outliers ','M0 w/o Outliers ','M1 w/o Outliers ','M2 w/o Outliers ','test size'])
+            
             subject_table.to_csv(subj_dir+space+'/'+'/subject_table.csv')
 
             print('======TIME======')    
-            print((time.time()-t_pca)/60, 'minuts for pca')
+            #print((time.time()-t_pca)/60, 'minuts for pca')
         subj_t=subj_t+1
     #Finishing the general table
     subjects_index=[]
@@ -446,6 +453,10 @@ if __name__ == "__main__":
         subjects_index.append('Subject ' +str(subject)+ ' ElectrodeSpace')
     for subject in subjects:
         subjects_index.append('Subject ' +str(subject)+ ' FontSpace')
-    data_table=pd.DataFrame(data_table,index=subjects_index,columns=['Channels','Trials', 'Trials M0', 'Trials M1', 'Trials M2', 'Trials Block 1', 'Trials Block 2','maximum accuracy w/ Silhouette achieved in bloc 1','maximum accuracy w/ Silhouette achieved in bloc 2'])
+    data_table=pd.DataFrame(data_table,index=subjects_index,columns=['Channels','Trials', 'Trials M0', 'Trials M1', 'Trials M2', 'Trials Session 1', 'Trials Session 2','max accuracy w/ Silhouette session 1','band of max accuracy in session1','max accuracy w/ Silhouette session 2','band of max accuracy in session2'])
+    data_table['band of max accuracy in session1']=data_table['band of max accuracy in session1'].apply(lambda x: band_dic[x])
+    data_table['band of max accuracy in session2']=data_table['band of max accuracy in session2'].apply(lambda x: band_dic[x])
     data_table.to_csv('results/intensities/data_table.csv')
+    dfi.export(data_table, 'results/intensities/data_table_subjects.png')
+
                                        
