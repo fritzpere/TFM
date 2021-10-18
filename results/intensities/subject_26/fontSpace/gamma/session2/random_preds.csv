@@ -1,0 +1,11 @@
+,dimension 0,dimension 1
+<<<<<<< HEAD
+Landscapes,69.5,73.4
+Silhouettes,0.0,72.8
+Descriptors,0.0,72.8
+=======
+Landscapes,67.9,68.9
+Silhouettes,0.0,67.8
+Descriptors,0.0,67.8
+>>>>>>> 3de395fe42d13c0f59a6b4501a0b12244fe463cb
+Bottleneck,0.0,92.0
