@@ -14,7 +14,7 @@ import numpy as np
 import gudhi as gd
 from sklearn.preprocessing   import MinMaxScaler
 from scipy.spatial.distance import cdist
-from tslearn.metrics import dtw
+#from tslearn.metrics import dtw
 from scipy import stats
 from scipy.spatial.distance import pdist
 import gudhi.representations as gdr

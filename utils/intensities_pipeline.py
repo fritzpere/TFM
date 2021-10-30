@@ -29,7 +29,7 @@ def topological_clf(arr):
     pred[not_random]=np.argmin((arr[not_random]),axis=1) #We select the motivational state whose topology ahs changed less
     random_selections=n-not_random.sum() #We save the number of trials we can't classify (if the topology of 2 or 3 motivational states doesn't change)
     pred[~not_random]=[np.random.choice(np.array(list(range(3)))[arr[~not_random][i]==0],1).item() for i in range(random_selections)]
-    return pred,random_selections
+    return pred,(random_selections/pred.shape[0])
 
 
 
