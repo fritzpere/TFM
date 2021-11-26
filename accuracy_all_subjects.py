@@ -9,6 +9,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
+from scipy.io import savemat
+
 subjects=list(range(25,36)) 
 bands=[-1,0,1,2] 
 sessions=list(range(1,3))
@@ -40,6 +42,10 @@ for space in spaces:
                 band=band_dic[b]
                 temp1=np.load('results/intensities/subject_'+str(subj)+'/'+space+'/'+band+'/session'+str(1)+'/topological_clf/'+band+'perf_intensity.npy')[0,1]
                 temp2=np.load('results/intensities/subject_'+str(subj)+'/'+space+'/'+band+'/session'+str(2)+'/topological_clf/'+band+'perf_intensity.npy')[0,1]
+                
+
+                savemat('Fig8/accuracies_subject'+str(subj-24)+'_banda_'+band+'_session1.mat',{'tensor1' : temp1})
+                savemat('Fig8/accuracies_subject'+str(subj-24)+'_banda_'+band+'_session2.mat',{'tensor2' : temp2})
 
                 violin1=axes[i][j].violinplot(temp1,positions=[-0.6+k*0.8],widths=[0.3])
                 violin2=axes[i][j].violinplot(temp2,positions=[-0.2+k*0.8],widths=[0.3])
@@ -95,6 +101,11 @@ for space in spaces:
                 band=band_dic[b]
                 temp1=np.load('results/intensities/subject_'+str(subj)+'/'+space+'/'+band+'/session'+str(1)+'/1nn_clf/'+band+'perf_intensity.npy')
                 temp2=np.load('results/intensities/subject_'+str(subj)+'/'+space+'/'+band+'/session'+str(2)+'/1nn_clf/'+band+'perf_intensity.npy')
+                
+                
+                savemat('Fig9/accuracies_subject'+str(subj-24)+'_banda_'+band+'_session1.mat',{'tensor1' : temp1})
+                savemat('Fig9/accuracies_subject'+str(subj-24)+'_banda_'+band+'_session2.mat',{'tensor2' : temp2})
+                
                 
                 violin1=axes[i][j].violinplot(temp1,positions=[-0.6+k*0.8],widths=[0.3])
                 violin2=axes[i][j].violinplot(temp2,positions=[-0.2+k*0.8],widths=[0.3])
