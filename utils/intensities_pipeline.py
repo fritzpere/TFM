@@ -87,7 +87,8 @@ def tda_intensity_classifier(subj_dir,space,PC,labels,i_band):
     
     ##NEW
     final_size=trials_per_m
-    matlab_matrix=dict()
+    sizes=[]
+    matlab_matrix=[]
     for trials_per_m in range(50,final_size,10):
         train_size=int(trials_per_m*3*0.8)
         #We balabce the dataset by downsampling
@@ -207,12 +208,17 @@ def tda_intensity_classifier(subj_dir,space,PC,labels,i_band):
                         #topo_conf_matrix[i_dim,i_vector,i_rep,:,:] += skm.confusion_matrix(y_true=labels_dwnsamp[ind_test], y_pred=topo_pred,normalize='true')               
         print((time.time()-t_int)/60, 'minuts for classification')
         
-        matlab_matrix[str(train_size)]=topo_perf[0,0,:]
-    if not os.path.exists(subj_dir+space+'/fig10'):
-        print("create directory(plot):",subj_dir+space+'/fig10')
-        os.makedirs(subj_dir+space+'/fig10')
-    savemat(subj_dir+space+'/fig10/accuracies_per_test_size.mat', matlab_matrix)
-    np.savez(subj_dir+space+'/fig10/accuracies_per_test_size.npz', matlab_matrix)
+        sizes.append(train_size)
+        matlab_matrix.append(topo_perf[0,0,:].copy())
+    if not os.path.exists('results/intensities/fig10'):
+        print("create directory(plot):",'results/intensities/fig10')
+        os.makedirs('results/intensities/fig10')
+    matlab_matrix=np.array(matlab_matrix)
+    sizes=np.array(sizes)
+    savemat('results/intensities/fig10/'+subj_dir[-3:-1]+band+space[-1]+'accuracies_per_test_size.mat', {'accuracies' :matlab_matrix})
+    savemat('results/intensities/fig10/'+subj_dir[-3:-1]+band+space[-1]+'sizes.mat', {'train_sizes':sizes})
+    np.save('results/intensities/fig10/'+subj_dir[-3:-1]+band+space[-1]+'accuracies_per_test_size.npy', matlab_matrix)
+    np.save('results/intensities/fig10/'+subj_dir[-3:-1]+band+space[-1]+'sizes.npy', sizes)
     #We plot accuracies and confusion matrices for 1nn
         
         

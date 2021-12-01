@@ -94,7 +94,8 @@ if __name__ == "__main__":
         space='both'
         data_space,subj_dir,index=load_data(subject,space=space)
 
-        spaces=['electrodeSpace','fontSpace']
+        #spaces=['electrodeSpace','fontSpace']
+        spaces=['electrodeSpace']
         index=index[0]
         ## We reoganize the blocks betwee sessions to make it easier to work with
         cont1=0
