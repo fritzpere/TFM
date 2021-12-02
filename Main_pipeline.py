@@ -59,7 +59,7 @@ def load_data(i_sub,space='both'):
 if __name__ == "__main__":
 
     subjects=list(range(25,36)) 
-    subjects=[27,33]
+    subjects=[33]
 
     bloc_dic={}
     bloc_subj_dic={}
@@ -114,7 +114,7 @@ if __name__ == "__main__":
         bloc_session=np.where([ind in bloc_subj_dic[subject][1] for ind in index],2,1 )
 
         #For both Electrode Space and Font Space we will preprocess the data. (we remove Nans, organize the data into Time Series, filter the data into 3 different frequancy bands)
-        for sp in range(2):
+        for sp in range(1):
             t=time.time()
             space=spaces[sp]
 
