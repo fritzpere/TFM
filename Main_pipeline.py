@@ -59,7 +59,7 @@ def load_data(i_sub,space='both'):
 if __name__ == "__main__":
 
     subjects=list(range(25,36)) 
-    subjects=[33]
+    #subjects=[33]
 
     bloc_dic={}
     bloc_subj_dic={}
@@ -230,8 +230,14 @@ if __name__ == "__main__":
                     np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/original_means_m1.npy',PC[labels==1].mean(axis=0))
                     np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/original_means_m2.npy',PC[labels==2].mean(axis=0))
                     '''
-
+                    #saving data
+                    if not os.path.exists('processed_data'):
+                        print("create directory(plot):",'processed_data')
+                        os.makedirs('processed_data')
+                    np.save('processed_data/subj_'+str(subject)+'_band_'+band_dic[i_band]+'_session_'+str(bloc_i)+'point_cloud.npy',pca)
+                    np.save('processed_data/subj_'+str(subject)+'_band_'+band_dic[i_band]+'_session_'+str(bloc_i)+'labels.npy',labels)
+                    
                     #Now we can use Topology om order to classify trials depending on how much they change the topology of each Point Cloud of motivational States
                     print('intensities for band ', band_dic[i_band], 'and session', bloc_i)
-                    subject_table[table_i,10],random_predictions_matrix,max_acc[bloc_i-1,i_band]=tda_intensity_classifier(subj_dir,space+'/'+band_dic[i_band]+'/session'+str(bloc_i),pca,labels,i_band)
+                    #subject_table[table_i,10],random_predictions_matrix,max_acc[bloc_i-1,i_band]=tda_intensity_classifier(subj_dir,space+'/'+band_dic[i_band]+'/session'+str(bloc_i),pca,labels,i_band)
                     bloc_i=bloc_i+1
