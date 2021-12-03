@@ -143,3 +143,142 @@ Traceback (most recent call last):
   File "Main_pipeline.py", line 119, in <module>
     space=spaces[sp]
 IndexError: list index out of range
+cleaning and filtering data of electrodeSpace of subject 33
+there are 54 clean channels
+intensities for band  gamma and session 1
+0.17896749178568522 minuts for classification
+0.4478354851404826 minuts for classification
+0.8359097599983215 minuts for classification
+1.395247260729472 minuts for classification
+2.1838754773139955 minuts for classification
+3.2657930413881937 minuts for classification
+4.729704451560974 minuts for classification
+6.691764720280966 minuts for classification
+9.257620871067047 minuts for classification
+12.640107770760855 minuts for classification
+17.032224822044373 minuts for classification
+22.667403121789295 minuts for classification
+29.8992307305336 minuts for classification
+39.19767877260844 minuts for classification
+51.178126549720766 minuts for classification
+66.4198918223381 minuts for classification
+intensities for band  gamma and session 2
+0.16957733631134034 minuts for classification
+0.4313417752583822 minuts for classification
+0.81035950978597 minuts for classification
+1.3507572650909423 minuts for classification
+2.11676679054896 minuts for classification
+3.1731909195582073 minuts for classification
+4.61505487759908 minuts for classification
+6.5321755091349285 minuts for classification
+9.082932074864706 minuts for classification
+12.43963166475296 minuts for classification
+16.809518730640413 minuts for classification
+22.454866969585417 minuts for classification
+29.690294822057087 minuts for classification
+39.00629286368688 minuts for classification
+51.10492781400681 minuts for classification
+66.33379012346268 minuts for classification
+intensities for band  beta and session 1
+0.16682674487431845 minuts for classification
+0.4209615429242452 minuts for classification
+0.795326050122579 minuts for classification
+1.3377264976501464 minuts for classification
+2.101152435938517 minuts for classification
+3.147832143306732 minuts for classification
+4.579739511013031 minuts for classification
+6.497355405489603 minuts for classification
+9.029185795783997 minuts for classification
+12.398427645365397 minuts for classification
+16.746954452991485 minuts for classification
+22.36783643166224 minuts for classification
+29.599846931298575 minuts for classification
+38.95213789542516 minuts for classification
+50.89260835647583 minuts for classification
+65.77644313971201 minuts for classification
+intensities for band  beta and session 2
+0.15355093876520792 minuts for classification
+0.3920969605445862 minuts for classification
+0.7467610875765482 minuts for classification
+1.2546202699343363 minuts for classification
+1.9721988399823507 minuts for classification
+2.9686516483624774 minuts for classification
+4.331222681204478 minuts for classification
+6.166126414140066 minuts for classification
+8.59492286046346 minuts for classification
+11.805298475424449 minuts for classification
+16.007082045078278 minuts for classification
+21.406362680594125 minuts for classification
+28.529027764002482 minuts for classification
+37.845142952601115 minuts for classification
+49.730782345930734 minuts for classification
+64.81677277088166 minuts for classification
+intensities for band  alpha and session 1
+0.1504412531852722 minuts for classification
+0.38617246548334755 minuts for classification
+0.7360665678977967 minuts for classification
+1.2400720437367758 minuts for classification
+1.959641981124878 minuts for classification
+2.9535102685292562 minuts for classification
+4.329709144433339 minuts for classification
+6.188891983032226 minuts for classification
+8.649982098738352 minuts for classification
+11.894364428520202 minuts for classification
+16.178154873847962 minuts for classification
+21.703590710957844 minuts for classification
+28.770610562960307 minuts for classification
+37.871669153372444 minuts for classification
+49.57021829684575 minuts for classification
+64.35830722252528 minuts for classification
+intensities for band  alpha and session 2
+0.18102724154790242 minuts for classification
+0.452994171778361 minuts for classification
+0.8460076530774434 minuts for classification
+1.4094274202982584 minuts for classification
+2.1916865865389505 minuts for classification
+3.2727071682612103 minuts for classification
+4.722224827607473 minuts for classification
+6.659389102458954 minuts for classification
+9.19755775531133 minuts for classification
+12.532958765824636 minuts for classification
+16.920712033907574 minuts for classification
+22.788123230139416 minuts for classification
+30.091937446594237 minuts for classification
+39.387260321776076 minuts for classification
+51.27297127246857 minuts for classification
+66.14068388144175 minuts for classification
+intensities for band  noFilter and session 1
+0.132027268409729 minuts for classification
+0.3414195974667867 minuts for classification
+0.6583201169967652 minuts for classification
+1.1172630588213603 minuts for classification
+1.769432532787323 minuts for classification
+2.686542491118113 minuts for classification
+3.9618720531463625 minuts for classification
+5.7354017694791155 minuts for classification
+8.103548351923624 minuts for classification
+11.249280325571696 minuts for classification
+15.38018707036972 minuts for classification
+20.74827766418457 minuts for classification
+27.649449042479198 minuts for classification
+36.667694024244945 minuts for classification
+48.00956290562947 minuts for classification
+62.65098000764847 minuts for classification
+80.9647341966629 minuts for classification
+intensities for band  noFilter and session 2
+0.18955393632253012 minuts for classification
+0.47500117619832355 minuts for classification
+0.8953493237495422 minuts for classification
+1.482742142677307 minuts for classification
+2.2980028947194415 minuts for classification
+3.415852944056193 minuts for classification
+4.90876551469167 minuts for classification
+6.884733772277832 minuts for classification
+9.484053723017375 minuts for classification
+12.89250380595525 minuts for classification
+17.4270321170489 minuts for classification
+23.15004708766937 minuts for classification
+30.442538352807365 minuts for classification
+39.924432174364725 minuts for classification
+51.9548956433932 minuts for classification
+67.29801806608836 minuts for classification
