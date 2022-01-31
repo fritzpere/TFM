@@ -183,31 +183,13 @@ if __name__ == "__main__":
                     acc_variance = np.cumsum(variance_prop)
                     std = s[:r]
 
-                    #Let us plot the accumulated variance that we have for each dimension
-                    fig= plt.figure( figsize=(18, 4))
-
-                    # 3/4 of the total variance rule
-                    plt.scatter(range(len(acc_variance)),acc_variance*100)
-                    plt.xticks(range(len(acc_variance)))
-                    plt.hlines(75, xmin=0, xmax=len(std), colors='r', linestyles='dashdot')
-                    plt.title('3/4 of the total variance rule')
-                    plt.xlabel('PCA coordinates')
-                    plt.ylabel('accumulated variance')
-
-                    if not os.path.exists(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)):
-                        print("create directory(plot):",subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i) )
-                        os.makedirs(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i) )
-                    plt.savefig(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/accumulated_variance.png')
-                    plt.close(fig)
                     #print('acumulated variance:',acc_variance)
                     #We save on our subject table the accumulated variance within the 3 most important dimensions.
                     subject_table[table_i,5]=acc_variance[3]
-                    #Let us work with this 3-dimensional Point Cloud. 
+                    #Let us work with this 3-dimensional Point Cloud. pca = point could after pca
                     pca = vh[:3,:] @ X[:,:]
 
                     pca=pca.T
-
-
 
                     pca,labels,PC=preprocessor.reject_outliers(pca,labels,PC,m=2) 
                     
@@ -218,119 +200,12 @@ if __name__ == "__main__":
                     subject_table[table_i,8]=int(len(labels[labels==1]))
                     subject_table[table_i,9]=int(len(labels[labels==2]))
                     
-                    #We reproject the PCA to the original coordinates and save the reprojected and the originals to compare them laters
-                    reproj= vh[:3,:].T @ pca.T + mean.reshape((-1,1))
-                    np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/reprojected_means_m0.npy',reproj[:,labels==0].mean(axis=1))
-                    np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/reprojected_means_m1.npy',reproj[:,labels==1].mean(axis=1))
-                    np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/reprojected_means_m2.npy',reproj[:,labels==2].mean(axis=1))
-                            
-                    np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/original_means_m0.npy',PC[labels==0].mean(axis=0))
-                    np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/original_means_m1.npy',PC[labels==1].mean(axis=0))
-                    np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/original_means_m2.npy',PC[labels==2].mean(axis=0))
-
-                    #saving data
-                    np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/point_cloud.npy',pca)
-                    np.save(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/labels.npy',labels)
-                    #Now we can use Topology om order to classify trials depending on how much they change the topology of each Point Cloud of motivational States
-                    print('intensities for band ', band_dic[i_band], 'and session', bloc_i)
-                    
-                    
                     subject_table[table_i,10],random_predictions_matrix,max_acc[bloc_i-1,i_band]=tda_intensity_classifier(subj_dir,space+'/'+band_dic[i_band]+'/session'+str(bloc_i),pca,labels,i_band)
                     
-
-                    #Now we weill plot the Point Cloud in 3 different Perspectives and also the point cloud of each motivational State
-                    plt.rcParams['xtick.labelsize']=16
-                    plt.rcParams['ytick.labelsize']=16
-                    plt.rcParams.update({'font.size': 16})
-
-                    fig = plt.figure(figsize=[36,16])
-                    ax =fig.add_subplot(2, 3, 1, projection='3d')
-                    fig.add_axes(ax)
-                    #fig.add_subplot(projection='3d')
-
                     pca_M0=pca[labels==0]
                     pca_M1=pca[labels==1]
                     pca_M2=pca[labels==2]
 
-                    ax.scatter(pca_M0[:,0],pca_M0[:,1],pca_M0[:,2],label='M0',c='r',alpha=0.5,zdir='z')
-                    ax.scatter(pca_M1[:,0],pca_M1[:,1],pca_M1[:,2],label='M1',c='g',alpha=0.5,zdir='z')
-                    ax.scatter(pca_M2[:,0],pca_M2[:,1],pca_M2[:,2],label='M2',c='b',alpha=0.5,zdir='z')
-                    ax.legend()
-                    ax.set_title(band_dic[i_band]+' pca projection Point Cloud direction z')
-                    ax.set_xlim3d(-1, 1)
-                    ax.set_ylim3d(-1, 1)
-                    ax.set_zlim3d(-1, 1)
-                    ax.set_xlabel('$X$')
-                    ax.set_ylabel('$Y$')
-                    ax.set_zlabel('$Z$')
-                    
-                    ax = fig.add_subplot(2, 3, 2, projection='3d')
-                    fig.add_axes(ax)
-                    ax.scatter(pca_M0[:,0],pca_M0[:,1],pca_M0[:,2],label='M0',c='r',alpha=0.5,zdir='y')
-                    ax.scatter(pca_M1[:,0],pca_M1[:,1],pca_M1[:,2],label='M1',c='g',alpha=0.5,zdir='y')
-                    ax.scatter(pca_M2[:,0],pca_M2[:,1],pca_M2[:,2],label='M2',c='b',alpha=0.5,zdir='y')
-                    ax.legend()
-                    ax.set_title(band_dic[i_band]+' pca projection Point Cloud direction y')
-                    ax.set_xlim3d(-1, 1)
-                    ax.set_ylim3d(-1, 1)
-                    ax.set_zlim3d(-1, 1)
-                    ax.set_xlabel('$X$')
-                    ax.set_ylabel('$Z$')
-                    ax.set_zlabel('$Y$')
-
-                    ax = fig.add_subplot(2, 3, 3, projection='3d')
-                    fig.add_axes(ax)
-                    ax.scatter(pca_M0[:,0],pca_M0[:,1],pca_M0[:,2],label='M0',c='r',alpha=0.5,zdir='x')
-                    ax.scatter(pca_M1[:,0],pca_M1[:,1],pca_M1[:,2],label='M1',c='g',alpha=0.5,zdir='x')
-                    ax.scatter(pca_M2[:,0],pca_M2[:,1],pca_M2[:,2],label='M2',c='b',alpha=0.5,zdir='x')
-                    ax.legend()
-                    ax.set_title(band_dic[i_band]+' pca projection Point Cloud direction x')
-                    ax.set_xlim3d(-1, 1)
-                    ax.set_ylim3d(-1, 1)
-                    ax.set_zlim3d(-1, 1)
-                    ax.set_xlabel('$Z$')
-                    ax.set_ylabel('$Y$')
-                    ax.set_zlabel('$X$')
-
-                    ax = fig.add_subplot(2, 3, 4, projection='3d')
-                    fig.add_axes(ax)
-                    ax.scatter(pca_M0[:,0],pca_M0[:,1],pca_M0[:,2],label='M0',alpha=0.5,c='r',zdir='z')
-                    ax.legend()
-                    ax.set_title(band_dic[i_band]+' pca projection Point Cloud motivation 0')
-                    ax.set_xlim3d(-1, 1)
-                    ax.set_ylim3d(-1, 1)
-                    ax.set_zlim3d(-1, 1)
-                    ax.set_xlabel('$X$')
-                    ax.set_ylabel('$Y$')
-                    ax.set_zlabel('$Z$')
-
-                    ax = fig.add_subplot(2, 3, 5, projection='3d')
-                    fig.add_axes(ax)
-                    ax.scatter(pca_M1[:,0],pca_M1[:,1],pca_M1[:,2],label='M1',alpha=0.5,c='g',zdir='z')
-                    ax.legend()
-                    ax.set_title(band_dic[i_band]+' pca projection Point Cloud motivation 1')
-                    ax.set_xlim3d(-1, 1)
-                    ax.set_ylim3d(-1, 1)
-                    ax.set_zlim3d(-1, 1)
-                    ax.set_xlabel('$X$')
-                    ax.set_ylabel('$Y$')
-                    ax.set_zlabel('$Z$')
-
-                    ax = fig.add_subplot(2, 3, 6, projection='3d')
-                    fig.add_axes(ax)
-                    ax.scatter(pca_M2[:,0],pca_M2[:,1],pca_M2[:,2],label='M2',alpha=0.5,c='b',zdir='z')    
-                    ax.legend()
-                    ax.set_title(band_dic[i_band]+' pca projection Point Cloud motivation 2')
-                    ax.set_xlim3d(-1, 1)
-                    ax.set_ylim3d(-1, 1)
-                    ax.set_zlim3d(-1, 1)
-                    ax.set_xlabel('$X$')
-                    ax.set_ylabel('$Y$')
-                    ax.set_zlabel('$Z$')
-                    
-                    fig.suptitle('Point Clouds of Principal Components of band '+band_dic[i_band] ,fontsize=48)
-                    plt.savefig(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca projection_PC.png')
-                    plt.close(fig)
                     ##let us compute the persistence Diagram for each Motavational state and plot it
                     pca_list=[pca_M0,pca_M1,pca_M2]
                     for i in range(3):
@@ -430,18 +305,7 @@ if __name__ == "__main__":
                     random_predictions_matrix.to_csv(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/random_preds.csv')
                     
                     bloc_i+=1
-            ## We select the band with highet mean accuracy from the silhouette feature vector       
-            max_bloc1=np.argmax(max_acc[0,:])
-            max_bloc2=np.argmax(max_acc[1,:])
-            if max_bloc1==3:
-                max_bloc1=-1
-            data_table[subj_t+n_subj*sp,8]=max_bloc1
-            data_table[subj_t+n_subj*sp,7]=max_acc[0,max_bloc1]
-        
-            if max_bloc2==3:
-                max_bloc2=-1
-            data_table[subj_t+n_subj*sp,10]=max_bloc2
-            data_table[subj_t+n_subj*sp,9]=max_acc[1,max_bloc2]
+           
             
             ## We finish complete table for the subject
             subject_table=pd.DataFrame(subject_table,index=subject_table_index,columns=['Clean Channels','N. trials','M0','M1','M2','captured variance after PCA','N. trials w/o Outliers ','M0 w/o Outliers ','M1 w/o Outliers ','M2 w/o Outliers ','test size'])
