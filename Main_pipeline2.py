@@ -129,16 +129,7 @@ if __name__ == "__main__":
             if sp==0:
                 np.save(subj_dir+'/silent-channels-'+str(subject)+'.npy',invalid_ch)
             
-            ## We fill up a table with the number of clean electrodes for each subject.(A table for each subject) (general table for all subjects)
-            subject_table[:,0]=int(preprocessor.N)
-             ## We fill up a table with the number of trials in total and for each motivational state. (general table for all subjects)
-            data_table[subj_t+n_subj*sp,0]=int(preprocessor.N)
-            data_table[subj_t+n_subj*sp,1]=int(ts_band.shape[0])
-            data_table[subj_t+n_subj*sp,2]=int((labels_original==0).sum())
-            data_table[subj_t+n_subj*sp,3]=int((labels_original==1).sum())
-            data_table[subj_t+n_subj*sp,4]=int((labels_original==2).sum())
-
-            #We defina which trials correspond to which Session
+             #We defina which trials correspond to which Session
             sessions=[]
             sessions.append(np.array(list(range(12)))[bloc_session==1])
             sessions.append(np.array(list(range(12)))[bloc_session==2])
@@ -164,12 +155,6 @@ if __name__ == "__main__":
                     PC=PC_all[temp]
                     labels=labels_all[temp]
 
-                    subject_table[table_i,1]=int(len(labels))
-                    subject_table[table_i,2]=int(len(labels[labels==0]))
-                    subject_table[table_i,3]=int(len(labels[labels==1]))
-                    subject_table[table_i,4]=int(len(labels[labels==2]))
-
-                    data_table[subj_t+n_subj*sp,4+bloc_i]=int(PC.shape[0])
                     #We Apply PCA to our Point Cloud to reduce the dimensionality
                     mean=np.mean(PC, axis=0)
                     X =(PC - mean).T #X.shape: (42,632)
@@ -183,25 +168,13 @@ if __name__ == "__main__":
                     acc_variance = np.cumsum(variance_prop)
                     std = s[:r]
 
-                    #print('acumulated variance:',acc_variance)
-                    #We save on our subject table the accumulated variance within the 3 most important dimensions.
-                    subject_table[table_i,5]=acc_variance[3]
-                    #Let us work with this 3-dimensional Point Cloud. pca = point could after pca
+                   #Let us work with this 3-dimensional Point Cloud. pca = point could after pca
                     pca = vh[:3,:] @ X[:,:]
 
                     pca=pca.T
 
                     pca,labels,PC=preprocessor.reject_outliers(pca,labels,PC,m=2) 
-                    
-                    
-                    #We fill up the table again since we have removed outliers
-                    subject_table[table_i,6]=int(len(labels))
-                    subject_table[table_i,7]=int(len(labels[labels==0]))
-                    subject_table[table_i,8]=int(len(labels[labels==1]))
-                    subject_table[table_i,9]=int(len(labels[labels==2]))
-                    
-                    subject_table[table_i,10],random_predictions_matrix,max_acc[bloc_i-1,i_band]=tda_intensity_classifier(subj_dir,space+'/'+band_dic[i_band]+'/session'+str(bloc_i),pca,labels,i_band)
-                    
+                      
                     pca_M0=pca[labels==0]
                     pca_M1=pca[labels==1]
                     pca_M2=pca[labels==2]
@@ -222,109 +195,32 @@ if __name__ == "__main__":
                         if persistence[i_band][i]==[]:
                             persistence[i_band][i]=[(0,(0.0,0.0))]
                             
-                    fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(18, 8))
-                    plot_func=lambda x,axes: gd.plot_persistence_diagram(x,legend=True,max_intervals=1000,axes=axes)#,inf_delta=0.5)
-                    aux_lis=np.array([persistence[i_band][0],persistence[i_band][1],persistence[i_band][2]], dtype=object)
-                    x_max=np.amax(list(map(lambda y: np.amax(list(map(lambda x: x[1][0],y))),aux_lis)))+0.05
-                    y_max=np.amax(list(map(lambda y: np.amax(list(map(lambda x: x[1][1] if x[1][1]!=np.inf  else 0 ,y))),aux_lis)))*1.2
-                    for j in range(3):
-                        a=plot_func(persistence[i_band][j],axes=axes[j])
-                        a.set_title('{0} persistence diagrams of \n motivational state {1} and band {2}'.format(space,j,band_dic[i_band]))
-                        a.set_xlim(-0.05,x_max)
-                        a.set_ylim(0,y_max)
-                    fig.suptitle('Persistence diagrams of the {0} for\n frequency band {1} and motivational state PCA'.format(space,band_dic[i_band]),fontsize=24)
-                    fig.tight_layout(pad=0.5)
-                    fig.subplots_adjust(top=0.8)
-                    plt.savefig(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca_persistence_diagram.png')
-                    plt.close(fig)
                     ##let us compute the persistence Silhouettes for each Motavational state and plot it
-                    fig, axes = plt.subplots(nrows=2, ncols=3, figsize=(24, 12))
-                    plt.rcParams['xtick.labelsize']=24
-                    for i_dim in range(2):
-                        silhouettes=[]
-                        for i_motiv in range(3):
-                            dim_list=np.array(list(map(lambda x: x[0], persistence[i_band][i_motiv])))
-                            point_list=np.array(list(map(lambda x: x[1], persistence[i_band][i_motiv])))
-                            zero_dim=point_list[np.logical_and(point_list[:,1]!=float('inf'),dim_list==0)]
-                            one_dim=point_list[np.logical_and(point_list[:,1]!=float('inf'),dim_list==1)]
-                            dim_persistence=(zero_dim,one_dim)
-                            silhouettes.append(dim_persistence[i_dim])
-                        silhouette_computer=DimensionSilhouette()
-                        silhouette_computer.fit([silhouettes[0],silhouettes[1],silhouettes[2]])
-                        vect=silhouette_computer.transform([silhouettes[0],silhouettes[1],silhouettes[2]])
-                        y_max=np.max(vect)
-                        axes[i_dim][0].plot(vect[0])
-                        axes[i_dim][0].set_title('{0} persistence Silhouette of \n motivational state 0 and band {1} of dimension {2}'.format(space,band_dic[i_band],dimensions[i_dim]))
-                        axes[i_dim][0].set_xlim(-2,1000)
-                        axes[i_dim][0].set_ylim(0,y_max*1.1)
-                        
-                        axes[i_dim][1].plot(vect[1])
-                        axes[i_dim][1].set_title('{0} persistence Silhouette of \n motivational state 1 and band {1} of dimension {2}'.format(space,band_dic[i_band],dimensions[i_dim]))
-                        axes[i_dim][1].set_xlim(-2,1000)
-                        axes[i_dim][1].set_ylim(0,y_max*1.1)
-                        
-                        axes[i_dim][2].plot(vect[2])
-                        axes[i_dim][2].set_title('{0} persistence Silhouette of \n motivational state 2 and band {1} of dimension {2}'.format(space,band_dic[i_band],dimensions[i_dim]))
-                        axes[i_dim][2].set_xlim(-2,1000)
-                        axes[i_dim][2].set_ylim(0,y_max*1.1)
-                        
-                    fig.suptitle('Persistence Silhouettes\nof the {0} for frequency band {1}\n and motivational state PCA'.format(space,band_dic[i_band]),fontsize=24)
-                    fig.tight_layout(pad=0.75)
-                    fig.subplots_adjust(top=0.8)
-                    plt.savefig(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca_persistence_silhouettes.png')
-                    plt.close(fig)
-                    ##let us compute the Topological Descriptors for each Motavational state and plot it
-                    fig, axes = plt.subplots(nrows=5, ncols=1, figsize=(14, 14))
-                    vect0,vect1=[0,0,0],[0,0,0]
-                    for i in range(3):
-                        dim_list=np.array(list(map(lambda x: x[0], persistence[i_band][i])))
-                        point_list=np.array(list(map(lambda x: x[1], persistence[i_band][i])))
-                        zero_dim=point_list[np.logical_and(point_list[:,1]!=float('inf'),dim_list==0)]
-                        one_dim=point_list[np.logical_and(point_list[:,1]!=float('inf'),dim_list==1)]
-                        descriptors_computer=TopologicalDescriptorsNocl()
-                        descriptors_computer.fit((zero_dim,one_dim))
-                        vect0[i],vect1[i]=descriptors_computer.transform((zero_dim,one_dim))
-                        
-                    axes[0].boxplot([vect0[0][0],vect0[1][0],vect0[2][0]],showfliers=False)
-                    axes[0].set_title('Life BoxPlot dimension 0')
-                    axes[1].boxplot([vect1[0][0],vect1[1][0],vect1[2][0]],showfliers=False)
-                    axes[1].set_title('Life BoxPlot dimension 1')
-                    axes[2].boxplot([vect1[0][2],vect1[1][2],vect1[2][2]],showfliers=False)
-                    axes[2].set_title('Midlife BoxPlot dimension 1')
-                    axes[3].boxplot([vect1[0][3],vect1[1][3],vect1[2][3]],showfliers=False)
-                    axes[3].set_title('Birth BoxPlot dimension 1')
-                    axes[4].boxplot([vect1[0][4],vect1[1][4],vect1[2][4]],showfliers=False)
-                    axes[4].set_title('Death BoxPlot dimension 1')
-                    fig.suptitle('Descriptors Boxplots of the {0} for\n frequency band {1} and different motivational states'.format(space,band_dic[i_band]),fontsize=24)
-                    fig.tight_layout(pad=1.00)
-                    fig.subplots_adjust(top=0.9)
-                    plt.savefig(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/pca_descriptors.png')
-                    plt.close(fig)
-                    ##We save the number of random classifications we have made for each dimension and Feature vector
-                    random_predictions_matrix=pd.DataFrame(random_predictions_matrix,columns=['dimension 0','dimension 1'],index=['Landscapes','Silhouettes','Descriptors','Bottleneck'])
-                    random_predictions_matrix.to_csv(subj_dir+space+'/'+band_dic[i_band]+'/session'+str(bloc_i)+'/random_preds.csv')
-                    
+                     vect0,vect1=[0,0,0],[0,0,0]
+                     silhouettes=[]
+                     landscapes = []
+                     for i_motiv in range(3):
+                         dim_list=np.array(list(map(lambda x: x[0], persistence[i_band][i_motiv])))
+                         point_list=np.array(list(map(lambda x: x[1], persistence[i_band][i_motiv])))
+                         zero_dim=point_list[np.logical_and(point_list[:,1]!=float('inf'),dim_list==0)]
+                         one_dim=point_list[np.logical_and(point_list[:,1]!=float('inf'),dim_list==1)]
+                         dim_persistence=(zero_dim,one_dim)
+                         silhouettes.append(dim_persistence[0])
+                         landscapes.append(dim_persistence[0])
+                         descriptors_computer=TopologicalDescriptorsNocl()
+                         descriptors_computer.fit((zero_dim,one_dim))
+                         vect0[i_motiv],vect1[i_motiv]=descriptors_computer.transform((zero_dim,one_dim))
+                     silhouette_computer=DimensionSilhouette()
+                     silhouette_computer.fit([silhouettes[0],silhouettes[1],silhouettes[2]])
+                     landscape_computer=DimensionLandScape()
+                     landscape_computer.fit([landscapes[0],landscapes[1],landscapes[2]])
+                     sil=silhouette_computer.transform([silhouettes[0],silhouettes[1],silhouettes[2]])
+                     lan=landscape_computer.transform([landscapes[0],landscapes[1],landscapes[2]])
+
+                     np.save('newResults/'+subj_dir+space+'_'+band_dic[i_band]+'_session'+str(bloc_i)+'Silh0.npy',sil)
+                     np.save('newResults/'+subj_dir+space+'_'+band_dic[i_band]+'_session'+str(bloc_i)+'Land0.npy',lan)
+                     np.save('newResults/'+subj_dir+space+'_'+band_dic[i_band]+'_session'+str(bloc_i)+'Descr0.npy',vect0)
+        
                     bloc_i+=1
-           
-            
-            ## We finish complete table for the subject
-            subject_table=pd.DataFrame(subject_table,index=subject_table_index,columns=['Clean Channels','N. trials','M0','M1','M2','captured variance after PCA','N. trials w/o Outliers ','M0 w/o Outliers ','M1 w/o Outliers ','M2 w/o Outliers ','test size'])
-            
-            subject_table.to_csv(subj_dir+space+'/'+'/subject_table.csv')
-
-            print('======TIME======')    
-            #print((time.time()-t_pca)/60, 'minuts for pca')
+          
         subj_t=subj_t+1
-    #Finishing the general table
-    subjects_index=[]
-    for subject in subjects:
-        subjects_index.append('Subject ' +str(subject)+ ' ElectrodeSpace')
-    for subject in subjects:
-        subjects_index.append('Subject ' +str(subject)+ ' FontSpace')
-    data_table=pd.DataFrame(data_table,index=subjects_index,columns=['Channels','Trials', 'Trials M0', 'Trials M1', 'Trials M2', 'Trials Session 1', 'Trials Session 2','max accuracy w/ Silhouette session 1','band of max accuracy in session1','max accuracy w/ Silhouette session 2','band of max accuracy in session2'])
-    data_table['band of max accuracy in session1']=data_table['band of max accuracy in session1'].apply(lambda x: band_dic[x])
-    data_table['band of max accuracy in session2']=data_table['band of max accuracy in session2'].apply(lambda x: band_dic[x])
-    data_table.to_csv('results/intensities/data_table.csv')
-    dfi.export(data_table, 'results/intensities/data_table_subjects.png')
-
-                                       
