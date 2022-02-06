@@ -24,7 +24,7 @@ def define_subject_dir(i_sub):
     :param i_sub: subject id
     :return: directory path
     """
-    res_dir = "results/intensities/subject_" + str(i_sub) +'/'
+    res_dir = "subject_" + str(i_sub) +'/'
     if not os.path.exists(res_dir):
         print("create directory:", res_dir)
         os.makedirs(res_dir)
@@ -212,9 +212,9 @@ if __name__ == "__main__":
                     sil=silhouette_computer.transform([silhouettes[0],silhouettes[1],silhouettes[2]])
                     lan=landscape_computer.transform([landscapes[0],landscapes[1],landscapes[2]])
 
-                    np.save('newResults/'+space+'_'+band_dic[i_band]+'_session'+str(bloc_i)+'Silh0.npy',sil)
-                    np.save('newResults/'+space+'_'+band_dic[i_band]+'_session'+str(bloc_i)+'Land0.npy',lan)
-                    np.save('newResults/'+space+'_'+band_dic[i_band]+'_session'+str(bloc_i)+'Descr0.npy',vect0)
+                    np.save('newResults/'+subj_dir+space+'_'+band_dic[i_band]+'_session'+str(bloc_i)+'Silh0.npy',sil)
+                    np.save('newResults/'+subj_dir+space+'_'+band_dic[i_band]+'_session'+str(bloc_i)+'Land0.npy',lan)
+                    np.save('newResults/'+subj_dir+space+'_'+band_dic[i_band]+'_session'+str(bloc_i)+'Descr0.npy',vect0)
         
                     bloc_i+=1
           
