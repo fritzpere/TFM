@@ -58,7 +58,7 @@ def load_data(i_sub,space='both'):
 
 if __name__ == "__main__":
 
-    subjects=list(range(27,36)) 
+    subjects=list(range(25,36)) 
 
     bloc_dic={}
     bloc_subj_dic={}
@@ -196,10 +196,10 @@ if __name__ == "__main__":
                             persistence[i_band][i]=[(0,(0.0,0.0))]
                             
                     ##let us compute the persistence Silhouettes for each Motavational state and plot it
-                     vect0,vect1=[0,0,0],[0,0,0]
-                     silhouettes=[]
-                     landscapes = []
-                     for i_motiv in range(3):
+                    vect0,vect1=[0,0,0],[0,0,0]
+                    silhouettes=[]
+                    landscapes = []
+                    for i_motiv in range(3):
                          dim_list=np.array(list(map(lambda x: x[0], persistence[i_band][i_motiv])))
                          point_list=np.array(list(map(lambda x: x[1], persistence[i_band][i_motiv])))
                          zero_dim=point_list[np.logical_and(point_list[:,1]!=float('inf'),dim_list==0)]
@@ -210,16 +210,16 @@ if __name__ == "__main__":
                          descriptors_computer=TopologicalDescriptorsNocl()
                          descriptors_computer.fit((zero_dim,one_dim))
                          vect0[i_motiv],vect1[i_motiv]=descriptors_computer.transform((zero_dim,one_dim))
-                     silhouette_computer=DimensionSilhouette()
-                     silhouette_computer.fit([silhouettes[0],silhouettes[1],silhouettes[2]])
-                     landscape_computer=DimensionLandScape()
-                     landscape_computer.fit([landscapes[0],landscapes[1],landscapes[2]])
-                     sil=silhouette_computer.transform([silhouettes[0],silhouettes[1],silhouettes[2]])
-                     lan=landscape_computer.transform([landscapes[0],landscapes[1],landscapes[2]])
+                    silhouette_computer=DimensionSilhouette()
+                    silhouette_computer.fit([silhouettes[0],silhouettes[1],silhouettes[2]])
+                    landscape_computer=DimensionLandScape()
+                    landscape_computer.fit([landscapes[0],landscapes[1],landscapes[2]])
+                    sil=silhouette_computer.transform([silhouettes[0],silhouettes[1],silhouettes[2]])
+                    lan=landscape_computer.transform([landscapes[0],landscapes[1],landscapes[2]])
 
-                     np.save('newResults/'+subj_dir+space+'_'+band_dic[i_band]+'_session'+str(bloc_i)+'Silh0.npy',sil)
-                     np.save('newResults/'+subj_dir+space+'_'+band_dic[i_band]+'_session'+str(bloc_i)+'Land0.npy',lan)
-                     np.save('newResults/'+subj_dir+space+'_'+band_dic[i_band]+'_session'+str(bloc_i)+'Descr0.npy',vect0)
+                    np.save('newResults/'+subj_dir+space+'_'+band_dic[i_band]+'_session'+str(bloc_i)+'Silh0.npy',sil)
+                    np.save('newResults/'+subj_dir+space+'_'+band_dic[i_band]+'_session'+str(bloc_i)+'Land0.npy',lan)
+                    np.save('newResults/'+subj_dir+space+'_'+band_dic[i_band]+'_session'+str(bloc_i)+'Descr0.npy',vect0)
         
                     bloc_i+=1
           
