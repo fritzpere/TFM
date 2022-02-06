@@ -119,15 +119,10 @@ if __name__ == "__main__":
             subject_table=np.zeros((8,11))
             max_acc=np.zeros((2,4))
 
-            if not os.path.exists(subj_dir+space):
-                print("create directory(plot):",subj_dir+space)
-                os.makedirs(subj_dir+'/'+space)
             print('cleaning and filtering data of',space,'of subject',subject)
             preprocessor=Preprocessor(data_space[sp])
             #filtered_ts_dic=preprocessor.get_filtered_ts_dic()
             ts_band,labels_original,invalid_ch=preprocessor.get_trials_and_labels()
-            if sp==0:
-                np.save(subj_dir+'/silent-channels-'+str(subject)+'.npy',invalid_ch)
             
              #We defina which trials correspond to which Session
             sessions=[]
@@ -217,9 +212,9 @@ if __name__ == "__main__":
                     sil=silhouette_computer.transform([silhouettes[0],silhouettes[1],silhouettes[2]])
                     lan=landscape_computer.transform([landscapes[0],landscapes[1],landscapes[2]])
 
-                    np.save('newResults/'+subj_dir+space+'_'+band_dic[i_band]+'_session'+str(bloc_i)+'Silh0.npy',sil)
-                    np.save('newResults/'+subj_dir+space+'_'+band_dic[i_band]+'_session'+str(bloc_i)+'Land0.npy',lan)
-                    np.save('newResults/'+subj_dir+space+'_'+band_dic[i_band]+'_session'+str(bloc_i)+'Descr0.npy',vect0)
+                    np.save('newResults/'+space+'_'+band_dic[i_band]+'_session'+str(bloc_i)+'Silh0.npy',sil)
+                    np.save('newResults/'+space+'_'+band_dic[i_band]+'_session'+str(bloc_i)+'Land0.npy',lan)
+                    np.save('newResults/'+space+'_'+band_dic[i_band]+'_session'+str(bloc_i)+'Descr0.npy',vect0)
         
                     bloc_i+=1
           
