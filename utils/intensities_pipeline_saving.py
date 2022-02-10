@@ -64,15 +64,12 @@ def tda_intensity_classifier2(subj_dir,space,PC,labels,i_band, n_repet=10,save=f
     #Initialize 1 Nearest Neighbor classifier
     clf= sklnn.KNeighborsClassifier(n_neighbors=1, algorithm='brute', metric='correlation')
 
-    if not os.path.exists(subj_dir+space+'/1nn_clf'):
-        print("create directory(plot):",subj_dir+space+'/1nn_clf')
-        os.makedirs(subj_dir+space+'/1nn_clf')
+    if not os.path.exists(subj_dir):
+        print("create directory(plot):",subj_dir)
+        os.makedirs(subj_dir)
     #perf_shuf = np.zeros([n_dim,n_vectors+1,n_rep])
     topo_conf_matrix = np.zeros([n_dim,n_vectors+1,n_rep,3,3])
 
-    if not os.path.exists(subj_dir+space+'/topological_clf'):
-        print("create directory(plot):",subj_dir+space+'/topological_clf')
-        os.makedirs(subj_dir+space+'/topological_clf')
     
     t_int=time.time()
     #We lool which motivational state has less points
