@@ -33,7 +33,7 @@ def topological_clf(arr):
 
 
 
-def tda_intensity_classifier2(subj_dir,space,PC,labels,i_band, n_repet=10,save=false):
+def tda_intensity_classifier2(subj_dir,space,PC,labels,i_band, n_repet=10):
     """
     Pipeline of a Topological Classifier
     
@@ -137,9 +137,6 @@ def tda_intensity_classifier2(subj_dir,space,PC,labels,i_band, n_repet=10,save=f
                         tda_vect[i_motiv][i_vector][i_dim]=tda_compt.transform([dim_persistence])
                 np.save(subj_dir+'_sil80_m'+str(i_motiv), tda_vect[i_motiv][0][0])       
 
-            for m in range(3):
-                tda_vect[m][2][0]=descriptors0[m]
-                tda_vect[m][2][1]=descriptors1[m]
             #For each point of the test set we add this point to all three Point Clouds
             i=0
             for index in ind_test:
@@ -166,7 +163,7 @@ def tda_intensity_classifier2(subj_dir,space,PC,labels,i_band, n_repet=10,save=f
                         dimensionscaler=DimensionDiagramScaler(dimensions=dimensions[i_dim])
                         dimensionscaler.fit(persistence)
                         dimensional_persistence=np.array(dimensionscaler.transform(persistence))
-                        for i_vector in range(n_vectors-1):
+                        for i_vector in range(n_vectors):
                             tda_compt=feat_vect[i_vector]
                             tda_compt.fit([dimensional_persistence])
                             silhouette = tda_compt.transform([dimensional_persistence])

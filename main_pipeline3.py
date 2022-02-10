@@ -9,6 +9,7 @@ Created on Jan 27 2022
 from utils.preprocess_data import *
 from utils.TDApipeline import *
 from utils.intensities_pipeline import *
+from utils.intensities_pipeline_saving import *
 import scipy.io as sio
 import os
 import dataframe_image as dfi
@@ -59,7 +60,7 @@ def load_data(i_sub,space='both'):
 if __name__ == "__main__":
 
     subjects=list(range(25,36)) 
-    subject=[30,33]
+    subjects=[30,33]
 
     bloc_dic={}
     bloc_subj_dic={}
@@ -176,7 +177,7 @@ if __name__ == "__main__":
                     pca_M1=pca[labels==1]
                     pca_M2=pca[labels==2]
                     
-                    dummy,random_predictions_matrix,dummy2=tda_intensity_classifier2('newResults/'+str(subject),',pca,labels,i_band,1,true)
+                    tda_intensity_classifier2('newResults/'+str(subject),'',pca,labels,i_band,1)
                     
         
                     bloc_i+=1
